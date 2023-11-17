@@ -1,0 +1,51 @@
+@import "_font.scss";
+
+$color-main: #a8bbff;
+$color-sub: #d0dbff;
+$color-register: #7995f9;
+
+@mixin x-icon($width, $height) {
+  color: $color-main;
+  width: $width;
+  height: $height;
+  cursor: pointer;
+}
+
+@mixin register($size) {
+  color: $color-register;
+  text-align: center;
+  font-size: $size;
+  line-height: normal;
+  letter-spacing: 3px;
+  margin-top: 0;
+}
+
+@mixin btn($width, $height, $font) {
+  // 버튼 글자
+  color: #fff;
+  text-align: center;
+  font-family: "EASTARJET-Medium";
+  font-weight: 700;
+  font-size: $font;
+  line-height: normal;
+  letter-spacing: 2px;
+  // 버튼 윤곽(?)
+  width: $width;
+  height: $height;
+  flex-shrink: 0;
+  background-color: $color-main;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+@mixin weatherbar($width, $height, $fontsize) {
+  width: $width;
+  height: $height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "EASTARJET-Medium";
+  font-weight: 500;
+  font-size: $fontsize;
+}

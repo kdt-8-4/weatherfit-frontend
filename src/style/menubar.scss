@@ -1,0 +1,21 @@
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #d7dff85e;
+  border-block-start: solid 2.5px #d7dff8;
+  height: 50px;
+  .menu_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .menu_icon {
+      width: 30px;
+      height: 30px;
+    }
+    span {
+      font-size: xx-small;
+      color: gray;
+    }
+  }
+}
