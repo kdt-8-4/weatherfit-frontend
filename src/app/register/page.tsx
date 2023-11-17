@@ -1,12 +1,12 @@
-// import CloseIcon from "@mui/icons-material/Close";
+import CloseIcon from "@mui/icons-material/Close";
 import "../../style/register.scss";
-import Image from 'next/image'
+import Image from "next/image";
 
 export default function Register() {
   return (
     <div id="container">
       <div id="x-div">
-        {/* <CloseIcon id="x" /> */}
+        <CloseIcon id="x" />
         <hr />
       </div>
       <section id="main">
