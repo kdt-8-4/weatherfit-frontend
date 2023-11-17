@@ -49,7 +49,7 @@ jobs:
       #   run : ./gradlew clean build --exclude-task test
 
       - name : 도커 이미지 빌드
-        run : docker build -t dongdung507/front_service .     #도커허브아이디/서비스명으로 정의
+        run : docker build -t dongdung507/NEXT_service .     #도커허브아이디/서비스명으로 정의
 
       - name : 도커 허브 로그인
         uses : docker/login-action@v2
@@ -58,7 +58,7 @@ jobs:
           password : ${{ secrets.WEATHER_FRONT_DOCKER_TOKEN }}         #이전에 발급한 토큰값
 
       - name : 도커 퍼블리싱
-        run : docker push dongdung507/front_service        #빌드한 이미지 도커허브에 push
+        run : docker push dongdung507/NEXT_service        #빌드한 이미지 도커허브에 push
 
       - name : ec2 접속 및 애플리케이션 실행
         uses : appleboy/ssh-action@v0.1.6
@@ -71,5 +71,6 @@ jobs:
             echo "${{ secrets.FOR_NGINX_DEFAULT_CONF }}" | base64 --decode > /home/ubuntu/conf/conf.d/default.conf
             sudo docker stop $(sudo docker ps -a -q)     #실행중인 컨테이너 중지
             sudo docker rm $(sudo docker ps -a -q)       # 삭제
-            sudo docker pull dongdung507/front_service      # 도커허브에서 이미지 최신버전 가져오기
-            sudo docker run -d -p 80:80 dongdung507/front_service     #이미지 사용해 컨테이너 실행(포트번호 주의)
+            sudo docker pull dongdung507/NEXT_service      # 도커허브에서 이미지 최신버전 가져오기
+            sudo docker run -d -p 80:80 dongdung507/NEXT_service     #이미지 사용해 컨테이너 실행(포트번호 주의)
+        
