@@ -24,17 +24,34 @@
 
 # # nginx 실행
 # CMD [ "nginx", "-g", "daemon off;" ] 
-FROM node:lts-alpine
 
-COPY ./package*.json ./
-COPY ./yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+# 빌드 스테이지
+FROM node:lts as build
 
-COPY ./ ./
+WORKDIR /app
 
-RUN yarn build
+# 의존성 설치
+COPY package*.json ./
+RUN npm install
 
+COPY . .
+
+# 앱 빌드
+RUN npm run build
+
+# Nginx 스테이지
+FROM nginx:stable-alpine
+
+# Nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+
+# 위 스테이지에서 생성한 빌드 결과를 nginx의 샘플 앱이 사용하던 폴더로 이동
+COPY --from=build /app/out /usr/share/nginx/html
+
+# 포트 설정
 EXPOSE 80
 
-CMD [ "pm2-runtime", "start", "npm", "--", "run", "serve" ]
+# nginx 실행
+CMD ["nginx", "-g", "daemon off;"]
