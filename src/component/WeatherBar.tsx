@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from "next/image";
 import "../style/weatherBar.scss";
 
 export default function WeatherBar() {
@@ -6,12 +6,12 @@ export default function WeatherBar() {
     <div id="container">
       <div id="weather">
         <Image
-              src="/partly-cloudy-day.svg"
-              alt="partly-cloudy-day"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority 
+          src="/partly-cloudy-day.svg"
+          alt="partly-cloudy-day"
+          className="dark:invert"
+          width={100}
+          height={24}
+          priority
         />
         <span>7℃</span>
       </div>
