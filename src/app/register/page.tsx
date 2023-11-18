@@ -11,6 +11,21 @@ export default function Register(): JSX.Element {
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
 
+  const validateEmail = (inputValue: string) => {
+    const emailFormat =
+      /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+    return emailFormat.test(inputValue);
+  };
+
+  const validatePassword = (inputValue: string) => {
+    const passwordFormat = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,20}$/;
+    return passwordFormat.test(inputValue);
+  };
+
+  const validateRePassword = (inputValue: string) => {
+    return inputValue === password;
+  };
+
   const caster_register = () => {};
 
   return (
@@ -23,6 +38,7 @@ export default function Register(): JSX.Element {
         <p>회원가입</p>
         <form>
           {/* 이메일 👉🏻 이메일 형식 유효성 검사*/}
+          <div></div>
           <InputBar
             label="이메일"
             id="email"
@@ -33,9 +49,6 @@ export default function Register(): JSX.Element {
             button // 버튼을 사용한다고 명시
             buttonId="btn_verify"
             buttonText="인증"
-            onButtonClick={() => {
-              // 인증 버튼 클릭 시 실행될 함수
-            }}
             autoFocus
           />
 

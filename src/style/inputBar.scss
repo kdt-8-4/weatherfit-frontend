@@ -22,11 +22,13 @@
     padding-left: 7px;
     &::placeholder {
       color: #ababaa;
-      // font-size: 10.5px;
     }
     //TODO 작성 다 되면 (값 생기면) 하얀색으로 바뀌는 디자인 필요
     &:focus {
       background-color: #fff;
     }
+  }
+  button {
+    padding-left: 2px;
   }
 }

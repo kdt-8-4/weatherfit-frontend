@@ -1,5 +1,5 @@
 // InputBar.tsx
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, FocusEvent, useState } from "react";
 import "../style/inputBar.scss";
 
 interface InputBarProps {
@@ -14,7 +14,6 @@ interface InputBarProps {
   buttonText?: string;
   onButtonClick?: () => void; // 버튼 클릭 핸들러
   autoFocus?: boolean;
-  isEmail?: boolean; // isEmail prop 추가
 }
 const InputBar: React.FC<InputBarProps> = ({
   label,
@@ -28,7 +27,6 @@ const InputBar: React.FC<InputBarProps> = ({
   buttonText,
   onButtonClick,
   autoFocus,
-  isEmail,
 }: InputBarProps) => {
   const inputClass = `${type === "email" ? " email" : ""}`;
 
