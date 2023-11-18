@@ -7,9 +7,9 @@ html {
   height: 100%;
 }
 body {
-  display: flex;
   width: 100%;
   height: 100%;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -17,4 +17,8 @@ body {
 .container {
   width: 75%;
   height: 100%;
+  /* menubar 밑에 고정 안되는 경우에 사용
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
 }

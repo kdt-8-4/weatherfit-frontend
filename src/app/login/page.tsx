@@ -5,7 +5,7 @@ import Menubar from "../../component/MenuBar";
 
 export default function Login() {
   return (
-    <>
+    <div className="container">
       <CloseIcon />
       <hr className="layout_hr" />
       <br />
@@ -35,6 +35,6 @@ export default function Login() {
         <hr /> 간편 로그인 <hr />
       </div>
       <Menubar />
-    </>
+    </div>
   );
 }
