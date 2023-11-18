@@ -74,23 +74,25 @@ export default function Register(): JSX.Element {
           />
           {/* 비밀번호 👉🏻 중복검사 & 유효성 검사*/}
 
-          <InputBar
-            label="비밀번호"
-            id="password"
-            type="password"
-            placeholder="비밀번호(8~20자 영문, 숫자, 특수기호 조합)"
-            value={password}
-            onChange={(value: string) => setPassword(value)}
-            autoFocus
-          />
-          <InputBar
-            label=""
-            id="re-password"
-            type="password"
-            placeholder="비밀번호 확인"
-            value={repassword}
-            onChange={(value: string) => setRepassword(value)}
-          />
+          <div>
+            <InputBar
+              label="비밀번호"
+              id="password"
+              type="password"
+              placeholder="비밀번호(8~20자 영문, 숫자, 특수기호 조합)"
+              value={password}
+              onChange={(value: string) => setPassword(value)}
+              autoFocus
+            />
+            <InputBar
+              label=""
+              id="re-password"
+              type="password"
+              placeholder="비밀번호 확인"
+              value={repassword}
+              onChange={(value: string) => setRepassword(value)}
+            />
+          </div>
           <button id="btn_register" type="submit" onClick={caster_register}>
             옷늘 캐스터 등록
           </button>

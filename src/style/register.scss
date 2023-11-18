@@ -54,6 +54,12 @@ footer {
 
 // 모바일
 @media only screen and (min-width: 320px) and (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
+  form {
+    width: 75vw;
+  }
   #x {
     @include x-icon(18px, 18px); // 가로, 세로
   }
@@ -61,14 +67,14 @@ footer {
     @include register(24px); // 폰트 사이즈
   }
   input {
-    @include input_register(30px, 11px);
+    @include input_register(40px, 12px);
   }
   #btn_verify {
-    @include btn(53px, 30px, 15px); // 가로, 세로, 폰트 사이즈
+    @include btn(53px, 40px, 15px); // 가로, 세로, 폰트 사이즈
   }
 
   #btn_register {
-    @include btn(100%, 35px, 15px); // 가로, 세로, 폰트 사이즈
+    @include btn(100%, 45px, 15px); // 가로, 세로, 폰트 사이즈
   }
   footer {
     font-size: 15px;
