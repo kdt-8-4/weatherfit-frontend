@@ -50,8 +50,8 @@ $color-register: #7995f9;
   cursor: pointer;
 }
 
-@mixin weatherbar($width, $height, $fontsize) {
-  width: $width;
+@mixin weatherbar($height, $fontsize) {
+  width: 100%;
   height: $height;
   display: flex;
   justify-content: space-between;
