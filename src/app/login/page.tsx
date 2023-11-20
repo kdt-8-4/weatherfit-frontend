@@ -1,3 +1,4 @@
+"use client";
 import { Link } from "@mui/icons-material";
 import "../../style/login.scss";
 import CloseIcon from "@mui/icons-material/Close";
