@@ -1,4 +1,4 @@
-footer {
+.menubar {
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -10,6 +10,7 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 
     .menu_icon {
       width: 30px;

@@ -3,6 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "../../style/register.scss";
 import { useState } from "react";
 import InputBar from "@/component/InputBar";
+import Menubar from "@/component/MenuBar";
 
 export default function Register(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -98,7 +99,10 @@ export default function Register(): JSX.Element {
           </button>
         </form>
       </section>
-      <footer>옷늘날씨</footer>
+      <footer>
+        <span>옷늘날씨</span>
+        <Menubar />
+      </footer>
     </div>
   );
 }
