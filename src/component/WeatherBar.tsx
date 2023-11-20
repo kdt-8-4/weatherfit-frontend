@@ -6,7 +6,7 @@ export default function WeatherBar() {
     <div id="container">
       <div id="weather">
         <Image
-          src="/partly-cloudy-day.svg"
+          src="/images/partly-cloudy-day.svg"
           alt="partly-cloudy-day"
           className="dark:invert"
           width={100}

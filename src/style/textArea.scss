@@ -1,0 +1,15 @@
+@import "_util.scss";
+
+.text-area {
+  width: 100%;
+  padding: 8px;
+  min-height: 100px;
+  font-size: 12px;
+  font-weight: 500;
+
+  .hashtag {
+    cursor: pointer;
+    font-weight: bold;
+    color: $color-main;
+  }
+}
