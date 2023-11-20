@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Menubar from "@/component/MenuBar"
 import WeatherBar from "@/component/WeatherBar"
 
