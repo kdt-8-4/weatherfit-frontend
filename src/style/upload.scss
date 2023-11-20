@@ -1,0 +1,28 @@
+@import "_util.scss";
+
+.container {
+  font-family: "EASTARJET-Medium";
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+
+footer {
+  width: 100%;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
+}
