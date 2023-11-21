@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState } from "react";
 import "../style/imageUpload.scss";
 
 interface ImageUploadProps {
-  onImagesSelected: (files: FileList | null) => void;
+  onImagesSelected: (files: File[] | null) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -23,26 +23,31 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         return;
       }
 
-      setSelectedImages((prevImages) => [...prevImages, ...filesArray]);
-      onImagesSelected(files);
+      const combinedImages = [...selectedImages, ...filesArray];
+      setSelectedImages(combinedImages);
+      onImagesSelected(combinedImages); //부모 컴포넌트로 File[] 전달
     }
   };
 
   const removeImage = (index: number) => {
-    const newImages = [...selectedImages];
-    newImages.splice(index, 1);
-    setSelectedImages(newImages);
+    if (selectedImages) {
+      const newImages = [...selectedImages];
+      newImages.splice(index, 1);
+      setSelectedImages(newImages);
+      onImagesSelected(newImages);
+    }
   };
 
   return (
     <div className="upload_images">
       <div className="uploaded_images">
-        {selectedImages.map((image, index) => (
-          <div key={index} className="image-preview">
-            <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-            <button onClick={() => removeImage(index)}>삭제</button>
-          </div>
-        ))}
+        {selectedImages &&
+          Array.from(selectedImages).map((image, index) => (
+            <div key={index} className="image-preview">
+              <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
+              <button onClick={() => removeImage(index)}>삭제</button>
+            </div>
+          ))}
         <label htmlFor="upload-input">
           <div className="add-div">
             <Image
