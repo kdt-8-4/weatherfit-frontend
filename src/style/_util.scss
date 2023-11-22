@@ -9,6 +9,7 @@ $color-register: #7995f9;
   width: $width;
   height: $height;
   cursor: pointer;
+  margin: 10px;
 }
 
 @mixin register($size) {

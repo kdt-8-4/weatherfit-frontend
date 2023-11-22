@@ -4,10 +4,10 @@
   justify-content: space-around;
   background-color: rgb(232 238 255);
   border-block-start: solid 2.5px #d7dff8;
+  width: 75%;
   height: 50px;
   position: fixed;
   bottom: 0;
-  width: 75%;
 
   .menu_box {
     display: flex;
@@ -24,5 +24,11 @@
       font-size: xx-small;
       color: gray;
     }
+  }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 768px) {
+  .menubar {
+    width: 100%;
   }
 }
