@@ -39,7 +39,6 @@ export default function Register(): JSX.Element {
         <p>회원가입</p>
         <form>
           {/* 이메일 👉🏻 이메일 형식 유효성 검사*/}
-          <div></div>
           <InputBar
             label="이메일"
             id="email"
@@ -73,8 +72,8 @@ export default function Register(): JSX.Element {
             onChange={(value: string) => setNickname(value)}
             autoFocus
           />
-          {/* 비밀번호 👉🏻 중복검사 & 유효성 검사*/}
 
+          {/* 비밀번호 👉🏻 중복검사 & 유효성 검사*/}
           <div>
             <InputBar
               label="비밀번호"
@@ -100,7 +99,7 @@ export default function Register(): JSX.Element {
         </form>
       </section>
       <footer>
-        <span>옷늘날씨</span>
+        {/* <span>옷늘날씨</span> */}
         <Menubar />
       </footer>
     </div>
