@@ -24,7 +24,7 @@ export default function Login() {
     try {
       const respone = await axios({
         method: "GET",
-        url: '13.124.197.227:8080/user/api/login?email="user100@test.com&password="1234"',
+        url: "13.124.197.227:8080/user/api/login?email=user100@test.com&password=1234",
         headers: {
           Authorization: "weatherfit",
         },
