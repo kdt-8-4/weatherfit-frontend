@@ -2,9 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background-color: #d7dff85e;
+  background-color: rgb(232 238 255);
   border-block-start: solid 2.5px #d7dff8;
   height: 50px;
+  position: fixed;
+  bottom: 0;
+  width: 75%;
 
   .menu_box {
     display: flex;
