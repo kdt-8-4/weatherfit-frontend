@@ -17,11 +17,11 @@ export default function Upload(): JSX.Element {
     Record<string, string[]>
   >({});
 
-  const handleImagesSelected = (files: File[] | null) => {
-    if (files) {
-      setSelectedImages(files);
-    }
-  };
+  const handleImagesSelected = useCallback((files: File[] | null) => {
+    // if (files) {
+    setSelectedImages(files ? Array.from(files) : []);
+    // }
+  }, []);
 
   const handleContent = (text: string) => {
     setContent(text);
@@ -39,45 +39,28 @@ export default function Upload(): JSX.Element {
 
   const handleComplete = async () => {
     try {
-      // 해시태그, 글 내용, 카테고리 -> board 데이터 하나로 묶어서 전송
-      // 서버에 데이터 전송
-      // const formData = new FormData();
+      const allSelectedSubCategories = Object.values(selectedCategories).reduce(
+        (acc, subCategories) => acc.concat(subCategories),
+        [],
+      );
 
-      // selectedImages.forEach((image) => {
-      //   formData.append("images", image);
-      // });
-
-      // formData.append("hashTag", JSON.stringify(hashtags));
-      // formData.append("category", JSON.stringify(selectedCategories));
-      // formData.append("content", content);
-
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
-      // console.log("form data", formData);
       let formData = new FormData();
       let boardData = {
         hashTag: hashtags,
-        category: selectedCategories,
+        category: allSelectedSubCategories,
         content: content,
       };
 
       formData.append("board", JSON.stringify(boardData));
-      // 여기서 files는 이미지 파일의 리스트입니다.
       selectedImages.forEach((image) => {
         formData.append("images", image);
       });
 
-      // const response = await axios({
-      //   method: "POST",
-      //   url: "http://13.124.197.227:8080/board/write",
-      //   data: formData,
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // });
-
       const response = await axios({
-        method: "GET",
-        url: "http://13.124.197.227:8080/board/detail/1",
+        method: "POST",
+        url: "https://www.jerneithe.site/board/write",
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       console.log(response.data); // 서버 응답 확인
