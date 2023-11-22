@@ -50,6 +50,8 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: space-evenly;
+          height: 50%;
         }
       }
       // .user_info {
@@ -64,16 +66,17 @@
       // }
     }
     // --------------------------------------
-    .tap_bar {
+    .tab_bar {
       height: 6vh;
       margin-bottom: 2%;
       .icon {
         height: 100%;
         width: 50%;
         cursor: pointer;
+        color: #a8bbff;
       }
-      .like_icon {
-        color: aqua;
+      .click_icon {
+        border-bottom: solid #a8bbff;
       }
     }
     .post_box {

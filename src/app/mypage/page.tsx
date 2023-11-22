@@ -4,7 +4,7 @@ import Image from "next/image";
 import "../../style/mypage.scss";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import GridOnOutlinedIcon from "@mui/icons-material/GridOnOutlined";
-import GridOnIcon from "@mui/icons-material/GridOn";
+import GridOnTwoToneIcon from "@mui/icons-material/GridOnTwoTone";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Menubar from "@/component/MenuBar";
@@ -12,6 +12,11 @@ import Menubar from "@/component/MenuBar";
 
 export default function Mypage() {
   const [liked, setLiked] = useState<boolean>(false);
+  const [grid, setGrid] = useState<boolean>(false);
+
+  const handleGridClick = () => {
+    setGrid(!grid);
+  };
 
   const handleLikeClick = () => {
     setLiked(!liked);
@@ -41,17 +46,24 @@ export default function Mypage() {
           </div>
         </div>
         {/* --------------------------------------- */}
-        {/* ------------- tap 부분 ------------- */}
-        <div className="tap_bar">
-          <GridOnOutlinedIcon className="icon mypost_icon" />
+        {/* ------------- tab 부분 ------------- */}
+        <div className="tab_bar">
+          {grid ? (
+            <GridOnTwoToneIcon
+              className="icon click_icon"
+              onClick={handleGridClick}
+            />
+          ) : (
+            <GridOnOutlinedIcon className="icon" onClick={handleGridClick} />
+          )}
           {liked ? (
             <FavoriteIcon
-              className="icon pulllike_icon"
+              className="icon click_icon"
               onClick={handleLikeClick}
             />
           ) : (
             <FavoriteBorderOutlinedIcon
-              className="icon like_icon"
+              className="icon"
               onClick={handleLikeClick}
             />
           )}
