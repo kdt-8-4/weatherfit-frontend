@@ -4,29 +4,27 @@ import "../style/textArea.scss";
 interface TextAreaProps {
   content: string;
   placeholder: string;
+  handleContent: (content: string) => void; // 부모 컴포넌트로 글 데이터 전달
   handleHashtags: (hashtags: string[]) => void; // 부모 컴포넌트로 해시태그 데이터 전달
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
   content,
   placeholder,
+  handleContent,
   handleHashtags,
 }) => {
   const [text, setText] = useState<string>(content);
-  const textAreaRef = useRef<HTMLDivElement>(null); //DOM 접근
-
-  // 처음 렌더링될 때만 placeholder 나오게 실행
-  useEffect(() => {
-    handleInputChange();
-  }, [content]);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null); //DOM 접근
 
   // 해시태그 span으로 감쌈
   const handleInputChange = () => {
     if (textAreaRef.current) {
-      const content = textAreaRef.current.textContent || "";
+      const content = textAreaRef.current.value || "";
       const hashtags = extractHashtags(content); // 해시태그 추출
       handleHashtags(hashtags); // 추출한 해시태그 부모 컴포넌트로 전달
       setText(content);
+      handleContent(content); // 글 내용 부모 컴포넌트로 전달
     }
   };
 
@@ -40,34 +38,41 @@ const TextArea: React.FC<TextAreaProps> = ({
     return [];
   };
   // 엔터키 인식해서 줄바꿈 가능하게
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      document.execCommand("insertLineBreak");
+      const { selectionStart, value } = event.currentTarget;
+      const newValue =
+        value.substring(0, selectionStart) +
+        "\n" +
+        value.substring(selectionStart);
+      setText(newValue);
+      if (textAreaRef.current) {
+        textAreaRef.current.value = newValue;
+        textAreaRef.current.setSelectionRange(
+          selectionStart + 1,
+          selectionStart + 1,
+        );
+      }
     }
   };
 
   // text 영역에 포커스가 맞춰질 때 placeholder 처리
   const handleFocus = () => {
-    if (textAreaRef.current && textAreaRef.current.textContent === placeholder)
-      textAreaRef.current.textContent = "";
-  };
-
-  // focus 해제될 때
-  const handleBlur = () => {
-    handleInputChange();
+    if (textAreaRef.current && textAreaRef.current.value === placeholder)
+      setText("");
   };
 
   return (
-    <div
+    <textarea
       ref={textAreaRef}
-      contentEditable //div 글 작성 ok
+      rows={5}
+      value={text}
+      placeholder={placeholder}
       onFocus={handleFocus}
-      onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       className="text-area"
-      suppressContentEditableWarning // ContentEditable 경고 제거
-      dangerouslySetInnerHTML={{ __html: text || placeholder }} // text가 없으면 placeholder 나오게
+      onChange={handleInputChange}
     />
   );
 };

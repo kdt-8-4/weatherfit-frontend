@@ -6,11 +6,16 @@ import "../../style/upload.scss";
 import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<
+    Record<string, string[]>
+  >({});
 
   const handleImagesSelected = (files: File[] | null) => {
     if (files) {
@@ -18,14 +23,49 @@ export default function Upload(): JSX.Element {
     }
   };
 
+  const handleContent = (text: string) => {
+    setContent(text);
+  };
   const handleHashtags = (extractedHashtags: string[]) => {
     setHashtags(extractedHashtags);
   };
 
-  const handleComplete = () => {
-    console.log("Selected images:", selectedImages);
-    console.log("Hashtags:", hashtags);
-    // 서버에 데이터를 전송하는 코드ㅡ...
+  const handleCategorySelect = useCallback(
+    (category: string, subCategories: string[]) => {
+      setSelectedCategories((prev) => ({ ...prev, [category]: subCategories }));
+    },
+    [],
+  );
+
+  const handleComplete = async () => {
+    try {
+      // 서버에 데이터 전송
+      const formData = new FormData();
+
+      selectedImages.forEach((image) => {
+        formData.append("image", image);
+      });
+
+      formData.append("hashTag", JSON.stringify(hashtags));
+      formData.append("category", JSON.stringify(selectedCategories));
+      formData.append("content", content);
+
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+      console.log("form data", formData);
+
+      const response = await axios({
+        method: "POST",
+        url: "http://13.124.197.227:8080/board/write",
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log(response.data); // 서버 응답 확인
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -48,9 +88,10 @@ export default function Upload(): JSX.Element {
           <ImageUpload onImagesSelected={handleImagesSelected} />
           <hr />
           <TextArea
-            content=""
+            content={content}
             placeholder="코디에 같이 올리고 싶은 #해시태그를 작성해주세요"
             handleHashtags={handleHashtags}
+            handleContent={handleContent}
           />
         </div>
         <div className="category">
@@ -69,6 +110,9 @@ export default function Upload(): JSX.Element {
                 "스포츠",
                 "기타",
               ]}
+              onSelect={(subCategories) =>
+                handleCategorySelect("상의", subCategories)
+              }
             />
             <SelectCategory
               category="하의"
@@ -84,6 +128,9 @@ export default function Upload(): JSX.Element {
                 "스포츠 하의",
                 "기타",
               ]}
+              onSelect={(subCategories) =>
+                handleCategorySelect("하의", subCategories)
+              }
             />
             <SelectCategory
               category="아우터"
@@ -105,6 +152,9 @@ export default function Upload(): JSX.Element {
                 "숏패딩",
                 "기타",
               ]}
+              onSelect={(subCategories) =>
+                handleCategorySelect("아우터", subCategories)
+              }
             />
             <SelectCategory
               category="신발"
@@ -124,6 +174,9 @@ export default function Upload(): JSX.Element {
                 "슬리퍼",
                 "기타",
               ]}
+              onSelect={(subCategories) =>
+                handleCategorySelect("신발", subCategories)
+              }
             />
             <SelectCategory
               category="가방"
@@ -138,6 +191,9 @@ export default function Upload(): JSX.Element {
                 "클러치백",
                 "이스트백",
               ]}
+              onSelect={(subCategories) =>
+                handleCategorySelect("가방", subCategories)
+              }
             />
             <SelectCategory
               category="모자"
@@ -148,6 +204,9 @@ export default function Upload(): JSX.Element {
                 "비니",
                 "트루퍼",
               ]}
+              onSelect={(subCategories) =>
+                handleCategorySelect("모자", subCategories)
+              }
             />
           </div>
         </div>
