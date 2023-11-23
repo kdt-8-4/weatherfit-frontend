@@ -1,20 +1,30 @@
 "use client";
-import Menubar from "@/component/MenuBar"
-import WeatherBar from "@/component/WeatherBar"
+
+import FeedSearch from "@/component/FeedSearch";
+import WeatherBar from "@/component/WeatherBar";
+import FeedCategory from "@/component/FeedCategory";
+import FeedContenets from "@/component/FeedContents";
+import Menubar from "@/component/MenuBar";
+
+import { RecoilRoot } from "recoil";
+
+
 
 export default function Feed(){
     
 
 
     return(<>
-        <div className="container">
-            <div id="search"></div>
+    <RecoilRoot>
+        <div className="container_dj">
+            <FeedSearch />
+            <hr />
             <WeatherBar />
-            <div id="category"></div>
-            <div id="feed_img">
-
-            </div>
+            <FeedCategory />
+            <FeedContenets />
+            <Menubar />
 
         </div>
+    </RecoilRoot>
     </>)
 }

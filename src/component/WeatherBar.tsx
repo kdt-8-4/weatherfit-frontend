@@ -3,25 +3,6 @@ import Image from "next/image";
 import "../style/weatherBar.scss";
 import React from "react";
 
-// interface WeatherData {
-//   main:{
-//     temp:number;
-//     temp_max:
-//   };
-//   weather:{
-//     main: string;
-//   }[];
-// }
-
-// interface Address {
-//   documents: {
-//     address: {
-//       region_1depth_name: string;
-//       region_2depth_name: string;
-//     };
-//   }[];
-// }
-
 
 const WeatherBar:React.FC = () => {
   const API_KEY = "fa3eba61f243af3e8e69086462763172";
@@ -45,7 +26,9 @@ const WeatherBar:React.FC = () => {
           );
 
           const latitude = position.coords.latitude;
+          console.log("위도", latitude);
           const longitude = position.coords.longitude;
+          console.log("경도", longitude);  
 
           const weatherResponse = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
@@ -57,6 +40,7 @@ const WeatherBar:React.FC = () => {
           setMax(weatherData.main.temp_max.toFixed(1));
           setMin(weatherData.main.temp_min.toFixed(1));
           setWeat(weatherData.weather[0].main);
+          console.log(weatherData)
           // console.log(`온도 : ${temp} ,최고온도 ${max},최저온도 ${min}, 날씨 : ${weat}`);
 
           const addressResponse = await fetch(
