@@ -73,7 +73,12 @@ export default function Upload(): JSX.Element {
     <div className="container">
       <header>
         <div className="top">
-          <CloseIcon id="x" />
+          <CloseIcon
+            id="x"
+            onClick={() => {
+              window.history.back();
+            }}
+          />
           <h2>등록하기</h2>
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
