@@ -12,7 +12,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+    const files: FileList | null = event.target.files;
     if (files) {
       const filesArray = Array.from(files);
       const totalSize = filesArray.reduce((acc, file) => acc + file.size, 0);
@@ -62,7 +62,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               type="file"
               accept="image/*"
               multiple
-              onChange={handleImageChange}
+              onChange={(e) => handleImageChange(e)}
               style={{ display: "none" }}
             />
           </div>
