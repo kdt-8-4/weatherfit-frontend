@@ -64,6 +64,7 @@ export default function Upload(): JSX.Element {
       });
 
       console.log(response.data); // 서버 응답 확인
+      alert("게시물 업로드 완료");
     } catch (error) {
       console.error(error);
     }
