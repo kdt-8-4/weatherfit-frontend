@@ -17,11 +17,11 @@ export default function Upload(): JSX.Element {
     Record<string, string[]>
   >({});
 
-  const handleImagesSelected = (files: File[] | null) => {
-    if (files) {
-      setSelectedImages(files);
-    }
-  };
+  const handleImagesSelected = useCallback((files: File[] | null) => {
+    // if (files) {
+    setSelectedImages(files ? Array.from(files) : []);
+    // }
+  }, []);
 
   const handleContent = (text: string) => {
     setContent(text);
@@ -39,25 +39,26 @@ export default function Upload(): JSX.Element {
 
   const handleComplete = async () => {
     try {
-      // 서버에 데이터 전송
-      const formData = new FormData();
+      const allSelectedSubCategories = Object.values(selectedCategories).reduce(
+        (acc, subCategories) => acc.concat(subCategories),
+        [],
+      );
 
+      let formData = new FormData();
+      let boardData = {
+        hashTag: hashtags,
+        category: allSelectedSubCategories,
+        content: content,
+      };
+
+      formData.append("board", JSON.stringify(boardData));
       selectedImages.forEach((image) => {
-        formData.append("image", image);
+        formData.append("images", image);
       });
-
-      formData.append("hashTag", JSON.stringify(hashtags));
-      formData.append("category", JSON.stringify(selectedCategories));
-      formData.append("content", content);
-
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-      console.log("form data", formData);
 
       const response = await axios({
         method: "POST",
-        url: "http://13.124.197.227:8080/board/write",
+        url: "https://www.jerneithe.site/board/write",
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -72,7 +73,12 @@ export default function Upload(): JSX.Element {
     <div className="container">
       <header>
         <div className="top">
-          <CloseIcon id="x" />
+          <CloseIcon
+            id="x"
+            onClick={() => {
+              window.history.back();
+            }}
+          />
           <h2>등록하기</h2>
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
