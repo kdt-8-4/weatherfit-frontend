@@ -7,7 +7,7 @@ export default function FeedContenets(){
         const feeddata = async() => {
             const req = axios({
                 method: "GET",
-                url: "https://www.jerneithe.site/",
+                url: "https://www.jerneithe.site/conment/conments?boardId=1",
             });
 
             console.log("받아온 피드 데이터", req);
