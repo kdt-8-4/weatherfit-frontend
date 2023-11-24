@@ -1,60 +1,50 @@
 "use client";
-import { Link } from "@mui/icons-material";
 import "../../style/login.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Menubar from "../../component/MenuBar";
-import { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-// 임시 데이터
-const userData = {
-  email: "testuser",
-  pw: "testPw",
-  name: "테스트",
-};
+import axios from "axios";
 
 export default function Login() {
-  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
+  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+  const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
+  const router = useRouter();
+
+  useEffect(() => {
+    // 페이지 로드 시 URL에서 access_token 파싱
+    const urlParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = urlParams.get("access_token");
+
+    // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+      // 백엔드로 전송하려면 이곳에서 API 호출을 수행할 수 있습니다.
+      // axios.post('/api/authenticate', { accessToken });
+    }
+  }, []);
+
+  const onGoogleSocialLogin = async () => {
+    window.location.href =
+      "https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https%3A%2F%2Fwww.jerneithe.site%2Fuser%2Flogin%2Foauth2%2Fcode%2Fgoogle&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&service=lso&o2v=2&theme=glif&flowName=GeneralOAuthFlow";
+  };
+
+  // 일반 로그인
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+
     try {
       const respone = await axios({
-        method: "GET",
-        url: "13.124.197.227:8080/user/api/login?email=user100@test.com&password=1234",
+        method: "POST",
+        url: "https://www.jerneithe.site/user/login",
         headers: {
           Authorization: "weatherfit",
         },
       });
-
-      /*
-      const res = await axios.post("/user/signin", { email, pw });
-
-      // 응답 상태 코드가 200이면 로그인 성공
-      if (res.status === 200) {
-        alert(`${res.data.ninkname}님 반갑습니다!`);
-        router.push("/"); // 로그인 성공 후 메인으로 이동
-      } else {
-        // 로그인 실패 시 서버에서 보낸 에러 메시지를 출력
-        alert(res.data.message);
-      }
-      */
-
-      /*
-      // if (email === userData.email && pw === userData.pw) {
-      //   alert(`${userData.name}님 반갑습니다!`);
-      //   router.push("/"); // 로그인 성공 후 메인으로 이동
-      // } else if (email === userData.email && pw != userData.pw) {
-      //   alert("비밀번호가 틀렸습니다.");
-      // } else if (email != userData.email && pw === userData.pw) {
-      //   alert("아이디가 틀렸습니다.");
-      // } else {
-      //   alert("로그인에 실패하였습니다.");
-      // }
-      */
+      console.log(respone);
     } catch (error) {
       console.error(error);
     }
@@ -62,8 +52,9 @@ export default function Login() {
 
   const handleInputChange =
     (setState: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: ChangeEvent<HTMLInputElement>) =>
+    (e: ChangeEvent<HTMLInputElement>) => {
       setState(e.target.value);
+    };
 
   return (
     <div className="container">
@@ -105,7 +96,12 @@ export default function Login() {
       <br />
       <br />
       <div className="login_easy">
-        <hr /> 간편 로그인 <hr />
+        <div>
+          <hr /> 간편 로그인 <hr />
+        </div>
+        <button className="" onClick={onGoogleSocialLogin}>
+          구글 소셜 로그인
+        </button>
       </div>
       <Menubar />
     </div>
