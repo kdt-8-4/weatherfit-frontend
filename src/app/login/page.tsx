@@ -17,7 +17,7 @@ export default function Login() {
 
     try {
       const respone = await axios({
-        method: "GET",
+        method: "POST",
         url: `https://www.jerneithe.site/user/api/login?email=${email}&password=${pw}`,
         // headers: {
         //   Authorization: "weatherfit",
