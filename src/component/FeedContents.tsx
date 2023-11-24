@@ -12,6 +12,7 @@ export default function FeedContenets(){
 
             console.log("받아온 피드 데이터", req);
         }
+        feeddata();
     }, []);
 
     return(<>
