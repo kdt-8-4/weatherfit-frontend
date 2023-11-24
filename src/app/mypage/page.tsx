@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "../../style/mypage.scss";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";    
 import Menubar from "@/component/MenuBar";
 import TabBar from "@/component/TabBar";
 import ProfileModal from "@/component/ProfileModal";

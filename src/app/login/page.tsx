@@ -28,24 +28,6 @@ export default function Login() {
       console.error("login error: ", error);
     }
 
-    // useEffect(() => {
-    //   const dataFunc = async () => {
-    //     try {
-    //       const respone = await axios({
-    //         method: "GET",
-    //         url: `https://www.jerneithe.site/user/api/login?email=${email}&password=${pw}`,
-    //         // headers: {
-    //         //   Authorization: "weatherfit",
-    //         // },
-    //       });
-    //       console.log(respone);
-    //     } catch (error) {
-    //       console.error(error);
-    //     }
-    //   };
-
-    //   dataFunc();
-    // });
   };
 
   const handleInputChange =
