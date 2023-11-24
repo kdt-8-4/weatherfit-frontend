@@ -3,8 +3,8 @@ import "../../style/login.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Menubar from "../../component/MenuBar";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -36,15 +36,16 @@ export default function Login() {
     try {
       const respone = await axios({
         method: "POST",
-        url: "https://www.jerneithe.site/user/login",
-        headers: {
-          Authorization: "weatherfit",
-        },
+        url: `https://www.jerneithe.site/user/api/login?email=${email}&password=${pw}`,
+        // headers: {
+        //   Authorization: "weatherfit",
+        // },
       });
-      console.log(respone);
+      console.log("login respone: ", respone);
     } catch (error) {
-      console.error(error);
+      console.error("login error: ", error);
     }
+
   };
 
   const handleInputChange =
