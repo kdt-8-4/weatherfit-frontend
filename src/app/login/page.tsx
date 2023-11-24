@@ -9,9 +9,6 @@ import axios from "axios";
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
-  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-  const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
-  const router = useRouter();
 
   useEffect(() => {
     // 페이지 로드 시 URL에서 access_token 파싱
