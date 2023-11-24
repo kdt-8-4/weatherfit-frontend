@@ -1,19 +1,22 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import "../../style/mypage.scss";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
 import TabBar from "@/component/TabBar";
-import Profile from "@/component/Profile";
+import ProfileModal from "@/component/ProfileModal";
 // import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined'; // > 아이콘
 
 export default function Mypage() {
+  // 회원 정보 수정 모달
   const [showProfileModify, setShowProfileModify] = useState<boolean>(false);
 
+  // 회원 정보 수정 모달 이벤트
   const handleSettingsClick = () => {
     setShowProfileModify(!showProfileModify);
   };
+
   return (
     <>
       <div className="container">
@@ -47,7 +50,9 @@ export default function Mypage() {
         </div>
         <Menubar />
       </div>
-      {showProfileModify ? <Profile /> : null}
+      {showProfileModify && (
+        <ProfileModal handleSettingsClick={handleSettingsClick} />
+      )}
     </>
   );
 }

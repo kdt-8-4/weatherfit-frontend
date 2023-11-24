@@ -7,13 +7,6 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-// 임시 데이터
-const userData = {
-  email: "testuser",
-  pw: "testPw",
-  name: "테스트",
-};
-
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
@@ -22,24 +15,37 @@ export default function Login() {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    useEffect(() => {
-      const dataFunc = async () => {
-        try {
-          const respone = await axios({
-            method: "GET",
-            url: "https://www.jerneithe.site/user/signin?email=user100@test.com&password=1234",
-            headers: {
-              Authorization: "weatherfit",
-            },
-          });
-          console.log(respone);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    try {
+      const respone = await axios({
+        method: "GET",
+        url: `https://www.jerneithe.site/user/api/login?email=${email}&password=${pw}`,
+        // headers: {
+        //   Authorization: "weatherfit",
+        // },
+      });
+      console.log("login respone: ", respone);
+    } catch (error) {
+      console.error("login error: ", error);
+    }
 
-      dataFunc();
-    });
+    // useEffect(() => {
+    //   const dataFunc = async () => {
+    //     try {
+    //       const respone = await axios({
+    //         method: "GET",
+    //         url: `https://www.jerneithe.site/user/api/login?email=${email}&password=${pw}`,
+    //         // headers: {
+    //         //   Authorization: "weatherfit",
+    //         // },
+    //       });
+    //       console.log(respone);
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+    //   };
+
+    //   dataFunc();
+    // });
   };
 
   const handleInputChange =
