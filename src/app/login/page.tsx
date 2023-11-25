@@ -4,7 +4,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import Menubar from "../../component/MenuBar";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -45,7 +44,6 @@ export default function Login() {
     } catch (error) {
       console.error("login error: ", error);
     }
-
   };
 
   const handleInputChange =

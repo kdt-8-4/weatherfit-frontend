@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 export default function CompleteProfile() {
