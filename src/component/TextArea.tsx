@@ -37,7 +37,6 @@ const TextArea: React.FC<TextAreaProps> = ({
     }
     return [];
   };
-
   // 엔터키 인식해서 줄바꿈 가능하게
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {

@@ -1,4 +1,5 @@
 "use client";
+import { Link } from "@mui/icons-material";
 import "../../style/login.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Menubar from "../../component/MenuBar";
@@ -7,28 +8,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
-
-  useEffect(() => {
-    // 페이지 로드 시 URL에서 access_token 파싱
-    const urlParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = urlParams.get("access_token");
-
-    // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
-    if (accessToken) {
-      localStorage.setItem("accessToken", accessToken);
-      // 백엔드로 전송하려면 이곳에서 API 호출을 수행할 수 있습니다.
-      // axios.post('/api/authenticate', { accessToken });
-    }
-  }, []);
-
-  const onGoogleSocialLogin = async () => {
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https%3A%2F%2Fwww.jerneithe.site%2Fuser%2Flogin%2Foauth2%2Fcode%2Fgoogle&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&service=lso&o2v=2&theme=glif&flowName=GeneralOAuthFlow";
-  };
-
-  // 일반 로그인
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,9 +32,8 @@ export default function Login() {
 
   const handleInputChange =
     (setState: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
-    };
 
   return (
     <div className="container">
@@ -94,12 +75,7 @@ export default function Login() {
       <br />
       <br />
       <div className="login_easy">
-        <div>
-          <hr /> 간편 로그인 <hr />
-        </div>
-        <button className="" onClick={onGoogleSocialLogin}>
-          구글 소셜 로그인
-        </button>
+        <hr /> 간편 로그인 <hr />
       </div>
       <Menubar />
     </div>
