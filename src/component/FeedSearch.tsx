@@ -26,7 +26,7 @@ export default function FeedSearch(){
                 <input id="search_input_dj" type="text" placeholder="#해시태그를 입력하세요."></input>
                 <button id="search_btn_dj" onChange={() => search_final()}>
                     <Image
-                        src="/search.svg"
+                        src="/images/search.svg"
                         alt="search"
                         className="search_img_dj"
                         width={12}

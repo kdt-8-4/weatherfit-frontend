@@ -17,8 +17,14 @@ body {
 .container {
   width: 75%;
   height: 100%;
-  /* menubar 밑에 고정 안되는 경우에 사용
+  /* menubar 밑에 고정 안되는 경우에 사용 */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; */
+  justify-content: space-between;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
 }
