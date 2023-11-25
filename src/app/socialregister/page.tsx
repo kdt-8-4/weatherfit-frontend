@@ -8,7 +8,6 @@ export default function CompleteProfile() {
   const [nickname, setNickname] = useState<string>("");
   const router = useRouter();
 
-  // 닉네임 설정 완료 후 다음 단계로 이동
   const handleNicknameSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
