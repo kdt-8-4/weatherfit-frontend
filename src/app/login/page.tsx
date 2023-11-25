@@ -17,8 +17,6 @@ export default function Login() {
     // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-      // 백엔드로 전송하려면 이곳에서 API 호출을 수행할 수 있습니다.
-      // axios.post('/api/authenticate', { accessToken });
     }
   }, []);
 
