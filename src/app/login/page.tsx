@@ -1,4 +1,5 @@
 "use client";
+import { Link } from "@mui/icons-material";
 import "../../style/login.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Menubar from "../../component/MenuBar";
@@ -46,9 +47,8 @@ export default function Login() {
 
   const handleInputChange =
     (setState: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
-    };
 
   return (
     <div className="container">
@@ -90,12 +90,7 @@ export default function Login() {
       <br />
       <br />
       <div className="login_easy">
-        <div>
-          <hr /> 간편 로그인 <hr />
-        </div>
-        <button className="" onClick={onGoogleSocialLogin}>
-          구글 소셜 로그인
-        </button>
+        <hr /> 간편 로그인 <hr />
       </div>
       <Menubar />
     </div>
