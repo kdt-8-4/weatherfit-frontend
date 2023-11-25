@@ -6,7 +6,7 @@ import "../../style/upload.scss";
 import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 
 export default function Upload(): JSX.Element {
@@ -18,9 +18,7 @@ export default function Upload(): JSX.Element {
   >({});
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
-    // if (files) {
     setSelectedImages(files ? Array.from(files) : []);
-    // }
   }, []);
 
   const handleContent = (text: string) => {
