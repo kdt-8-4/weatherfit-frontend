@@ -3,9 +3,6 @@
 .container {
   font-family: "EASTARJET-Medium";
   font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -57,9 +54,6 @@ footer {
 
 // 모바일
 @media only screen and (min-width: 320px) and (max-width: 768px) {
-  .container {
-    width: 100%;
-  }
   form {
     width: 75vw;
   }
