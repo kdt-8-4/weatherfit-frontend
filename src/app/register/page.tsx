@@ -4,16 +4,15 @@ import "../../style/register.scss";
 import { useState } from "react";
 import InputBar from "@/component/InputBar";
 import Menubar from "@/component/MenuBar";
-
 import axios from "axios";
 
 ///////////////////////////해야하는 작업/////////////////////////////
 
 // 희성이형하고 같이해야함
-//1. 비밀번호 확인 기능 
-//2. 이메일 인증 전에는 데이터 전송을 해주지 않고, 이메일 전송을 통해 토큰을 받았을때만 
+//1. 비밀번호 확인 기능
+//2. 이메일 인증 전에는 데이터 전송을 해주지 않고, 이메일 전송을 통해 토큰을 받았을때만
 // 회원가입 데이터를 전송해주는 기능
-//3. 소셜데이터 로그인 버튼과 소셜 로그인 기능 
+//3. 소셜데이터 로그인 버튼과 소셜 로그인 기능
 
 ///////////////////////////////////////////////////////////////////
 export default function Register(): JSX.Element {
@@ -44,39 +43,33 @@ export default function Register(): JSX.Element {
     return inputValue === password;
   };
 
-  const verify_btn = async() => {
+  const verify_btn = async () => {
     console.log("Verify 버튼이 클릭되었습니다.");
 
-    const verify_email =  await axios({
-      method : "POST",
-      url : "https://www.jerneithe.site/user/profile",
-      data : email
+    const verify_email = await axios({
+      method: "POST",
+      url: "https://www.jerneithe.site/user/profile",
+      data: email,
     });
+  };
 
-
-  }
-
-  const caster_register = async() => {
+  const caster_register = async () => {
     const req_regdata = {
       email,
       name,
       nickname,
       password,
-      repassword,  
-    }
+      repassword,
+    };
 
     console.log(req_regdata);
 
-    const register_data =  await axios({
-      method : "POST",
-      url : "https://www.jerneithe.site/user/signup",
-      data : req_regdata
+    const register_data = await axios({
+      method: "POST",
+      url: "https://www.jerneithe.site/user/signup",
+      data: req_regdata,
     });
-
-
-
   };
-
 
   return (
     <div className="container">
