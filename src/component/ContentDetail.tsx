@@ -3,13 +3,10 @@ interface ContentDetailProps {
 }
 
 const ContentDetail = ({ content }: ContentDetailProps): JSX.Element => {
-  // 해시태그를 추출하고 색상을 바꾸는 로직 등을 포함하여 구현
-  // 추출한 해시태그를 강조하여 표시하는 방식으로 구현
-  const extractAndStyleHashtags = (content: string) => {
-    // ...해시태그 추출 및 스타일 적용 로직
-  };
+  const extractAndStyleHashtags = (content: string) => {};
 
   return <div className="content-detail">{content}</div>;
+  // 해시태그가 content 내부에 포함 -> 글과 같이 해시태그 나와야 되고 해시태그는 #해시태그 이런 식으로 보여야 되며 색 달라야되고, 클릭 되야되며 클릭되면 그 해시태그로 검색하는 페이지로 이동하게 해야함
 };
 
 export default ContentDetail;
