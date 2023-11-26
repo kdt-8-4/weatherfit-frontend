@@ -1,0 +1,36 @@
+//데이터 가져와 무한 스크롤
+.feed_box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 2%;
+    position: relative;
+    padding: 2%;
+    .feed {
+      width: 32%;
+      height: 30vw;
+      font-weight: bold;
+      text-align: center;
+      background-color: white;
+    }
+  }
+
+//피드 정보
+//비율 맞추기
+.feed_info{
+    height: 30%;
+    display: flex;
+
+    justify-content: space-between; 
+}
+
+.feed_imgs3{
+    height: 70%;
+    overflow: hidden;
+    background-color: beige;
+}
+
+//정보 div 비율 맞추기
+
+#like_feed_dj{
+    display: flex;
+}

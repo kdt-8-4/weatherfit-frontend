@@ -5,7 +5,7 @@
 
 .search_contain_dj{
     width: 75%;
-    height: 30px;
+    height: 35px;
     margin: 10px 5px 10px 10%;
     background-color: #E5EBFF;
     border-radius: 8px;
@@ -17,7 +17,7 @@
 
     background-color: #E5EBFF;
 
-    font-size: 11px;
+    font-size: 13px;
     
 }
 
@@ -28,6 +28,10 @@
 
 .search_img_dj{
     display: block;
+    position: relative;
+    top: 5px;
+    left: 10px;
+    
 }
 
 #cancle_btn_dj{
