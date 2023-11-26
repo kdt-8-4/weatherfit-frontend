@@ -6,8 +6,31 @@ import "../../style/detail.scss";
 import Menubar from "@/component/MenuBar";
 import Profile from "@/component/Profile";
 import ImageDetail from "@/component/ImageDetail";
+import Comments from "@/component/Comments";
+import Like from "@/component/Like";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ContentDetail from "@/component/ContentDetail";
 
 export default function Detail(): JSX.Element {
+  const [boardDetail, setBoardDetail] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          // "https://www.jerneithe.site/board/detail/{boardId}",
+          "https://www.jerneithe.site/board/detail/1",
+        );
+        setBoardDetail(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="container">
       <header className="top w-full">
@@ -28,9 +51,18 @@ export default function Detail(): JSX.Element {
         <hr className="w-full h-px" />
       </header>
 
-      <section className="main w-full h-full">
-        <Profile />
-        <ImageDetail />
+      <section className="main w-5/6 h-full">
+        {boardDetail && (
+          <>
+            <Profile nickName={boardDetail.nickName} />
+            <ImageDetail images={boardDetail.images} />
+            <ContentDetail content={boardDetail.content} />
+            <div className="button flex">
+              <Like />
+              <Comments />
+            </div>
+          </>
+        )}
       </section>
 
       <footer className="w-full">
