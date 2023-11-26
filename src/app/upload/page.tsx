@@ -6,7 +6,7 @@ import "../../style/upload.scss";
 import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 
 import { RecoilRoot } from "recoil";
@@ -24,9 +24,7 @@ export default function Upload(): JSX.Element {
   // const [icon, setIcon] = useRecoilState(WeatherIcons);
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
-    // if (files) {
     setSelectedImages(files ? Array.from(files) : []);
-    // }
   }, []);
 
   const handleContent = (text: string) => {
