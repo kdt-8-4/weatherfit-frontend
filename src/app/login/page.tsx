@@ -9,7 +9,7 @@ import LoginForm from "@/component/LoginForm";
 
 export default function Login() {
   return (
-    <RecoilRoot>
+    // <RecoilRoot>
       <div className="container">
         <CloseIcon />
         <hr className="layout_hr" />
@@ -18,6 +18,6 @@ export default function Login() {
         <Menubar />
         <br />
       </div>
-    </RecoilRoot>
+    // </RecoilRoot>
   );
 }

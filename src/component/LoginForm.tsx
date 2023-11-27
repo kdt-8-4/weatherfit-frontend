@@ -51,7 +51,7 @@ export default function LoginForm() {
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
       setToken(resData.token);
-
+      router.push("/upload");
       // router.push("/"); // 로그인 성공시 메인페이지로 이동
     } catch (error: any) {
       setEmail("");
@@ -62,10 +62,16 @@ export default function LoginForm() {
     }
   };
 
+  console.log("resData token 적용됐는지: ", token);
+
+
   const handleInputChange =
     (setState: React.Dispatch<React.SetStateAction<string>>) =>
     (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
+
+  
+
 
   return (
     <>

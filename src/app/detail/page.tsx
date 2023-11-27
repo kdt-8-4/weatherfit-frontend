@@ -34,7 +34,7 @@ export default function Detail(): JSX.Element {
   }, []);
 
   return (
-    <RecoilRoot>
+    // <RecoilRoot>
       <div className="container">
         <header className="top w-full">
           <div className="w-full h-12 flex items-center ">
@@ -75,6 +75,6 @@ export default function Detail(): JSX.Element {
           <Menubar />
         </footer>
       </div>
-    </RecoilRoot>
+    // </RecoilRoot>
   );
 }

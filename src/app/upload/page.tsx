@@ -6,9 +6,14 @@ import "../../style/upload.scss";
 import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+
 import { RecoilRoot } from "recoil";
+import { Login_token } from "@/recoilAtom/Login_token";
+import { useRecoilState } from "recoil";
+
+
 
 export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -18,6 +23,11 @@ export default function Upload(): JSX.Element {
     Record<string, string[]>
   >({});
   // const [icon, setIcon] = useRecoilState(WeatherIcons);
+  const [token, setToken] = useRecoilState(Login_token);
+
+  useEffect(()=>{
+    console.log("토큰값을 받아왔는가" ,token);
+  },[])
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
@@ -72,7 +82,7 @@ export default function Upload(): JSX.Element {
   };
 
   return (
-    <RecoilRoot>
+    // <RecoilRoot>
       <div className="container">
         <header>
           <div className="top">
@@ -225,6 +235,6 @@ export default function Upload(): JSX.Element {
           <Menubar />
         </footer>
       </div>
-    </RecoilRoot>
+    // </RecoilRoot>
   );
 }
