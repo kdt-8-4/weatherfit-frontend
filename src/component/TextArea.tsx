@@ -67,7 +67,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   return (
     <textarea
       ref={textAreaRef}
-      rows={5}
+      rows={6}
       value={text}
       placeholder={placeholder}
       onFocus={handleFocus}
