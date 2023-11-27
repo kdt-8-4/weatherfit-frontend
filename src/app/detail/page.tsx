@@ -21,8 +21,8 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // "https://www.jerneithe.site/board/detail/{boardId}",
-          "https://www.jerneithe.site/board/detail/3",
+          "https://www.jerneithe.site/board/detail/{boardId}",
+          // "https://www.jerneithe.site/board/detail/3",
         );
         setBoardDetail(response.data);
       } catch (error) {
@@ -34,7 +34,7 @@ export default function Detail(): JSX.Element {
   }, []);
 
   return (
-    <RecoilRoot>
+    // <RecoilRoot>
       <div className="container">
         <header className="top w-full">
           <div className="w-full h-12 flex items-center ">
@@ -58,11 +58,13 @@ export default function Detail(): JSX.Element {
           {boardDetail && (
             <>
               <Profile nickName={boardDetail.nickName} />
-              <ImageDetail images={boardDetail.images} />
-              <ContentDetail
-                content={boardDetail.content}
-                hashTag={boardDetail.hashTag}
-              />
+              <div className="contents w-full">
+                <ImageDetail images={boardDetail.images} />
+                <ContentDetail
+                  content={boardDetail.content}
+                  hashTag={boardDetail.hashTag}
+                />
+              </div>
               <div className="button flex">
                 <Like />
                 <Comments />
@@ -75,6 +77,6 @@ export default function Detail(): JSX.Element {
           <Menubar />
         </footer>
       </div>
-    </RecoilRoot>
+    // </RecoilRoot>
   );
 }
