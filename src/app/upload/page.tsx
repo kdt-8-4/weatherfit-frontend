@@ -9,6 +9,11 @@ import SelectCategory from "@/component/SelectCategory";
 import { useCallback, useState } from "react";
 import axios from "axios";
 
+import { RecoilRoot } from "recoil";
+
+import { RecoilRootProps, useRecoilState } from "recoil";
+import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
+
 export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [content, setContent] = useState<string>("");
@@ -16,6 +21,7 @@ export default function Upload(): JSX.Element {
   const [selectedCategories, setSelectedCategories] = useState<
     Record<string, string[]>
   >({});
+  // const [icon, setIcon] = useRecoilState(WeatherIcons);
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
@@ -54,6 +60,8 @@ export default function Upload(): JSX.Element {
         formData.append("images", image);
       });
 
+      // console.log("폼데이터",formData);
+
       const response = await axios({
         method: "POST",
         url: "https://www.jerneithe.site/board/write",
@@ -69,6 +77,7 @@ export default function Upload(): JSX.Element {
   };
 
   return (
+    <RecoilRoot>  
     <div className="container">
       <header>
         <div className="top">
@@ -221,5 +230,6 @@ export default function Upload(): JSX.Element {
         <Menubar />
       </footer>
     </div>
+  </RecoilRoot>
   );
 }

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 import { FeedAtom } from "@/recoilAtom/FeedAtom";
 
-import { FeedSearchData } from "@/recoilAtom/FseahData";
+import { FeedSearchdata } from "@/recoilAtom/FseahData";
 
 import { FeedTop } from "@/recoilAtom/Category_top";
 import { FeedOuter } from "@/recoilAtom/Category_out";
@@ -38,7 +38,7 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
     // seState에서 이전 값을 사용하던 방식 사용 가능 setState((prev)=>[...prev, data]);
     const category_data = useRecoilValue(FeedAtom);
 
-    const [search, setSearch] = useRecoilState<SEARCH[]>(FeedSearchData);
+    const [search, setSearch] = useRecoilState<SEARCH[]>(FeedSearchdata);
 
     const [top_data, setTop] = useRecoilState<string[]>(FeedTop);
     const [outer_data, setOuter] = useRecoilState<string[]>(FeedOuter);
@@ -186,7 +186,7 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
             <div>{/* 카테고리 목록 */}
                 {view_arr && view_arr.map((myarr, index)=>{
                         return(<>
-                            <button className="cate_btn_dj" onClick={()=>cate_btn(myarr)} key={index}>{myarr}</button>
+                            <button key={index} className="cate_btn_dj" onClick={()=>cate_btn(myarr)}>{myarr}</button>
                             <br />
                         </>)
                     }
