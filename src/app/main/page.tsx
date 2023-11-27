@@ -5,8 +5,8 @@ import { RecoilRoot } from "recoil"
 export default function Mainpage() {
 
     return(<>
-    <RecoilRoot>
+    {/* <RecoilRoot> */}
         <MainWeather />
-    </RecoilRoot>
+    {/* </RecoilRoot> */}
     </>)
 }

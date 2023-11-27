@@ -17,7 +17,7 @@ import '../../style/feed.scss';
 export default function Feed(){
 
     return(<>
-    <RecoilRoot>
+    {/* <RecoilRoot> */}
         <div className="container_dj">
             <br />
             <FeedSearch />
@@ -28,6 +28,6 @@ export default function Feed(){
             <Menubar />
 
         </div>
-    </RecoilRoot>
+    {/* </RecoilRoot> */}
     </>)
 }
