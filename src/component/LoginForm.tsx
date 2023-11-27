@@ -1,11 +1,9 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
   const [token, setToken] = useRecoilState(Login_token);
@@ -51,8 +49,6 @@ export default function LoginForm() {
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
       setToken(resData.token);
-
-      // router.push("/"); // 로그인 성공시 메인페이지로 이동
     } catch (error: any) {
       setEmail("");
       setPw("");
