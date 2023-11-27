@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
 
+import { RecoilRoot } from "recoil";
+
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
 
@@ -32,6 +34,7 @@ export default function Detail(): JSX.Element {
   }, []);
 
   return (
+  <RecoilRoot>
     <div className="container">
       <header className="top w-full">
         <div className="w-full h-12 flex items-center ">
@@ -69,5 +72,6 @@ export default function Detail(): JSX.Element {
         <Menubar />
       </footer>
     </div>
+  </RecoilRoot>
   );
 }
