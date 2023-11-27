@@ -4,6 +4,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import Menubar from "../../component/MenuBar";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { RecoilRoot } from "recoil";
+import LoginForm from "@/component/LoginForm";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -21,8 +24,15 @@ export default function Login() {
   }, []);
 
   const onGoogleSocialLogin = async () => {
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https%3A%2F%2Fwww.jerneithe.site%2Fuser%2Flogin%2Foauth2%2Fcode%2Fgoogle&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&service=lso&o2v=2&theme=glif&flowName=GeneralOAuthFlow";
+    try {
+      const response = await axios({
+        method: "GET",
+        url: "https://jerneithe.site/user/social/login/google",
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // 일반 로그인
@@ -51,33 +61,13 @@ export default function Login() {
     };
 
   return (
-    <div className="container">
-      <CloseIcon />
-      <hr className="layout_hr" />
-      <br />
-      <div className="login_logobox">
-        기온별 옷차림은,
-        <p>옷 늘 날 씨</p>
-      </div>
-      <br />
-      <br />
-      <form className="login_form" onSubmit={handleLogin}>
-        <input
-          type="text"
-          className="login_email"
-          placeholder="이메일"
-          value={email}
-          onChange={handleInputChange(setEmail)}
-        />
+    <RecoilRoot>
+      <div className="container">
+        <CloseIcon />
+        <hr className="layout_hr" />
         <br />
-        <input
-          type="password"
-          className="login_pw"
-          placeholder="비밀번호"
-          value={pw}
-          onChange={handleInputChange(setPw)}
-        />
-        <br />
+        <LoginForm />
+        <Menubar />
         <br />
         <button type="submit">로 그 인</button>
       </form>
@@ -97,7 +87,6 @@ export default function Login() {
           구글 소셜 로그인
         </button>
       </div>
-      <Menubar />
-    </div>
+    </RecoilRoot>
   );
 }
