@@ -34,44 +34,47 @@ export default function Detail(): JSX.Element {
   }, []);
 
   return (
-  <RecoilRoot>
-    <div className="container">
-      <header className="top w-full">
-        <div className="w-full h-12 flex items-center ">
-          <Image
-            src="/images/back.svg"
-            width={15}
-            height={15}
-            className="ml-3 cursor-pointer"
-            alt="back"
-            onClick={() => {
-              window.history.back();
-            }}
-          />
-        </div>
-        <hr className="w-full h-px" />
-        <WeatherBar />
-        <hr className="w-full h-px" />
-      </header>
+    <RecoilRoot>
+      <div className="container">
+        <header className="top w-full">
+          <div className="w-full h-12 flex items-center ">
+            <Image
+              src="/images/back.svg"
+              width={15}
+              height={15}
+              className="ml-3 cursor-pointer"
+              alt="back"
+              onClick={() => {
+                window.history.back();
+              }}
+            />
+          </div>
+          <hr className="w-full h-px" />
+          <WeatherBar />
+          <hr className="w-full h-px" />
+        </header>
 
-      <section className="main w-5/6 h-full">
-        {boardDetail && (
-          <>
-            <Profile nickName={boardDetail.nickName} />
-            <ImageDetail images={boardDetail.images} />
-            <ContentDetail content={boardDetail.content} />
-            <div className="button flex">
-              <Like />
-              <Comments />
-            </div>
-          </>
-        )}
-      </section>
+        <section className="main w-5/6 h-full">
+          {boardDetail && (
+            <>
+              <Profile nickName={boardDetail.nickName} />
+              <ImageDetail images={boardDetail.images} />
+              <ContentDetail
+                content={boardDetail.content}
+                hashTag={boardDetail.hashTag}
+              />
+              <div className="button flex">
+                <Like />
+                <Comments />
+              </div>
+            </>
+          )}
+        </section>
 
-      <footer className="w-full">
-        <Menubar />
-      </footer>
-    </div>
-  </RecoilRoot>
+        <footer className="w-full">
+          <Menubar />
+        </footer>
+      </div>
+    </RecoilRoot>
   );
 }
