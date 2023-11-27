@@ -10,6 +10,29 @@ export default function LoginForm() {
   const [pw, setPw] = useState<string>("");
   const [token, setToken] = useRecoilState(Login_token);
 
+  useEffect(() => {
+    // 페이지 로드 시 URL에서 access_token 파싱
+    const urlParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = urlParams.get("access_token");
+
+    // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+    }
+  }, []);
+
+  const onGoogleSocialLogin = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: "https://jerneithe.site/user/social/login/google",
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -82,6 +105,7 @@ export default function LoginForm() {
       <br />
       <div className="login_easy">
         <hr /> 간편 로그인 <hr />
+        <button onClick={onGoogleSocialLogin}>구글 로그인</button>
       </div>
     </>
   );
