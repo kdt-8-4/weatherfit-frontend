@@ -4,6 +4,11 @@
   font-family: "EASTARJET-Medium";
   font-weight: 600;
   align-items: center;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .main {
     width: 95%;
@@ -15,10 +20,20 @@
     .content,
     .category {
       width: 100%;
-      height: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+    }
+    .content {
+      height: 300px;
+    }
+    .category {
+      height: 60%;
+      margin-bottom: 20px;
     }
   }
 }
+
 header {
   width: 100%;
 }

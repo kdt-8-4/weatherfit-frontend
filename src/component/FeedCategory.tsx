@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "../style/feedCategory.scss";
 import FeedcateDetail from "./FeedCateDetail";
+import FeedTemControl from "./FeedTemControl";
+import { BloomFilter } from "next/dist/shared/lib/bloom-filter";
 
 interface TabMenu {
     id: number;
@@ -47,6 +49,8 @@ export default function FeedCategory(){
     const [tab_control, setControl] = useState<boolean>(false);
     const [send_val, setVal] = useState<string>();
 
+    const [temtab_control, setTemtab] = useState<boolean>(false);
+
     //useEffect
     // useEffect(()=>{
     //     console.log("탭 메뉴",usetab);
@@ -66,17 +70,27 @@ export default function FeedCategory(){
 
     console.log(tab_control);
 
+    const tem_btn = () => {
+        if(tab_control == false) {
+            setTemtab(true);
+        } else {
+            setTemtab(false);
+        }
+    }
+
     
     return(<>
         <div id="category_dj_box">
             <ul id="category_dj">
                 {
                     usetab.map((val) => {
-                        return<li key={val.id} className="tab_menu_dj" onClick={() => tab_title(val.val)}> || {val.title}</li>
+                        return<li key={val.id} className="tab_menu_dj" onClick={() => tab_title(val.val)}> | {val.title} |</li>
                     })
                 }
             </ul>
+            <button onClick={tem_btn}>온도 조절</button>
         </div>
-        {tab_control && <FeedcateDetail categorytitle = {send_val} tab_control = {tab_control} setControl = {setControl}/>}          
+        {tab_control && <FeedcateDetail categorytitle = {send_val} tab_control = {tab_control} setControl = {setControl}/>}
+        {temtab_control && <FeedTemControl  setTemtab = {setTemtab}/>}       
     </>)
 }

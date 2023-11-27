@@ -1,0 +1,143 @@
+.modal_back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .modal_body {
+    background-color: #ffffff;
+    width: 500px;
+    height: 700px;
+    border-radius: 1%;
+    padding: 20px;
+    .top {
+      font-size: large;
+      font-weight: bold;
+      // text-align: center;
+      width: 100%;
+      padding: 1% 0 1% 0;
+      border-bottom: solid 2px #d0dbff;
+      margin: 2% 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .title {
+        width: 90%;
+        text-align: center;
+      }
+    }
+    .modal_content {
+      .modal_form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .user_image {
+          width: 130px;
+          height: 130px;
+        }
+        input {
+          margin-top: 10px;
+          border: 1px solid #d0dbff;
+          padding: 8px 10px;
+          border-radius: 7px;
+        }
+        p {
+          font-weight: bold;
+        }
+        .email_box {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          span {
+            margin-left: 10px;
+            color: gray;
+          }
+        }
+        .name_box {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          span {
+            margin-left: 10px;
+            color: gray;
+          }
+        }
+        .nickname_box {
+          margin-bottom: 10px;
+          .nickname_check {
+            display: flex;
+            align-items: center;
+          }
+          .nickname_check_btn {
+            border-radius: 10px;
+            border: none;
+            background-color: #a8bbff;
+            color: white;
+            font-weight: bolder;
+            padding: 2%;
+            font-size: small;
+            margin-left: 5px;
+            align-items: center;
+          }
+        }
+        .pw_box {
+          margin-bottom: 10px;
+          display: flex;
+          flex-direction: column;
+        }
+        .profile_edit_btn {
+          border-radius: 10px;
+          border: none;
+          background-color: #a8bbff;
+          color: white;
+          font-weight: bolder;
+          padding: 2%;
+          font-size: small;
+          margin-left: 5px;
+          align-items: center;
+        }
+      }
+    }
+    .user_out_btn {
+      text-decoration: underline;
+      color: gray;
+      font-size: xx-small;
+    }
+    // h2 {
+    //     text-align: center;
+    //     font-size: x-large;
+    //     font-weight: bold;
+    //     border-bottom: solid 2px;
+    // }
+    // ----------------------------------------
+    //padding: 1.5rem 3rem;
+    // width: 28.125rem;
+    // border-radius: 0.313rem;
+    // display: flex;
+    // flex-direction: column;
+    background-color: #ffffff;
+    // input {
+    //   display: flex;
+    //   align-items: center;
+    //   margin-top: 0.625rem;
+    //   border: 0.063rem solid gray;
+    //   padding: 0.8rem 1rem;
+    //   font-size: 1rem;
+    // }
+    // div {
+    //   display: flex;
+    //   justify-content: space-evenly;
+    //   margin-top: 1.25rem;
+    //   button {
+    //     border: none;
+    //     width: 6.875rem;
+    //     padding: 0.8rem 1.8rem;
+    //     font-size: 0.9rem;
+    //   }
+    // }
+  }
+}

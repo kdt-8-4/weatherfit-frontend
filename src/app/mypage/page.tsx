@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "../../style/mypage.scss";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";    
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
 import TabBar from "@/component/TabBar";
 import ProfileModal from "@/component/ProfileModal";
@@ -24,7 +24,7 @@ export default function Mypage() {
         {/* <header>로고 이미지</header> */}
         <div className="top">
           <h2 className="title">마이페이지</h2>
-          <SettingsIcon className="setting" onClick={handleSettingsClick} />
+          <SettingsIcon className="icon" onClick={handleSettingsClick} />
         </div>
         <div className="mypage_body">
           {/* ------------- 프로필 부분 ------------- */}

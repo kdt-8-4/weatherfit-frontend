@@ -1,7 +1,11 @@
 "use client";
 import Image from "next/image";
 
-export default function Profile(): JSX.Element {
+interface ProfileProps {
+  nickName: string;
+}
+
+const Profile = ({ nickName }: ProfileProps): JSX.Element => {
   return (
     <div className="profile w-full h-20 flex items-center p-3">
       <div className="img relative rounded-full overflow-hidden w-12 h-12 md:w-18 md:h-18 lg:w-18 lg:h-18">
@@ -14,9 +18,11 @@ export default function Profile(): JSX.Element {
         />
       </div>
       <div className="text flex flex-col ml-2">
-        <span>홍길동</span>
+        <span>{nickName}</span>
         <span>-5 ℃</span>
       </div>
     </div>
   );
-}
+};
+
+export default Profile;
