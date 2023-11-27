@@ -22,14 +22,15 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
     }
     .content {
       height: 300px;
+      justify-content: space-evenly;
     }
     .category {
       height: 60%;
       margin-bottom: 20px;
+      justify-content: flex-start;
     }
   }
 }

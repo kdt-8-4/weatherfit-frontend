@@ -22,7 +22,7 @@ export default function Detail(): JSX.Element {
       try {
         const response = await axios.get(
           // "https://www.jerneithe.site/board/detail/{boardId}",
-          "https://www.jerneithe.site/board/detail/3",
+          "https://www.jerneithe.site/board/detail/1",
         );
         setBoardDetail(response.data);
       } catch (error) {
