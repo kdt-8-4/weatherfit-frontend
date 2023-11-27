@@ -21,8 +21,15 @@ export default function Login() {
   }, []);
 
   const onGoogleSocialLogin = async () => {
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https%3A%2F%2Fwww.jerneithe.site%2Fuser%2Flogin%2Foauth2%2Fcode%2Fgoogle&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&service=lso&o2v=2&theme=glif&flowName=GeneralOAuthFlow";
+    try {
+      const response = await axios({
+        method: "GET",
+        url: "https://jerneithe.site/user/social/login/google",
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // 일반 로그인
