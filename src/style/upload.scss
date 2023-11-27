@@ -3,10 +3,12 @@
 .container {
   font-family: "EASTARJET-Medium";
   font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .main {
     width: 95%;
@@ -14,15 +16,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    // justify-content: center;
 
     .content,
     .category {
       width: 100%;
-      height: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+    }
+    .content {
+      height: 300px;
+    }
+    .category {
+      height: 60%;
+      margin-bottom: 20px;
     }
   }
 }
+
 header {
   width: 100%;
 }
@@ -49,9 +60,6 @@ footer {
 @media only screen and (min-width: 320px) and (max-width: 768px) {
   #x {
     @include x-icon(20px, 20px);
-  }
-  .container {
-    width: 100%;
   }
   .top {
     height: 40px;

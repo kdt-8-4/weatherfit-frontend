@@ -5,7 +5,7 @@ interface SEARCH{
     serch_data:string[];
 }
 
-export const FeedSearchData = atom<SEARCH[]>({
+export const FeedSearchdata = atom<SEARCH[]>({
     key:'seach_key_dj',//전역적으로 유일한 값
     default:[
         {
