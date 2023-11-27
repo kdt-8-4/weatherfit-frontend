@@ -68,7 +68,7 @@ export default function FeedContents(){
     //     // console.log( "필터 데이터" ,filter_feedata);
     //     // setFeedd(filter_feedata);
 
-    }, [max, min])
+    }, [max, min, setFeedd])
 
     
     // console.log(feedata[0].nickName);
@@ -114,7 +114,7 @@ export default function FeedContents(){
             {feedata ?
             feedata.map((arr)=>{
                 return( 
-                <div className="feed">
+                <div className="feed" key={arr.boardId}>
                     <div className="feed_imgs3">
                         <Image
                             src={arr.images.image_url}
@@ -131,7 +131,7 @@ export default function FeedContents(){
                             <div id="like_feed_dj">
                                 <button onClick={() => heart_plus(arr.boardId)}>
                                 <Image
-                                    src="/images/like.svg"
+                                    src="/images/likeuseFeed.svg"
                                     alt="좋아요"
                                     width={25}
                                     height={25}

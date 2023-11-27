@@ -14,7 +14,7 @@ import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
 const WeatherBar:React.FC = () => {
   const API_KEY = "fa3eba61f243af3e8e69086462763172";
   const kakao_API_KEY = "3a6c3035c801405eaa71ebb9dc7f474b";
-  let temp: string;
+  // let temp: string;
   const [usetemp, setTemp] = useRecoilState(TemNowControl);
   
   const [max, setMax] = useRecoilState(TemMaxControl);
@@ -44,8 +44,7 @@ const WeatherBar:React.FC = () => {
             `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
           );
           const weatherData = await weatherResponse.json();
-          temp = weatherData.main.temp.toFixed(1);
-          setTemp(temp);
+          setTemp(weatherData.main.temp.toFixed(1));
           // max = weatherData.main.temp_max.toFixed(1);
           setMax(weatherData.main.temp_max.toFixed(1));
           setMin(weatherData.main.temp_min.toFixed(1));
