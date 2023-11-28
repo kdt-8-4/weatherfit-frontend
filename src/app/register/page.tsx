@@ -21,12 +21,12 @@ export default function Register(): JSX.Element {
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repassword, setRepassword] = useState<string>("");
-  console.log("========================================");
-  console.log("이메일", email);
-  console.log("이름", name);
-  console.log("닉네임", nickname);
-  console.log("비번", password);
-  console.log("비번 확인", repassword);
+  // console.log("========================================");
+  // console.log("이메일", email);
+  // console.log("이름", name);
+  // console.log("닉네임", nickname);
+  // console.log("비번", password);
+  // console.log("비번 확인", repassword);
 
   const validateEmail = (inputValue: string) => {
     const emailFormat =
@@ -54,21 +54,34 @@ export default function Register(): JSX.Element {
   };
 
   const caster_register = async () => {
-    const req_regdata = {
-      email,
-      name,
-      nickname,
-      password,
-      repassword,
-    };
+    // const req_regdata = {
+    //   email : email,
+    //   name : name,
+    //   nickname : nickname,
+    //   password : password,
+    // };
 
-    console.log(req_regdata);
+    // console.log("데이터 확인", req_regdata);
 
-    const register_data = await axios({
+    console.log(
+      email, 
+      name, 
+      nickname, 
+      password
+      )
+
+    const register_data = axios({
       method: "POST",
-      url: "https://www.jerneithe.site/user/signup",
-      data: req_regdata,
+      url: "https://www.jerneithe.site/user/api/signup",
+      data : {
+        email : email,
+        name : name,
+        nickname : nickname,
+        password : password
+      }
     });
+
+    console.log("회원가입 됐는지 확인", register_data);
   };
 
   return (

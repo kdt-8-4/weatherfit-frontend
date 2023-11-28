@@ -10,16 +10,16 @@ export default function LoginForm() {
   const [token, setToken] = useRecoilState(Login_token);
   const router = useRouter();
 
-  useEffect(() => {
-    // 페이지 로드 시 URL에서 access_token 파싱
-    const urlParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = urlParams.get("access_token");
+  // useEffect(() => {
+  //   // 페이지 로드 시 URL에서 access_token 파싱
+  //   const urlParams = new URLSearchParams(window.location.hash.substring(1));
+  //   const accessToken = urlParams.get("access_token");
 
-    // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
-    if (accessToken) {
-      localStorage.setItem("accessToken", accessToken);
-    }
-  }, []);
+  //   // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
+  //   if (accessToken) {
+  //     localStorage.setItem("accessToken", accessToken);
+  //   }
+  // }, []);
 
   const onGoogleSocialLogin = async () => {
     // try {
@@ -39,7 +39,7 @@ export default function LoginForm() {
 
     try {
       const response = await axios({
-        method: "POST",
+        method: "GET",
         url: `https://www.jerneithe.site/user/login/api?email=${email}&password=${pw}`,
       });
 
@@ -49,7 +49,7 @@ export default function LoginForm() {
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
       // 토큰을 쿠키에 저장
-      document.cookie = `accessToken=${resData.token}; path=/`;
+      // document.cookie = `accessToken=${resData.token}; path=/`;
       setToken(resData.token);
       // router.push('/');
     } catch (error: any) {
