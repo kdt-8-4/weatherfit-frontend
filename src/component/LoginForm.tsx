@@ -40,7 +40,7 @@ export default function LoginForm() {
 
     try {
       const response = await axios({
-        method: "POST",
+        method: "GET",
         url: `https://www.jerneithe.site/user/login/api?email=${email}&password=${pw}`,
       });
 
