@@ -4,7 +4,6 @@ import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
 
-
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
@@ -53,7 +52,6 @@ export default function LoginForm() {
       // document.cookie = `accessToken=${resData.token}; path=/`;
       setToken(resData.token);
       // router.push('/');
-
     } catch (error: any) {
       setEmail("");
       setPw("");
@@ -65,14 +63,10 @@ export default function LoginForm() {
 
   console.log("resData token 적용됐는지: ", token);
 
-
   const handleInputChange =
     (setState: React.Dispatch<React.SetStateAction<string>>) =>
     (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
-
-  
-
 
   return (
     <>
