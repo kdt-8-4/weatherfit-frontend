@@ -38,7 +38,7 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // "https://www.jerneithe.site/board/detail/{boardId}",
+          //`https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
           "https://www.jerneithe.site/board/detail/3",
           { headers: { Authorization: "Bearer " + accessToken } },
         );
