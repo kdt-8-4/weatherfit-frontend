@@ -6,6 +6,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import Menubar from "@/component/MenuBar";
 import TabBar from "@/component/TabBar";
 import ProfileModal from "@/component/ProfileModal";
+
 // import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined'; // > 아이콘
 
 export default function Mypage() {
@@ -20,6 +21,7 @@ export default function Mypage() {
   return (
     <>
       <div className="container">
+        
         {/* header 넣을지 말지 */}
         {/* <header>로고 이미지</header> */}
         <div className="top">
