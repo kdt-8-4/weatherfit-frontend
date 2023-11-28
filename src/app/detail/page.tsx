@@ -11,12 +11,29 @@ import Like from "@/component/Like";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
+import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
 
 import { RecoilRoot } from "recoil";
 import CommentIcon from "@/component/CommentIcon";
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  // const accessToken = document.cookie.replace(
+  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+  //   "$1",
+  // );
+  const accessToken = Cookies.get("accessToken");
+  console.log("accessToken 값: ", accessToken);
+
+  // const decodedToken = jwt.decode(accessToken) as { [key: string]: any };
+  const decodedToken = accessToken
+    ? (jwt.decode(accessToken) as { [key: string]: any })
+    : null;
+  console.log("디코딩", decodedToken);
+  const decoded_nickName = decodedToken?.sub;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +43,7 @@ export default function Detail(): JSX.Element {
           `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`
           // 테스트용
           // "https://www.jerneithe.site/board/detail/1"
+          { headers: { Authorization: "Bearer " + accessToken } },
         );
         setBoardDetail(response.data);
       } catch (error) {
@@ -36,9 +54,36 @@ export default function Detail(): JSX.Element {
     fetchData();
   }, []);
 
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const handleEdit = () => {
+    // 수정 버튼 클릭 시 처리할 로직 추가
+    console.log("Edit clicked");
+  };
+
+  const handleDelete = async () => {
+    // 삭제 버튼 클릭 시 처리할 로직 추가
+    if (window.confirm("게시물을 삭제하시겠습니까?")) {
+      try {
+        const response = await axios({
+          method: "DELETE",
+          url: `https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
+          headers: { Authorization: "Bearer " + accessToken },
+        });
+        console.log(response.data.result);
+        alert("게시물이 삭제되었습니다");
+        window.location.href = "/feed";
+      } catch (error) {
+        console.error("Error deleting post:", error);
+      }
+    }
+  };
+
   return (
     // <RecoilRoot>
-    <div className="container">
+    <div className="container relative">
       <header className="top w-full">
         <div className="w-full h-12 flex items-center ">
           <Image
@@ -57,10 +102,39 @@ export default function Detail(): JSX.Element {
         <hr className="w-full h-px" />
       </header>
 
-      <section className="main w-5/6 h-full">
+      <section className="main w-5/6 h-auto">
         {boardDetail && (
           <>
-            <Profile nickName={boardDetail.nickName} />
+            <div className="w-full flex items-center">
+              <Profile nickName={boardDetail.nickName} />
+              {decoded_nickName === boardDetail.nickName && (
+                <div
+                  onClick={toggleDropdown}
+                  className="ml-auto flex flex-col items-center">
+                  <Image
+                    src="/images/more.svg"
+                    alt="etc"
+                    width={30}
+                    height={30}
+                    className="cursor-pointer"
+                  />
+                  {dropdownVisible && (
+                    <div className="dropdown absolute mt-7 z-10">
+                      <button
+                        onClick={handleEdit}
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        수정
+                      </button>
+                      <button
+                        onClick={handleDelete}
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        삭제
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
             <div className="contents w-full">
               <ImageDetail images={boardDetail.images} />
               <ContentDetail
@@ -71,14 +145,13 @@ export default function Detail(): JSX.Element {
             <div className="button flex">
               <Like />
               <CommentIcon />
+
             </div>
           </>
         )}
       </section>
-
-      <footer className="w-full">
-        <Menubar />
-      </footer>
+      
+      <Menubar />
     </div>
     // </RecoilRoot>
   );

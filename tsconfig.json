@@ -14,7 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "downlevelIteration" : true,
     // 배열에서 사용하는 Set은 원래 반복 사용이 안됨 위의 코드를 추가해줌으로써
     // 반복을 허용
     "plugins": [

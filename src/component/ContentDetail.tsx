@@ -12,27 +12,33 @@ const ContentDetail = ({
   const extractAndStyleHashtags = (content: string) => {
     const hashTagRegex = /#[^\s#]+/g;
     const splitContent = content.split(hashTagRegex);
+    const matchedHashTags = content.match(hashTagRegex) || [];
 
-    return splitContent.map((text, index) => {
-      if (index === splitContent.length - 1) return text;
+    return splitContent.reduce(
+      (prev: (string | JSX.Element)[], current, index) => {
+        if (index !== splitContent.length - 1) {
+          const currentHashTag = matchedHashTags[index];
+          const tagIndex = hashTag.indexOf(currentHashTag.slice(1));
 
-      const currentHashTag = content.match(hashTagRegex)![index];
-      const tagIndex = hashTag.indexOf(currentHashTag.slice(1));
+          return prev.concat(
+            current,
+            <span
+              key={index}
+              className="hash-tag"
+              style={{
+                color: tagIndex !== -1 ? "#a8bbff" : "#000000",
+                cursor: "pointer",
+              }}
+              onClick={() => handleHashTagClick(currentHashTag)}>
+              {currentHashTag}
+            </span>,
+          );
+        }
 
-      return (
-        <span
-          key={index}
-          className="hash-tag"
-          style={{
-            color: tagIndex !== -1 ? "#a8bbff" : "#000000",
-            cursor: "pointer",
-          }}
-          onClick={() => handleHashTagClick(currentHashTag)}
-        >
-          {currentHashTag}
-        </span>
-      );
-    });
+        return prev.concat(current);
+      },
+      [],
+    );
   };
 
   const handleHashTagClick = (hashTag: string) => {
@@ -40,11 +46,7 @@ const ContentDetail = ({
   };
 
   return (
-    <div className="content-detail">
-      {extractAndStyleHashtags(content)}
-      <br />
-      {content} [해시태그: {hashTag.map((tag) => `#${tag}`).join(" ")}]
-    </div>
+    <div className="content-detail">{extractAndStyleHashtags(content)}</div>
   );
 };
 
