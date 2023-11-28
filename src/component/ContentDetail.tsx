@@ -11,31 +11,41 @@ const ContentDetail = ({
 }: ContentDetailProps): JSX.Element => {
   const extractAndStyleHashtags = (content: string) => {
     const hashTagRegex = /#[^\s#]+/g;
-    return content.split(hashTagRegex).map((text, index) => {
-      if (index === content.match(hashTagRegex)?.length) return text;
-      const hashTag = content.match(hashTagRegex)![index];
+    const splitContent = content.split(hashTagRegex);
+
+    return splitContent.map((text, index) => {
+      if (index === splitContent.length - 1) return text;
+
+      const currentHashTag = content.match(hashTagRegex)![index];
+      const tagIndex = hashTag.indexOf(currentHashTag.slice(1));
+
       return (
         <span
           key={index}
           className="hash-tag"
-          style={{ color: "#a8bbff", cursor: "pointer" }}
-          onClick={() => handleHashTagClick(hashTag)}>
-          {hashTag}
+          style={{
+            color: tagIndex !== -1 ? "#a8bbff" : "#000000",
+            cursor: "pointer",
+          }}
+          onClick={() => handleHashTagClick(currentHashTag)}
+        >
+          {currentHashTag}
         </span>
       );
     });
   };
 
-  const handleHashTagClick = (hashTag: string) => {};
+  const handleHashTagClick = (hashTag: string) => {
+    console.log("Clicked hashtag:", hashTag);
+  };
 
   return (
     <div className="content-detail">
       {extractAndStyleHashtags(content)}
       <br />
-      {content} [해시태그: {hashTag}]
+      {content} [해시태그: {hashTag.map((tag) => `#${tag}`).join(" ")}]
     </div>
   );
-  // 해시태그가 content 내부에 포함 -> 글과 같이 해시태그 나와야 되고 해시태그는 #해시태그 이런 식으로 보여야 되며 색 달라야되고, 클릭 되야되며 클릭되면 그 해시태그로 검색하는 페이지로 이동하게 해야함
 };
 
 export default ContentDetail;

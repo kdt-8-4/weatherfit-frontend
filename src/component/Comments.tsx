@@ -22,7 +22,7 @@ export default function Comments(): JSX.Element {
         className="cursor-pointer"
         onClick={handleCommentClick}
       />
-      {showModal && <CommentModal />}
+      {/* {showModal && <CommentModal />} */}
     </>
   );
 }
