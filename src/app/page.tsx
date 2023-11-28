@@ -2,13 +2,13 @@
 import MainWeather from "@/component/MainWeather"
 import Menubar from "@/component/MenuBar"
 import axios from "axios";
-import { GetServerSideProps } from "next";
+// import { GetServerSideProps } from "next";
 
 interface MainPageProps {
   accessToken?  : string
 }
 
-export default function Mainpage( { accessToken }: MainPageProps ) {
+export default function Mainpage( ) {
 
     const send = async() => {
       const send = await axios({
@@ -25,7 +25,7 @@ export default function Mainpage( { accessToken }: MainPageProps ) {
     }
 
     // const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
-    console.log("accessToken: ", accessToken);
+    // console.log("accessToken: ", accessToken);
 
     return(<>
         <MainWeather />
@@ -37,12 +37,12 @@ export default function Mainpage( { accessToken }: MainPageProps ) {
 }
 
 
-export const getServerSideProps: GetServerSideProps<MainPageProps> = async ({ req }) => {
-  const { accessToken } = req.cookies;
+// export const getServerSideProps: GetServerSideProps<MainPageProps> = async ({ req }) => {
+//   const { accessToken } = req.cookies;
 
-  return {
-    props: {
-      accessToken,
-    },
-  };
-};
+//   return {
+//     props: {
+//       accessToken,
+//     },
+//   };
+// };
