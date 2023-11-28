@@ -7,6 +7,7 @@ import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
 import { useCallback, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import axios from "axios";
 
 import { RecoilRoot } from "recoil";
@@ -23,11 +24,13 @@ export default function Upload(): JSX.Element {
   // const [icon, setIcon] = useRecoilState(WeatherIcons);
   const [token, setToken] = useRecoilState(Login_token);
 
-  const accessToken = document.cookie.replace(
-    /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-    "$1",
-  );
-  console.log("accessToken: ", accessToken);
+  // const accessToken = document.cookie.replace(
+  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+  //   "$1",
+  // );
+  // console.log("accessToken: ", accessToken);
+  const accessToken = Cookies.get("accessToken");
+  console.log("accessToken 값: ", accessToken);
 
   useEffect(() => {
     console.log("토큰값을 받아왔는가", token);

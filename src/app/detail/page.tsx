@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
 import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
 
 import { RecoilRoot } from "recoil";
 
@@ -19,21 +20,26 @@ export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  const accessToken = document.cookie.replace(
-    /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-    "$1",
-  );
-  console.log("accessToken: ", accessToken);
+  // const accessToken = document.cookie.replace(
+  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+  //   "$1",
+  // );
+  const accessToken = Cookies.get("accessToken");
+  console.log("accessToken 값: ", accessToken);
 
-  const decodedToken = jwt.decode(accessToken) as { [key: string]: any };
-  const decoded_nickName = decodedToken?.nickName;
+  // const decodedToken = jwt.decode(accessToken) as { [key: string]: any };
+  const decodedToken = accessToken
+    ? (jwt.decode(accessToken) as { [key: string]: any })
+    : null;
+  console.log("디코딩", decodedToken);
+  const decoded_nickName = decodedToken?.sub;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://www.jerneithe.site/board/detail/{boardId}",
-          // "https://www.jerneithe.site/board/detail/8",
+          // "https://www.jerneithe.site/board/detail/{boardId}",
+          "https://www.jerneithe.site/board/detail/3",
           { headers: { Authorization: "Bearer " + accessToken } },
         );
         setBoardDetail(response.data);
@@ -65,11 +71,7 @@ export default function Detail(): JSX.Element {
         });
         console.log(response.data.result);
         alert("게시물이 삭제되었습니다");
-
-        // 게시물이 성공적으로 삭제되면 페이지를 새로 고침하거나 다른 페이지로 리디렉션
-        if (response.data.result === "true") {
-          window.location.href = "/feed";
-        }
+        window.location.href = "/feed";
       } catch (error) {
         console.error("Error deleting post:", error);
       }
