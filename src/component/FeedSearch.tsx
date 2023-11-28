@@ -39,17 +39,27 @@ export default function FeedSearch(){
         //해시태그 검샏 데이터 #을 기준으로 나누어 배열 형성
         const search_hashtag_Data = hash_value.split('#').filter(Boolean);
         console.log('해시태그 검색 배열', search_hashtag_Data);
-        
+        let url = "https://www.jerneithe.site/board/search?categories="
+        if(search_category_Data.length != 0) {
+            for(let i=0 ; i<search_category_Data.length ; i++) {
+                url += search_category_Data[i];
+            }
+        }
+        if(search_hashtag_Data.length != 0) {
+            url += '&hashtags='
+            for(let i=0 ; i<search_hashtag_Data.length ; i++) {
+                url += search_hashtag_Data[i];
+            }
+        }
+
         const req = await axios({
             method: 'GET',
-            url: "https://www.jerneithe.site/board/search",
-            data: {
-                caetgories : search_category_Data,
-                hashtags : search_hashtag_Data
-            }
+            url : url,
         });
 
         //req 데이터 형식 확인 후 setFeedd로 데이터 넣기
+
+        console.log(req);
     }
 
 
