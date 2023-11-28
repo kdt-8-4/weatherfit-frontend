@@ -11,31 +11,43 @@ const ContentDetail = ({
 }: ContentDetailProps): JSX.Element => {
   const extractAndStyleHashtags = (content: string) => {
     const hashTagRegex = /#[^\s#]+/g;
-    return content.split(hashTagRegex).map((text, index) => {
-      if (index === content.match(hashTagRegex)?.length) return text;
-      const hashTag = content.match(hashTagRegex)![index];
-      return (
-        <span
-          key={index}
-          className="hash-tag"
-          style={{ color: "#a8bbff", cursor: "pointer" }}
-          onClick={() => handleHashTagClick(hashTag)}>
-          {hashTag}
-        </span>
-      );
-    });
+    const splitContent = content.split(hashTagRegex);
+    const matchedHashTags = content.match(hashTagRegex) || [];
+
+    return splitContent.reduce(
+      (prev: (string | JSX.Element)[], current, index) => {
+        if (index !== splitContent.length - 1) {
+          const currentHashTag = matchedHashTags[index];
+          const tagIndex = hashTag.indexOf(currentHashTag.slice(1));
+
+          return prev.concat(
+            current,
+            <span
+              key={index}
+              className="hash-tag"
+              style={{
+                color: tagIndex !== -1 ? "#a8bbff" : "#000000",
+                cursor: "pointer",
+              }}
+              onClick={() => handleHashTagClick(currentHashTag)}>
+              {currentHashTag}
+            </span>,
+          );
+        }
+
+        return prev.concat(current);
+      },
+      [],
+    );
   };
 
-  const handleHashTagClick = (hashTag: string) => {};
+  const handleHashTagClick = (hashTag: string) => {
+    console.log("Clicked hashtag:", hashTag);
+  };
 
   return (
-    <div className="content-detail">
-      {extractAndStyleHashtags(content)}
-      <br />
-      {content} [해시태그: {hashTag}]
-    </div>
+    <div className="content-detail">{extractAndStyleHashtags(content)}</div>
   );
-  // 해시태그가 content 내부에 포함 -> 글과 같이 해시태그 나와야 되고 해시태그는 #해시태그 이런 식으로 보여야 되며 색 달라야되고, 클릭 되야되며 클릭되면 그 해시태그로 검색하는 페이지로 이동하게 해야함
 };
 
 export default ContentDetail;

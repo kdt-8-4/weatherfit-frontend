@@ -8,14 +8,16 @@ import LoginForm from "@/component/LoginForm";
 export default function Login() {
   return (
     // <RecoilRoot>
-      <div className="container">
+    <div className="container">
+      <div>
         <CloseIcon />
         <hr className="layout_hr" />
         <br />
         <LoginForm />
         <br />
-        <Menubar />
       </div>
+      <Menubar />
+    </div>
     // </RecoilRoot>
   );
 }

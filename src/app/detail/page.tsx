@@ -11,18 +11,30 @@ import Like from "@/component/Like";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
+import jwt from "jsonwebtoken";
 
 import { RecoilRoot } from "recoil";
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const accessToken = document.cookie.replace(
+    /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+    "$1",
+  );
+  console.log("accessToken: ", accessToken);
+
+  const decodedToken = jwt.decode(accessToken) as { [key: string]: any };
+  const decoded_nickName = decodedToken?.nickName;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://www.jerneithe.site/board/detail/{boardId}",
-          // "https://www.jerneithe.site/board/detail/3",
+          // "https://www.jerneithe.site/board/detail/{boardId}",
+          "https://www.jerneithe.site/board/detail/8",
+          { headers: { Authorization: "Bearer " + accessToken } },
         );
         setBoardDetail(response.data);
       } catch (error) {
@@ -33,50 +45,108 @@ export default function Detail(): JSX.Element {
     fetchData();
   }, []);
 
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const handleEdit = () => {
+    // 수정 버튼 클릭 시 처리할 로직 추가
+    console.log("Edit clicked");
+  };
+
+  const handleDelete = async () => {
+    // 삭제 버튼 클릭 시 처리할 로직 추가
+    if (window.confirm("게시물을 삭제하시겠습니까?")) {
+      try {
+        const response = await axios({
+          method: "DELETE",
+          url: `https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
+          headers: { Authorization: "Bearer " + accessToken },
+        });
+        console.log(response.data.result);
+        alert("게시물이 삭제되었습니다");
+
+        // 게시물이 성공적으로 삭제되면 페이지를 새로 고침하거나 다른 페이지로 리디렉션
+        if (response.data.result === "true") {
+          window.location.href = "/feed";
+        }
+      } catch (error) {
+        console.error("Error deleting post:", error);
+      }
+    }
+  };
+
   return (
     // <RecoilRoot>
-      <div className="container">
-        <header className="top w-full">
-          <div className="w-full h-12 flex items-center ">
-            <Image
-              src="/images/back.svg"
-              width={15}
-              height={15}
-              className="ml-3 cursor-pointer"
-              alt="back"
-              onClick={() => {
-                window.history.back();
-              }}
-            />
-          </div>
-          <hr className="w-full h-px" />
-          <WeatherBar />
-          <hr className="w-full h-px" />
-        </header>
+    <div className="container relative">
+      <header className="top w-full">
+        <div className="w-full h-12 flex items-center ">
+          <Image
+            src="/images/back.svg"
+            width={15}
+            height={15}
+            className="ml-3 cursor-pointer"
+            alt="back"
+            onClick={() => {
+              window.history.back();
+            }}
+          />
+        </div>
+        <hr className="w-full h-px" />
+        <WeatherBar />
+        <hr className="w-full h-px" />
+      </header>
 
-        <section className="main w-5/6 h-full">
-          {boardDetail && (
-            <>
+      <section className="main w-5/6 h-auto">
+        {boardDetail && (
+          <>
+            <div className="w-full flex items-center">
               <Profile nickName={boardDetail.nickName} />
-              <div className="contents w-full">
-                <ImageDetail images={boardDetail.images} />
-                <ContentDetail
-                  content={boardDetail.content}
-                  hashTag={boardDetail.hashTag}
-                />
-              </div>
-              <div className="button flex">
-                <Like />
-                <Comments />
-              </div>
-            </>
-          )}
-        </section>
+              {decoded_nickName === boardDetail.nickName && (
+                <div
+                  onClick={toggleDropdown}
+                  className="ml-auto flex flex-col items-center">
+                  <Image
+                    src="/images/more.svg"
+                    alt="etc"
+                    width={30}
+                    height={30}
+                    className="cursor-pointer"
+                  />
+                  {dropdownVisible && (
+                    <div className="dropdown absolute mt-7 z-10">
+                      <button
+                        onClick={handleEdit}
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        수정
+                      </button>
+                      <button
+                        onClick={handleDelete}
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        삭제
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="contents w-full">
+              <ImageDetail images={boardDetail.images} />
+              <ContentDetail
+                content={boardDetail.content}
+                hashTag={boardDetail.hashTag}
+              />
+            </div>
+            <div className="button flex">
+              <Like />
+              <Comments />
+            </div>
+          </>
+        )}
+      </section>
 
-        <footer className="w-full">
-          <Menubar />
-        </footer>
-      </div>
+      <Menubar />
+    </div>
     // </RecoilRoot>
   );
 }
