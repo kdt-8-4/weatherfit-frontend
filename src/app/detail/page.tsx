@@ -15,6 +15,7 @@ import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
 
 import { RecoilRoot } from "recoil";
+import CommentIcon from "@/component/CommentIcon";
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
@@ -38,8 +39,10 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // "https://www.jerneithe.site/board/detail/{boardId}",
-          "https://www.jerneithe.site/board/detail/3",
+          // 메인용
+          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`
+          // 테스트용
+          // "https://www.jerneithe.site/board/detail/1"
           { headers: { Authorization: "Bearer " + accessToken } },
         );
         setBoardDetail(response.data);
@@ -141,12 +144,13 @@ export default function Detail(): JSX.Element {
             </div>
             <div className="button flex">
               <Like />
-              <Comments />
+              <CommentIcon />
+
             </div>
           </>
         )}
       </section>
-
+      
       <Menubar />
     </div>
     // </RecoilRoot>
