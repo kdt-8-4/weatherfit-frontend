@@ -20,10 +20,6 @@ export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // const accessToken = document.cookie.replace(
-  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-  //   "$1",
-  // );
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
@@ -38,8 +34,8 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          //`https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
-          "https://www.jerneithe.site/board/detail/3",
+          // `https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
+          "https://www.jerneithe.site/board/detail/4",
           { headers: { Authorization: "Bearer " + accessToken } },
         );
         setBoardDetail(response.data);
@@ -48,7 +44,9 @@ export default function Detail(): JSX.Element {
       }
     };
 
+    // if (boardDetail && boardDetail.boardId) {
     fetchData();
+    // }
   }, []);
 
   const toggleDropdown = () => {

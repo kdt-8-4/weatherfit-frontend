@@ -49,7 +49,7 @@ export default function LoginForm() {
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
       // 토큰을 쿠키에 저장
-      // document.cookie = `accessToken=${resData.token}; path=/`;
+      document.cookie = `accessToken=${resData.token}; path=/`;
       setToken(resData.token);
       // router.push('/');
     } catch (error: any) {
