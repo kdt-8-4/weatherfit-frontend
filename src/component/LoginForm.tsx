@@ -3,6 +3,7 @@ import axios from "axios";
 import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -39,6 +40,7 @@ export default function LoginForm() {
 
     try {
       const response = await axios({
+        withCredentials: true,
         method: "GET",
         url: `https://www.jerneithe.site/user/login/api?email=${email}&password=${pw}`,
       });
@@ -48,6 +50,8 @@ export default function LoginForm() {
       const resData = response.data;
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
+      
+
       // 토큰을 쿠키에 저장
       // document.cookie = `accessToken=${resData.token}; path=/`;
       setToken(resData.token);
