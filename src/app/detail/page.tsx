@@ -15,6 +15,7 @@ import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
 
 import { RecoilRoot } from "recoil";
+import CommentIcon from "@/component/CommentIcon";
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
@@ -38,9 +39,11 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // "https://www.jerneithe.site/board/detail/{boardId}",
-          "https://www.jerneithe.site/board/detail/3",
-          { headers: { Authorization: "Bearer " + accessToken } },
+          // 메인용
+          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
+          // 테스트용
+          // "https://www.jerneithe.site/board/detail/1"
+          { headers: { Authorization: "Bearer " + accessToken } }
         );
         setBoardDetail(response.data);
       } catch (error) {
@@ -107,7 +110,8 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center">
+                  className="ml-auto flex flex-col items-center"
+                >
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -119,12 +123,14 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         삭제
                       </button>
                     </div>
@@ -141,7 +147,7 @@ export default function Detail(): JSX.Element {
             </div>
             <div className="button flex">
               <Like />
-              <Comments />
+              <CommentIcon />
             </div>
           </>
         )}
