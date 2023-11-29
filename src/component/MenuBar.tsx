@@ -7,20 +7,6 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import Link from "next/link";
 
 export default function Menubar() {
-  // const router = useRouter(); // useRouter 훅을 사용하여 router 객체 가져오기
-  // const goto_home = () => {
-  //   router.push("/"); // '/'로 페이지 이동
-  // };
-  // const goto_feed = () => {
-  //   router.push("/feed"); // '/feed'로 페이지 이동
-  // };
-  // const goto_upload = () => {
-  //   router.push("/upload"); // '/upload'로 페이지 이동
-  // };
-  // const goto_myPage = () => {
-  //   router.push("/mypage"); // '/mypage'로 페이지 이동
-  // };
-
   return (
     <div className="menubar">
       <Link href="/" className="menu_box">

@@ -7,16 +7,19 @@ import FeedContenets from "@/component/FeedContents";
 import Menubar from "@/component/MenuBar";
 
 import { RecoilRoot } from "recoil";
+import { useEffect } from "react";
+import axios from "axios";
+
+import '../../style/feed.scss';
 
 
 
 export default function Feed(){
-    
-
 
     return(<>
-    <RecoilRoot>
+    {/* <RecoilRoot> */}
         <div className="container_dj">
+            <br />
             <FeedSearch />
             <hr />
             <WeatherBar />
@@ -25,6 +28,6 @@ export default function Feed(){
             <Menubar />
 
         </div>
-    </RecoilRoot>
+    {/* </RecoilRoot> */}
     </>)
 }

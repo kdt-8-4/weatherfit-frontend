@@ -6,8 +6,13 @@ import "../../style/upload.scss";
 import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import axios from "axios";
+
+import { RecoilRoot } from "recoil";
+import { Login_token } from "@/recoilAtom/Login_token";
+import { useRecoilState } from "recoil";
 
 export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -16,6 +21,20 @@ export default function Upload(): JSX.Element {
   const [selectedCategories, setSelectedCategories] = useState<
     Record<string, string[]>
   >({});
+  // const [icon, setIcon] = useRecoilState(WeatherIcons);
+  const [token, setToken] = useRecoilState(Login_token);
+
+  // const accessToken = document.cookie.replace(
+  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+  //   "$1",
+  // );
+  // console.log("accessToken: ", accessToken);
+  const accessToken = Cookies.get("accessToken");
+  console.log("accessToken 값: ", accessToken);
+
+  useEffect(() => {
+    console.log("토큰값을 받아왔는가", token);
+  }, []);
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
@@ -58,17 +77,22 @@ export default function Upload(): JSX.Element {
         method: "POST",
         url: "https://www.jerneithe.site/board/write",
         data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + accessToken,
+        },
       });
 
       console.log(response.data); // 서버 응답 확인
       alert("게시물 업로드 완료");
+      window.location.href = "/feed";
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
+    // <RecoilRoot>
     <div className="container">
       <header>
         <div className="top">
@@ -94,7 +118,7 @@ export default function Upload(): JSX.Element {
           <hr />
           <TextArea
             content={content}
-            placeholder="코디에 같이 올리고 싶은 #해시태그를 작성해주세요"
+            placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
             handleHashtags={handleHashtags}
             handleContent={handleContent}
           />
@@ -217,9 +241,8 @@ export default function Upload(): JSX.Element {
         </div>
       </section>
 
-      <footer>
-        <Menubar />
-      </footer>
+      <Menubar />
     </div>
+    // </RecoilRoot>
   );
 }
