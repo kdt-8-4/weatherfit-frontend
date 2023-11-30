@@ -50,8 +50,10 @@ export default function LoginForm() {
       const resData = response.data;
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
-      
 
+      const accessToken = Cookies.get("accessToken");
+      console.log("accessToken 값: ", accessToken);
+      
       // 토큰을 쿠키에 저장
       // document.cookie = `accessToken=${resData.token}; path=/`;
       setToken(resData.token);
