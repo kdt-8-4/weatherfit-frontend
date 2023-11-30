@@ -15,18 +15,6 @@ import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 import { categories } from "@/component/category";
 
-export function saveToLocalStorage(key: any, value: any) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
-
-export function loadFromLocalStorage(key: any, defaultValue: any) {
-  if (typeof window !== "undefined") {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : defaultValue;
-  }
-  return defaultValue;
-}
-
 const mapSubCategoriesToCategory = (
   subCategories: string[],
 ): Record<string, string[]> => {
@@ -48,28 +36,6 @@ interface Image {
   imageId: number;
   imageUrl: string;
 }
-
-// async function urlToFile(url: any, filename: any) {
-//   const res = await fetch(url);
-//   const blob = await res.blob();
-//   const extension = filename.split(".").pop();
-
-//   let mimeType = "";
-//   switch (extension) {
-//     case "jpg":
-//     case "jpeg":
-//       mimeType = "image/jpeg";
-//       break;
-//     case "png":
-//       mimeType = "image/png";
-//       break;
-//     // Add more cases as needed
-//     default:
-//       mimeType = "application/octet-stream"; // Fallback option
-//   }
-
-//   return new File([blob], filename, { type: mimeType });
-// }
 
 async function urlToFile(url: any, filename: any) {
   try {

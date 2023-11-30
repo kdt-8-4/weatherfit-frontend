@@ -1,7 +1,4 @@
-import {
-  loadFromLocalStorage,
-  saveToLocalStorage,
-} from "@/app/detail/edit/page";
+import { saveToLocalStorage, loadFromLocalStorage } from "@/component/storage";
 import { atom } from "recoil";
 
 export const editBoardIdState = atom({
