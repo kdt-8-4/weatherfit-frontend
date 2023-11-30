@@ -23,17 +23,17 @@ export default function LoginForm() {
   // }, []);
 
   const onGoogleSocialLogin = async () => {
-    // try {
-    //   const response = await axios({
-    //     method: "GET",
-    //     url: "https://jerneithe.site/user/social/login/google",
-    //   });
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https://www.jerneithe.site/user/login/oauth2/code/google&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com";
+    try {
+      const response = await axios({
+        method: "POST",
+        url: "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=https://localhost:3000&response_type=token&scope=email",
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+    // window.location.href =
+    //   "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https://www.jerneithe.site/user/login/oauth2/code/google&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com";
   };
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ export default function LoginForm() {
       // 토큰을 쿠키에 저장
       document.cookie = `accessToken=${resData.token}; path=/`;
       setToken(resData.token);
-      // router.push('/');
+      router.push('/');
     } catch (error: any) {
       setEmail("");
       setPw("");
@@ -113,6 +113,8 @@ export default function LoginForm() {
       <div className="login_easy">
         <hr /> 간편 로그인 <hr />
         <button onClick={onGoogleSocialLogin}>구글 로그인</button>
+        <hr />
+        <button>카카오 로그인 </button>
       </div>
     </>
   );
