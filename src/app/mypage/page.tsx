@@ -13,8 +13,6 @@ import Link from "next/link";
 // import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined'; // > 아이콘
 import axios from "axios";
 import MypageProfile from "@/component/MypageProfile";
-
-import Cookies from "js-cookie";
 import jwt from "jsonwebtoken";
 
 interface IMAGE {
