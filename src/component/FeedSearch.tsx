@@ -26,7 +26,7 @@ export default function FeedSearch(){
         setHval(e.target.value); // 입력 값 업데이트
     };
 
-    console.log("인풋 입력값", hash_value);
+    // console.log("인풋 입력값", hash_value);
 
     //검색 아이콘 누르면 선택한 카테고리 데이터가 있는 아톰에서 배열들을 가져오고
     //해시태그에 있는 스트링을 # 기준으로 나누어 배열에 넣은 뒤에
@@ -59,7 +59,8 @@ export default function FeedSearch(){
 
         //req 데이터 형식 확인 후 setFeedd로 데이터 넣기
 
-        console.log(req);
+        console.log(req.data);
+        setFeedd(req.data);
     }
 
 
