@@ -6,6 +6,7 @@ interface TextAreaProps {
   placeholder: string;
   handleContent: (content: string) => void; // 부모 컴포넌트로 글 데이터 전달
   handleHashtags: (hashtags: string[]) => void; // 부모 컴포넌트로 해시태그 데이터 전달
+  initialText?: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -13,9 +14,14 @@ const TextArea: React.FC<TextAreaProps> = ({
   placeholder,
   handleContent,
   handleHashtags,
+  initialText = "",
 }) => {
   const [text, setText] = useState<string>(content);
   const textAreaRef = useRef<HTMLTextAreaElement>(null); //DOM 접근
+
+  useEffect(() => {
+    setText(content); // content 상태가 변경될 때마다 text 상태 업데이트
+  }, [content]);
 
   // 해시태그 span으로 감쌈
   const handleInputChange = () => {
@@ -61,7 +67,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   // text 영역에 포커스가 맞춰질 때 placeholder 처리
   const handleFocus = () => {
     if (textAreaRef.current && textAreaRef.current.value === placeholder)
-      setText("");
+      setText(initialText);
   };
 
   return (
