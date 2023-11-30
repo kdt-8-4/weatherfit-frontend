@@ -8,6 +8,7 @@ const config: Config = {
     "./src/app/detail/*.{tsx, ts}",
     "./src/app/*.{tsx,ts}",
     "./src/component/Profile.tsx",
+    "./src/component/CategoryDetail.tsx",
   ],
   theme: {
     extend: {
@@ -15,6 +16,10 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      colors: {
+        main: "#a8bbff",
+        sub: "#d0dbff",
       },
     },
   },
