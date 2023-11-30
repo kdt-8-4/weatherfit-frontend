@@ -40,9 +40,9 @@ export default function Detail(): JSX.Element {
       try {
         const response = await axios.get(
           // 메인용
-          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
+          // `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
           // 테스트용
-          // "https://www.jerneithe.site/board/detail/1"
+          "https://www.jerneithe.site/board/detail/4",
           { headers: { Authorization: "Bearer " + accessToken } }
         );
         setBoardDetail(response.data);

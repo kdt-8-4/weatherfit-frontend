@@ -34,6 +34,7 @@ export default function LoginForm() {
     window.location.href =
       "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https://www.jerneithe.site/user/login/oauth2/code/google&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com";
   };
+
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -49,9 +50,10 @@ export default function LoginForm() {
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
       // 토큰을 쿠키에 저장
-      // document.cookie = `accessToken=${resData.token}; path=/`;
-      setToken(resData.token);
+      document.cookie = `accessToken=${resData.token}; path=/`;
+      // setToken(resData.token);
       // router.push('/');
+      console.log("쿠키: ", document.cookie);
     } catch (error: any) {
       setEmail("");
       setPw("");
