@@ -1,12 +1,35 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import GridOnOutlinedIcon from "@mui/icons-material/GridOnOutlined";
 import GridOnTwoToneIcon from "@mui/icons-material/GridOnTwoTone";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LikePost from "./LikePost";
 import MyPost from "./MyPost";
+import { useRecoilState } from "recoil";
+import { FeedContent } from "@/recoilAtom/FeedContents";
 
-export default function TabBar() {
+interface IMAGE {
+  boardId: number;
+  imageId: number;
+  image_url: string;
+}
+
+interface FEEDATA {
+  boardId: number;
+  images: IMAGE;
+  likeCount: number;
+  nickName: string;
+  temperature: number;
+  weather: string;
+}
+
+interface TabbarProps {
+  myPostData: FEEDATA[];
+}
+
+export default function TabBar(props: TabbarProps) {
+  const { myPostData } = props;
   const [grid, setGrid] = useState<boolean>(true);
   const [liked, setLiked] = useState<boolean>(false);
 
@@ -50,7 +73,7 @@ export default function TabBar() {
         )}
       </div>
       {/* post 부분 */}
-      {grid ? <MyPost /> : null}
+      {grid ? <MyPost myPostData={myPostData} /> : null}
       {liked ? <LikePost /> : null}
     </>
   );

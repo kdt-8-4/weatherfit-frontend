@@ -6,7 +6,6 @@ import "../../style/detail.scss";
 import Menubar from "@/component/MenuBar";
 import Profile from "@/component/Profile";
 import ImageDetail from "@/component/ImageDetail";
-import Comments from "@/component/Comments";
 import Like from "@/component/Like";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,16 +13,19 @@ import ContentDetail from "@/component/ContentDetail";
 import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
 
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilState } from "recoil";
+import CommentIcon from "@/component/CommentIcon";
+import CategoryDetail from "@/component/CategoryDetail";
+import { useRouter } from "next/navigation";
+import { editBoardIdState } from "@/recoilAtom/EditDetail";
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
 
-  // const accessToken = document.cookie.replace(
-  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-  //   "$1",
-  // );
+  const router = useRouter();
+
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
@@ -31,16 +33,17 @@ export default function Detail(): JSX.Element {
   const decodedToken = accessToken
     ? (jwt.decode(accessToken) as { [key: string]: any })
     : null;
-  console.log("디코딩", decodedToken);
   const decoded_nickName = decodedToken?.sub;
+  console.log("디코딩", decodedToken);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // "https://www.jerneithe.site/board/detail/{boardId}",
-          "https://www.jerneithe.site/board/detail/3",
-          { headers: { Authorization: "Bearer " + accessToken } },
+          // 메인용
+          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
+          // 테스트용
+          // "https://www.jerneithe.site/board/detail/4",
         );
         setBoardDetail(response.data);
       } catch (error) {
@@ -48,7 +51,9 @@ export default function Detail(): JSX.Element {
       }
     };
 
+    // if (boardDetail && boardDetail.boardId) {
     fetchData();
+    // }
   }, []);
 
   const toggleDropdown = () => {
@@ -57,7 +62,9 @@ export default function Detail(): JSX.Element {
 
   const handleEdit = () => {
     // 수정 버튼 클릭 시 처리할 로직 추가
-    console.log("Edit clicked");
+    setEditBoardId(boardDetail.boardId);
+    router.push(`/detail/edit`);
+    // router.push(`/detail/edit?id=${boardDetail.boardId}`);
   };
 
   const handleDelete = async () => {
@@ -141,8 +148,9 @@ export default function Detail(): JSX.Element {
             </div>
             <div className="button flex">
               <Like />
-              <Comments />
+              <CommentIcon />
             </div>
+            <CategoryDetail category={boardDetail.category} />
           </>
         )}
       </section>

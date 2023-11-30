@@ -8,6 +8,7 @@ import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
 import { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { categories } from "@/component/category";
 import axios from "axios";
 
 import { RecoilRoot } from "recoil";
@@ -24,11 +25,6 @@ export default function Upload(): JSX.Element {
   // const [icon, setIcon] = useRecoilState(WeatherIcons);
   const [token, setToken] = useRecoilState(Login_token);
 
-  // const accessToken = document.cookie.replace(
-  //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-  //   "$1",
-  // );
-  // console.log("accessToken: ", accessToken);
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
@@ -114,7 +110,10 @@ export default function Upload(): JSX.Element {
       <section className="main">
         <h2>오늘 날씨의 옷차림을 올려주세요!</h2>
         <div className="content">
-          <ImageUpload onImagesSelected={handleImagesSelected} />
+          <ImageUpload
+            onImagesSelected={handleImagesSelected}
+            initialImages={[]}
+          />
           <hr />
           <TextArea
             content={content}
@@ -125,118 +124,16 @@ export default function Upload(): JSX.Element {
         </div>
         <div className="category">
           <div>
-            <SelectCategory
-              category="상의"
-              subCategories={[
-                "맨투맨",
-                "셔츠/블라우스",
-                "후드티",
-                "니트/스웨터",
-                "반팔티",
-                "카라티",
-                "긴팔티",
-                "민소매",
-                "스포츠",
-                "기타",
-              ]}
-              onSelect={(subCategories) =>
-                handleCategorySelect("상의", subCategories)
-              }
-            />
-            <SelectCategory
-              category="하의"
-              subCategories={[
-                "데님 팬츠",
-                "코튼 팬츠",
-                "슬랙스",
-                "트레이닝 팬츠",
-                "조거 팬츠",
-                "숏 팬츠",
-                "레깅스",
-                "점프 슈트",
-                "스포츠 하의",
-                "기타",
-              ]}
-              onSelect={(subCategories) =>
-                handleCategorySelect("하의", subCategories)
-              }
-            />
-            <SelectCategory
-              category="아우터"
-              subCategories={[
-                "후드 집업",
-                "가디건",
-                "베스트",
-                "플리스",
-                "아노락",
-                "블루종",
-                "라이더 자켓",
-                "트러커 자켓",
-                "무스탕",
-                "블레이저",
-                "싱글 코트",
-                "더블 코트",
-                "더플 코트",
-                "롱패딩",
-                "숏패딩",
-                "기타",
-              ]}
-              onSelect={(subCategories) =>
-                handleCategorySelect("아우터", subCategories)
-              }
-            />
-            <SelectCategory
-              category="신발"
-              subCategories={[
-                "스니커즈",
-                "컨버스",
-                "워커",
-                "로퍼",
-                "보트화",
-                "슬립온",
-                "운동화",
-                "구두",
-                "부츠",
-                "플랫 슈즈",
-                "블로퍼",
-                "샌들",
-                "슬리퍼",
-                "기타",
-              ]}
-              onSelect={(subCategories) =>
-                handleCategorySelect("신발", subCategories)
-              }
-            />
-            <SelectCategory
-              category="가방"
-              subCategories={[
-                "백팩",
-                "메신저백",
-                "크로스백",
-                "숄더백",
-                "토트백",
-                "에코백",
-                "더플백",
-                "클러치백",
-                "이스트백",
-              ]}
-              onSelect={(subCategories) =>
-                handleCategorySelect("가방", subCategories)
-              }
-            />
-            <SelectCategory
-              category="모자"
-              subCategories={[
-                "베레모",
-                "페도라",
-                "버킷/사파리햇",
-                "비니",
-                "트루퍼",
-              ]}
-              onSelect={(subCategories) =>
-                handleCategorySelect("모자", subCategories)
-              }
-            />
+            {Object.entries(categories).map(([category, subCategories]) => (
+              <SelectCategory
+                key={category}
+                category={category}
+                subCategories={subCategories}
+                onSelect={(selectedSubCategories) =>
+                  handleCategorySelect(category, selectedSubCategories)
+                }
+              />
+            ))}
           </div>
         </div>
       </section>

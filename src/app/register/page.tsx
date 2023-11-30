@@ -70,7 +70,7 @@ export default function Register(): JSX.Element {
       password
       )
 
-    const register_data = axios({
+    const register_data = await axios({
       method: "POST",
       url: "https://www.jerneithe.site/user/api/signup",
       data : {
