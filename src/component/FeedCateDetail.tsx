@@ -55,9 +55,9 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
     let chooseCa:string[] = [];
 
     //▷ 데이터 확인하기
-    console.log(category_data);
+    // console.log(category_data);
     // console.log(Object.keys(category_data));//키만 가지고 오기
-    console.log(categorytitle);
+    // console.log(categorytitle);
 
     if(categorytitle == "top") {
         chooseCa = [...top_data];
@@ -77,7 +77,7 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
     //▷ 가져온 Value 값을 Ctitle로 가진 배열 가지고오기
     const caArr:DATA | undefined  = category_data.find(arr => arr.Ctitle == categorytitle);
     const view_arr:string[] | undefined = caArr?.arr; 
-    console.log(view_arr);
+    // console.log(view_arr);
 
     //▷ 이벤트 리스너
     
@@ -177,7 +177,7 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
 
     }
 
-    console.log("검색 데이터 배열",search);
+    // console.log("검색 데이터 배열",search);
     console.log("삭제할 카테고리", delData);
 
 

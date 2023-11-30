@@ -6,6 +6,8 @@ import { FeedContent } from "@/recoilAtom/FeedContents";
 import { TemMaxControl } from "@/recoilAtom/TemMax";
 import { TemMinControl } from "@/recoilAtom/TemMin";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import "../style/feedContent.scss"
 
 
@@ -31,6 +33,8 @@ export default function FeedContents(){
     const [min, setMin] = useRecoilState(TemMinControl);
 
     const [feedata, setFeedd] = useRecoilState(FeedContent);
+
+    const router = useRouter();
 
     //최고 최저가 바뀔때마다 바뀐 온도에 맞춰 피드 바꾸기
     useEffect(() => {
@@ -109,13 +113,17 @@ export default function FeedContents(){
 
     }
 
+    const goDetail = async(board_id:number) => {
+        console.log("게시글 아이디", board_id);
+    }
+
     return(<>
         <div className="feed_box">
             {feedata ?
             feedata.map((arr)=>{
                 return( 
                 <div className="feed" key={arr.boardId}>
-                    <div className="feed_imgs3">
+                    <div className="feed_imgs3" onClick={()=>goDetail(arr.boardId)}>
                         <Image
                             src={arr.images.image_url}
                             alt="코디 이미지"
@@ -129,13 +137,13 @@ export default function FeedContents(){
                         <div id="name_like">
                             <p id="nickName_feed">@{arr.nickName}</p>
                             <div id="like_feed_dj">
-                                <button onClick={() => heart_plus(arr.boardId)}>
-                                <Image
-                                    src="/images/likeuseFeed.svg"
-                                    alt="좋아요"
-                                    width={25}
-                                    height={25}
-                                />
+                                <button>
+                                    <Image
+                                        src="/images/likeuseFeed.svg"
+                                        alt="좋아요"
+                                        width={25}
+                                        height={25}
+                                    />
                                 </button>
                                 <p>{arr.likeCount}</p>
                             </div>
@@ -158,5 +166,7 @@ export default function FeedContents(){
             }) : 
             <p>로딩 중입니다. 계속 피드에 코디가 뜨지 않는다면 새로고침을 해주세요.</p>}
         </div>
+        {/* <Link href={
+            pathname: '/'}>ffffffff</Link> */}
     </>)
 }
