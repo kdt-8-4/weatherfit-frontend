@@ -10,11 +10,13 @@ interface handleSettingsClickProps {
   handleSettingsClick: () => void;
   email: string;
   name: string;
-  password: string;
+  password: string | undefined;
 }
 
 export default function ProfileModal(props: handleSettingsClickProps) {
   const { handleSettingsClick, email, name, password } = props;
+
+  console.log("현재 pw: ", password);
 
   // 프로필 이미지
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -134,6 +136,7 @@ export default function ProfileModal(props: handleSettingsClickProps) {
             {/* <AccountCircleOutlinedIcon className="user_image" /> */}
             <div className="email_box">
               <p>이메일</p>
+              <p>비번: {password}</p>
               <span>{email}</span>
             </div>
             <div className="name_box">
