@@ -4,12 +4,14 @@ import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
   const [token, setToken] = useRecoilState(Login_token);
   const router = useRouter();
+  // const { data: session } = useSession();
 
   // useEffect(() => {
   //   // 페이지 로드 시 URL에서 access_token 파싱
@@ -23,17 +25,23 @@ export default function LoginForm() {
   // }, []);
 
   const onGoogleSocialLogin = async () => {
-    try {
-      const response = await axios({
-        method: "POST",
-        url: "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=https://localhost:3000&response_type=token&scope=email",
-      });
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-    // window.location.href =
-    //   "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&redirect_uri=https://www.jerneithe.site/user/login/oauth2/code/google&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com";
+    // try {
+    //   const response = await axios({
+    //     method: "POST",
+    //     url: "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=https://localhost:3000&response_type=token&scope=email",
+    //   });
+    //   console.log(response);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    window.location.href =
+    "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=http://localhost:3000/socialregister&response_type=token&scope=email";
+    
+    // router.push('/socialregister');
+
+    // const code = new URL(window.location.href).searchParams.get("code");
+    // console.log(code);
+    
   };
 
   const handleLogin = async (e: FormEvent) => {
