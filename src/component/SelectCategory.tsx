@@ -6,15 +6,17 @@ interface SelectCategoryProps {
   category: string;
   subCategories: string[];
   onSelect: (subCategory: string[]) => void; // 선택한 하위 카테고리 부모 컴포넌트로 전송
+  initialSelectedSubCategories?: string[];
 }
 
 const SelectCategory: React.FC<SelectCategoryProps> = ({
   category,
   subCategories,
   onSelect,
+  initialSelectedSubCategories = [],
 }) => {
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(
-    [],
+    initialSelectedSubCategories,
   );
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [isImageFlipped, setIsImageFlipped] = useState<boolean>(false);
@@ -38,6 +40,10 @@ const SelectCategory: React.FC<SelectCategoryProps> = ({
     }
     onSelect(updatedSubCategories); // 선택 사항을 부모 컴포넌트에 바로 반영
   };
+
+  useEffect(() => {
+    setSelectedSubCategories(initialSelectedSubCategories);
+  }, [initialSelectedSubCategories]);
 
   return (
     <>

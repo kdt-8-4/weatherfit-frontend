@@ -1,7 +1,17 @@
-import { atom, useRecoilState } from "recoil";
+import {
+  loadFromLocalStorage,
+  saveToLocalStorage,
+} from "@/app/detail/edit/page";
+import { atom } from "recoil";
 
-// 상태 정의
 export const editBoardIdState = atom({
-  key: "editBoardId", // unique ID (with respect to other atoms/selectors)
-  default: null, // default value (aka initial value)
+  key: "editBoardIdState",
+  default: loadFromLocalStorage("editBoardId", ""),
+  effects_UNSTABLE: [
+    ({ onSet }) => {
+      onSet((newValue) => {
+        saveToLocalStorage("editBoardId", newValue);
+      });
+    },
+  ],
 });

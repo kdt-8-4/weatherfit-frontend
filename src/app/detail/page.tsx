@@ -6,7 +6,6 @@ import "../../style/detail.scss";
 import Menubar from "@/component/MenuBar";
 import Profile from "@/component/Profile";
 import ImageDetail from "@/component/ImageDetail";
-import Comments from "@/component/Comments";
 import Like from "@/component/Like";
 import { useEffect, useState } from "react";
 import axios from "axios";
