@@ -8,21 +8,14 @@ interface Image {
 }
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
-  // initialImagesURLs: string[];
   initialImages: Image[];
-  // onImageDelete: (imageId: number) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
-  // initialImagesURLs,
   initialImages,
-}: // onImageDelete,
-ImageUploadProps) => {
+}: ImageUploadProps) => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  // const [existingImages, setExistingImages] =
-  //   useState<string[]>(initialImagesURLs);
-  // const [imageIdsToDelete, setImageIdsToDelete] = useState<number[]>([]);
   const [existingImages, setExistingImages] = useState<Image[]>(initialImages);
 
   useEffect(() => {
@@ -62,7 +55,6 @@ ImageUploadProps) => {
       const imageId = existingImages[index].imageId;
       newImages.splice(index, 1);
       setExistingImages(newImages);
-      // onImageDelete(imageId);
     }
   };
 
