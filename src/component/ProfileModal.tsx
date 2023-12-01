@@ -3,6 +3,7 @@ import "../style/modal.scss";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 
 // 회원 정보 수정 모달 컴포넌트
 
@@ -10,7 +11,7 @@ interface handleSettingsClickProps {
   handleSettingsClick: () => void;
   email: string;
   name: string;
-  password: string | undefined;
+  password: string;
 }
 
 export default function ProfileModal(props: handleSettingsClickProps) {
@@ -72,10 +73,17 @@ export default function ProfileModal(props: handleSettingsClickProps) {
     e.preventDefault();
 
     // 현재 비밀번호 확인
-    if (currentPassword !== password) {
+    const isPasswordMatch = await bcrypt.compare(currentPassword, password);
+
+    if (!isPasswordMatch) {
       alert("현재 비밀번호를 다시 입력하세요.");
       return;
     }
+
+    // if (currentPassword !== password) {
+    //   alert("현재 비밀번호를 다시 입력하세요.");
+    //   return;
+    // }
 
     // 변경 비밀번호 확인
     if (newPassword !== confirmPassword) {
@@ -136,7 +144,6 @@ export default function ProfileModal(props: handleSettingsClickProps) {
             {/* <AccountCircleOutlinedIcon className="user_image" /> */}
             <div className="email_box">
               <p>이메일</p>
-              <p>비번: {password}</p>
               <span>{email}</span>
             </div>
             <div className="name_box">

@@ -96,12 +96,23 @@ export default function Mypage() {
 
         const response = await axios.post(
           `https://www.jerneithe.site/user/api/profile`,
-          { email: "user94@test.com" }
+          { email: "user95@test.com" }
         );
         setUserProfile(response.data);
 
         // 비밀번호 디코딩
-        let pw_jwt: string = response.data.password;
+        // console.log("회원정보 pw: ", response.data.password);
+        // let pw_jwt = response.data.password;
+        // let pw_payload = pw_jwt.substring(
+        //   pw_jwt.indexOf(".") + 1,
+        //   pw_jwt.lastIndexOf(".")
+        // );
+
+        // console.log("pw_payload: ", pw_payload);
+
+        // let pw_decode = base64.decode(pw_payload);
+
+        // console.log("pw 디코딩: ", pw_decode);
 
         // 기존 것
         // let password_jwt: string = response.data.password;
@@ -112,7 +123,7 @@ export default function Mypage() {
         // const decoded_password = decodedPass?.sub;
         // setPassword(decoded_password);
 
-        console.log("postData: ", response.data);
+        console.log("회원정보 Data: ", response.data);
       } catch (error) {
         console.error("회원정보 에러: ", error);
       }
@@ -120,21 +131,19 @@ export default function Mypage() {
     profileData();
   }, []);
 
-  // ---------------------------------------------------------
+  // ------------------------------------------------------------------------
 
   // board 이미지 데이터 불러오기
   useEffect(() => {
     const postData = async () => {
       const req = await axios.get("https://www.jerneithe.site/board/list");
       const data: FEEDATA[] = req.data;
-      const filteredData = data.filter((item) => item.nickName === "dongdong");
+      const filteredData = data.filter((item) => item.nickName === "테스터");
       console.log("filterData: ", filteredData);
       setMyPostData(filteredData);
     };
     postData();
   }, []);
-
-  console.log("디코딩 비번: ", password);
 
   // 회원 정보 수정 모달 이벤트
   const handleSettingsClick = () => {
@@ -155,12 +164,16 @@ export default function Mypage() {
             {/* ------------- 프로필 부분 ------------- */}
             {userPofile && (
               <>
-                <MypageProfile nickname={userPofile.nickname} />
+                <MypageProfile
+                  nickname={userPofile.nickname}
+                  postnum={myPostData.length}
+                  myPostData={myPostData}
+                />
               </>
             )}
             {/* --------------------------------------- */}
             {/* ------------- tap 부분 ------------- */}
-            <TabBar myPostData={myPostData} />
+            {/* <TabBar myPostData={myPostData} /> */}
           </div>
           <Menubar />
         </div>
@@ -177,7 +190,7 @@ export default function Mypage() {
           handleSettingsClick={handleSettingsClick}
           email={userPofile.email}
           name={userPofile.name}
-          password={password}
+          password={userPofile.password}
         />
       )}
     </>
