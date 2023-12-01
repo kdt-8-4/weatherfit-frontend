@@ -12,6 +12,7 @@ import { categories } from "@/component/category";
 import axios from "axios";
 import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
+import Image from "next/image";
 
 export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -107,7 +108,13 @@ export default function Upload(): JSX.Element {
               window.history.back();
             }}
           />
-          <h2>등록하기</h2>
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={150}
+            height={90}
+          />
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
           </button>

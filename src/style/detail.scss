@@ -1,12 +1,15 @@
 @import "_util.scss";
+
 .container {
-  font-family: "EASTARJET-Medium";
   font-weight: 600;
   align-items: center;
   justify-content: flex-start;
 }
 header {
   width: 100%;
+}
+.top {
+  height: 80px;
 }
 
 hr {
