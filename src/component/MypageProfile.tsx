@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { FeedContent } from "@/recoilAtom/FeedContents";
+import TabBar from "./TabBar";
 
 interface MyPageProfileProps {
   nickname: string;
+  postnum: number;
+  myPostData: FEEDATA[];
 }
 
 interface IMAGE {
@@ -24,27 +27,7 @@ interface FEEDATA {
 }
 
 export default function MypageProfile(props: MyPageProfileProps) {
-  const { nickname } = props;
-
-  // const [feedata, setFeedd] = useRecoilState(FeedContent);
-
-  // useEffect(() => {
-
-  //   const feed_data = async() => {
-  //       const req = await axios({
-  //           method: "GET",
-  //           url: "https://www.jerneithe.site/board/list",
-  //       });
-
-  //       console.log("받아온 데이터", req.data);
-
-  //       const copy:FEEDATA[] = req.data;
-
-  //       console.log("카피" ,copy);
-
-  //   }
-
-  //   feed_data(); }, []);
+  const { nickname, postnum, myPostData } = props;
 
   return (
     <>
@@ -56,7 +39,7 @@ export default function MypageProfile(props: MyPageProfileProps) {
         <div className="user_info">
           <div className="num_box">
             <p className="user_post">내 게시물</p>
-            <p className="user_post_num">7</p>
+            <p className="user_post_num">{postnum}</p>
           </div>
           <div className="num_box">
             <p className="user_like">좋아요 한 게시물</p>
@@ -64,6 +47,7 @@ export default function MypageProfile(props: MyPageProfileProps) {
           </div>
         </div>
       </div>
+      <TabBar myPostData={myPostData} />
     </>
   );
 }
