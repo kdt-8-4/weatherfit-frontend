@@ -3,6 +3,7 @@ import "../style/modal.scss";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 
 // 회원 정보 수정 모달 컴포넌트
 
@@ -15,6 +16,8 @@ interface handleSettingsClickProps {
 
 export default function ProfileModal(props: handleSettingsClickProps) {
   const { handleSettingsClick, email, name, password } = props;
+
+  console.log("현재 pw: ", password);
 
   // 프로필 이미지
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -70,10 +73,17 @@ export default function ProfileModal(props: handleSettingsClickProps) {
     e.preventDefault();
 
     // 현재 비밀번호 확인
-    if (currentPassword !== password) {
+    const isPasswordMatch = await bcrypt.compare(currentPassword, password);
+
+    if (!isPasswordMatch) {
       alert("현재 비밀번호를 다시 입력하세요.");
       return;
     }
+
+    // if (currentPassword !== password) {
+    //   alert("현재 비밀번호를 다시 입력하세요.");
+    //   return;
+    // }
 
     // 변경 비밀번호 확인
     if (newPassword !== confirmPassword) {

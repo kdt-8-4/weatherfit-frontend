@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { FeedContent } from "@/recoilAtom/FeedContents";
+import Image from "next/image";
 
 interface IMAGE {
   boardId: number;
@@ -18,37 +19,50 @@ interface FEEDATA {
   weather: string;
 }
 
-export default function MyPost() {
-  // const posts = [1, 2, 3, 4, 5, 6, 7];
+interface MyPostProps {
+  myPostData: FEEDATA[];
+}
 
-  // const [feedata, setFeedd] = useState<any>([]);
-  // const email = "user91@test.com";
+export default function MyPost(props: MyPostProps) {
+  const { myPostData } = props;
 
-  useEffect(() => {
-    const feed_data = async () => {
-      const req = await axios({
-        method: "GET",
-        url: "https://www.jerneithe.site/board/mylist",
-        // url: `https://www.jerneithe.site/board/list?email=${email}`,
-      });
-
-      console.log("받아온 데이터: ", req.data);
-
-      const copy: FEEDATA[] = req.data;
-
-      console.log("카피: ", copy);
-    };
-
-    feed_data();
-  }, []);
+  console.log("mypost 데이터: ", myPostData);
 
   return (
     <div className="post_box">
-      {/* {posts.map((post, index) => (
-        <div key={index} className="post">
-          {post}
-        </div>
-      ))} */}
+      {myPostData.length > 0 ? (
+        myPostData.map((item) => (
+          <div key={item.boardId} className="post">
+            {item.images && (
+              <Image
+                src={item.images.image_url}
+                alt="코디 이미지"
+                layout="fill"
+                objectFit="cover"
+              />
+            )}
+          </div>
+        ))
+      ) : (
+        <>
+          <p>게시물을 등록해주세요.</p>
+        </>
+      )}
     </div>
   );
+}
+
+{
+  /* {item.images ? (
+            <Image
+              src={item.images.image_url}
+              alt="코디 이미지"
+              layout="fill"
+              objectFit="cover"
+            />
+          ) : (
+            <>
+              <p>게시물을 등록해주세요.</p>
+            </>
+          )} */
 }

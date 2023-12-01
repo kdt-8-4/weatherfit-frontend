@@ -7,6 +7,15 @@
   font-size: 12px;
   font-weight: 500;
   resize: none;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .hashtag {
     font-weight: bold;

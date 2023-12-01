@@ -5,22 +5,58 @@
   align-items: center;
   width: 100%;
   height: 140px;
+  overflow-x: auto; /* 이미지가 영역을 넘어갈 경우, 슬라이드로 표시 */
+  overflow-y: hidden; /* 수직 스크롤을 숨김 */
+  white-space: nowrap; /* 이미지를 한 줄로 표시 */
   .image-preview {
     position: relative;
+    width: 100px; /* 이미지를 감싸는 div의 크기를 고정합니다. */
+    height: 140px;
+    flex-shrink: 0;
     img {
-      position: relative;
-      width: 100px;
-      height: 140px;
+      width: 100%; /* 이미지의 크기를 div에 맞게 조절합니다. */
+      height: 100%;
+      object-fit: cover; /* 이미지가 div를 꽉 채우면서 비율을 유지하게 합니다. */
     }
     button {
       position: absolute;
-      color: red;
-      font-size: 10px;
+      color: red; /* 글자색을 흰색으로 변경 */
+      border-radius: 50%; /* 버튼을 원형으로 만듬 */
+      font-size: 8px;
       top: 5px;
       right: 5px;
+      border: none; /* 버튼 테두리 제거 */
+      cursor: pointer; /* 마우스를 올렸을 때 커서 모양을 변경 */
+      transition: background-color 0.3s; /* 배경색이 부드럽게 변경되게 함 */
+
+      &:hover {
+        background-color: rgba(139, 0, 0, 0.329);
+        border-radius: 50%; /* 버튼을 원형으로 만듬 */
+      }
     }
   }
 }
+
+/* Chrome, Safari, Edge */
+.uploaded_images::-webkit-scrollbar {
+  height: 5px; /* 스크롤 바 높이 */
+}
+
+.uploaded_images::-webkit-scrollbar-thumb {
+  background: #c9c9c9; /* 스크롤 바 색 */
+  border-radius: 5px; /* 스크롤 바 모서리 둥글기 */
+}
+
+.uploaded_images::-webkit-scrollbar-thumb:hover {
+  background: $color-main; /* 스크롤 바 마우스 오버 시 색 */
+}
+
+/* Firefox */
+.uploaded_images {
+  scrollbar-width: thin; /* 스크롤 바 두께 */
+  scrollbar-color: $color-main #c9c9c9; /* 스크롤 바 색, 스크롤 트랙 색 */
+}
+
 .add-div {
   cursor: pointer;
   width: 100px;

@@ -1,15 +1,26 @@
 import Image from "next/image";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "../style/imageUpload.scss";
 
+interface Image {
+  imageId: number;
+  imageUrl: string;
+}
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
+  initialImages: Image[];
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
+  initialImages,
 }: ImageUploadProps) => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<Image[]>(initialImages);
+
+  useEffect(() => {
+    setExistingImages(initialImages);
+  }, [initialImages]);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = event.target.files;
@@ -38,14 +49,30 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
+  const removeExistingImage = (index: number) => {
+    if (existingImages) {
+      const newImages = [...existingImages];
+      const imageId = existingImages[index].imageId;
+      newImages.splice(index, 1);
+      setExistingImages(newImages);
+    }
+  };
+
   return (
     <div className="upload_images">
       <div className="uploaded_images">
+        {existingImages &&
+          Array.from(existingImages).map((image, index) => (
+            <div key={index} className="image-preview">
+              <img src={image.imageUrl} alt={`Image ${index}`} />
+              <button onClick={() => removeExistingImage(index)}>❌</button>
+            </div>
+          ))}
         {selectedImages &&
           Array.from(selectedImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-              <button onClick={() => removeImage(index)}>삭제</button>
+              <button onClick={() => removeImage(index)}>❌</button>
             </div>
           ))}
         <label htmlFor="upload-input">
