@@ -4,25 +4,13 @@ import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [pw, setPw] = useState<string>("");
-  const [token, setToken] = useRecoilState(Login_token);
+  const [token, setToken] = useState<string>("");
+  const [logintoken, setLogincheck] = useRecoilState(Login_token);
   const router = useRouter();
-  // const { data: session } = useSession();
-
-  // useEffect(() => {
-  //   // 페이지 로드 시 URL에서 access_token 파싱
-  //   const urlParams = new URLSearchParams(window.location.hash.substring(1));
-  //   const accessToken = urlParams.get("access_token");
-
-  //   // accessToken을 로컬 스토리지에 저장 또는 백엔드로 전송
-  //   if (accessToken) {
-  //     localStorage.setItem("accessToken", accessToken);
-  //   }
-  // }, []);
 
   const onGoogleSocialLogin = async () => {
     // try {
@@ -36,11 +24,6 @@ export default function LoginForm() {
     // }
     window.location.href =
     "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=http://localhost:3000/socialregister&response_type=token&scope=email";
-    
-    // router.push('/socialregister');
-
-    // const code = new URL(window.location.href).searchParams.get("code");
-    // console.log(code);
     
   };
 
@@ -59,12 +42,11 @@ export default function LoginForm() {
       const resData = response.data;
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
-
-      const accessToken = Cookies.get("accessToken");
-      console.log("accessToken 값: ", accessToken);
       
       // 토큰을 쿠키에 저장
       document.cookie = `accessToken=${resData.token}; path=/`;
+      // 이메일을 로컬 스토리지에 저장
+      localStorage.setItem("user_email", resData.email);
 
       setToken(resData.token);
       router.push('/');
@@ -78,12 +60,29 @@ export default function LoginForm() {
     }
   };
 
-  console.log("resData token 적용됐는지: ", token);
-
   const handleInputChange =
     (setState: React.Dispatch<React.SetStateAction<string>>) =>
     (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
+
+
+  // Recoil로 로그인 체크할려했으나 새로고침하면 사라지는 문제가 여전히 존재해 패스    
+  // useEffect(()=>{
+  //   const cookie = () => {
+  //     const accessToken = Cookies.get("accessToken");
+  //     console.log("accessToken 값: ", accessToken);
+  //   }
+  //   cookie();
+  //   cookie();
+  //   if (token === undefined) {
+  //     setLogincheck(false);
+  //   } else {
+  //     setLogincheck(true);
+  //   }
+  // },[token]);
+
+
+  console.log("resData token 적용됐는지: ", token);
 
   return (
     <>
