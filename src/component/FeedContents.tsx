@@ -70,11 +70,6 @@ export default function FeedContents() {
     //     // setFeedd(filter_feedata);
   }, [max, min, setFeedd]);
 
-  // console.log(feedata[0].nickName);
-  // console.log(feedata[0].likeCount);
-  // console.log(feedata[0].images.image_url);
-  // console.log(feedata[0].temperature);
-
   const heart_plus = async (board_id: number) => {
     console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
     console.log("하트 누른 피드의 boardId", board_id);
@@ -109,6 +104,9 @@ export default function FeedContents() {
   const goDetail = async (board_id: number) => {
     console.log("게시글 아이디", board_id);
   };
+
+
+  console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
 
   return (
     <>

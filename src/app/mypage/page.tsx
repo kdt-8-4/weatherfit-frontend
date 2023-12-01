@@ -45,6 +45,7 @@ export default function Mypage() {
   const [logintoken, setToken] = useState<string | undefined>("");
 
   const [myPostData, setMyPostData] = useState<FEEDATA[]>([]);
+  const [email, setEmail] = useState<string | null>("");
 
   const cookie = () => {
     const accessToken = Cookies.get("accessToken");
@@ -60,12 +61,16 @@ export default function Mypage() {
     } else {
       setCheck(true);
     }
+
+    setEmail(localStorage.getItem("user_email"));
+
   }, [logintoken]);
 
   // ------------------------------------------------------------------------
 
   console.log("로그인 토큰 존재 확인", logincheck);
   console.log("로그인 토큰 값", logintoken);
+  console.log("유저 이메일", email);
 
   useEffect(() => {
     const profileData = async () => {
@@ -163,6 +168,7 @@ export default function Mypage() {
         <>
           <div>로그인을 해주세요.</div>
           <Link href={"/login"}>로그인 페이지로 이동</Link>
+          <Link href={"/"}>홈 페이지로 이동</Link>
         </>
       )}
 
