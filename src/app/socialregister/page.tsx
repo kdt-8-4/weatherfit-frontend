@@ -20,7 +20,7 @@ export default function CompleteProfile() {
   const send = async() => {
     await axios({
               method: "POST",
-              url: "https://www.jerneithe.site/user/api/token",
+              url: "https://www.jerneithe.site/user/login/google/token",
               data: {
                 token: googleToken,
               },

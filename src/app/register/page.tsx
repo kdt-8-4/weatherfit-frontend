@@ -1,7 +1,7 @@
 "use client";
 import CloseIcon from "@mui/icons-material/Close";
 import "../../style/register.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputBar from "@/component/InputBar";
 import Menubar from "@/component/MenuBar";
 import axios from "axios";
@@ -21,12 +21,10 @@ export default function Register(): JSX.Element {
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repassword, setRepassword] = useState<string>("");
-  // console.log("========================================");
-  // console.log("이메일", email);
-  // console.log("이름", name);
-  // console.log("닉네임", nickname);
-  // console.log("비번", password);
-  // console.log("비번 확인", repassword);
+  
+  //중복검사
+  const [emailcheck, setEmailCheck] = useState<string>("이메일을 입력하세요");
+  const [nickname_check, setNickCHeck] = useState<string>("닉네임을 입력하세요");
 
   const validateEmail = (inputValue: string) => {
     const emailFormat =
@@ -42,6 +40,14 @@ export default function Register(): JSX.Element {
   const validateRePassword = (inputValue: string) => {
     return inputValue === password;
   };
+
+  //이메일 중복 검사
+  const check_email = () => {
+    console.log("onBlur 잘돌아가는지 확인", email);
+  }
+
+  //닉네임 중복 검사
+
 
   const verify_btn = async () => {
     console.log("Verify 버튼이 클릭되었습니다.");
@@ -101,13 +107,25 @@ export default function Register(): JSX.Element {
               label="이메일"
               id="email"
               type="email"
-              placeholder="이메일을 입력하세요"
+              placeholder={emailcheck}
               value={email}
               onChange={(value: string) => setEmail(value)}
+              onBlur={check_email}
               button // 버튼을 사용한다고 명시
               buttonId="btn_verify"
               buttonText="인증"
               onButtonClick={verify_btn}
+              autoFocus
+            />
+
+            {/* 닉네임 👉🏻 중복검사*/}
+            <InputBar
+              label="닉네임"
+              id="nickname"
+              type="text"
+              placeholder={nickname_check}
+              value={nickname}
+              onChange={(value: string) => setNickname(value)}
               autoFocus
             />
 
@@ -119,16 +137,6 @@ export default function Register(): JSX.Element {
               placeholder="이름을 입력하세요"
               value={name}
               onChange={(value: string) => setName(value)}
-              autoFocus
-            />
-            {/* 닉네임 👉🏻 중복검사*/}
-            <InputBar
-              label="닉네임"
-              id="nickname"
-              type="text"
-              placeholder="닉네임을 입력하세요"
-              value={nickname}
-              onChange={(value: string) => setNickname(value)}
               autoFocus
             />
 

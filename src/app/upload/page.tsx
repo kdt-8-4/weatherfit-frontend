@@ -13,6 +13,7 @@ import axios from "axios";
 import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -26,12 +27,26 @@ export default function Upload(): JSX.Element {
   >({});
   const [token, setToken] = useRecoilState(Login_token);
 
-  const accessToken = Cookies.get("accessToken");
-  console.log("accessToken 값: ", accessToken);
+  // 로그인 확인 후 페이지 로드
+  const [logincheck, setCheck] = useState<boolean>(false);
+  // 토큰 값
+  const [logintoken, setLoginToken] = useState<string | undefined>("");
+
+  //쿠기 가져오고 State에 넣기
+  const cookie = () => {
+    const accessToken = Cookies.get("accessToken");
+    console.log("accessToken 값: ", accessToken);
+    setLoginToken(accessToken);
+  };
 
   useEffect(() => {
-    console.log("토큰값을 받아왔는가", token);
-  }, []);
+    cookie();
+    if (logintoken === undefined) {
+      setCheck(false);
+    } else {
+      setCheck(true);
+    }
+  }, [logintoken]);
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
@@ -86,7 +101,7 @@ export default function Upload(): JSX.Element {
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + accessToken,
+          Authorization: "Bearer " + logintoken,
         },
       });
 
@@ -98,7 +113,11 @@ export default function Upload(): JSX.Element {
     }
   };
 
-  return (
+  console.log("로그인 토큰 존재 확인", logincheck);
+  console.log("로그인 토큰 값", logintoken);
+
+  return (<>
+    {logincheck ? 
     <div className="container">
       <header>
         <div className="top">
@@ -158,6 +177,14 @@ export default function Upload(): JSX.Element {
       </section>
 
       <Menubar />
-    </div>
-  );
+    </div> : 
+    <>
+      <div>로그인 후에 업로드할 수 있습니다.</div>
+      <Link href={"/login"}>로그인 페이지로 이동</Link>
+      <Link href={"/"}>홈 페이지로 이동</Link>
+    </>  
+    }
+
+    
+    </>);
 }
