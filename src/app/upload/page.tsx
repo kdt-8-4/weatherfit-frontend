@@ -10,8 +10,6 @@ import { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { categories } from "@/component/category";
 import axios from "axios";
-
-import { RecoilRoot } from "recoil";
 import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 
@@ -88,7 +86,6 @@ export default function Upload(): JSX.Element {
   };
 
   return (
-    // <RecoilRoot>
     <div className="container">
       <header>
         <div className="top">
@@ -140,6 +137,5 @@ export default function Upload(): JSX.Element {
 
       <Menubar />
     </div>
-    // </RecoilRoot>
   );
 }

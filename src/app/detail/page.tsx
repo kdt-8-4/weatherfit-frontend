@@ -12,8 +12,7 @@ import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
 import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
-
-import { RecoilRoot, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import CommentIcon from "@/component/CommentIcon";
 import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
@@ -29,7 +28,6 @@ export default function Detail(): JSX.Element {
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
-  // const decodedToken = jwt.decode(accessToken) as { [key: string]: any };
   const decodedToken = accessToken
     ? (jwt.decode(accessToken) as { [key: string]: any })
     : null;
@@ -49,9 +47,7 @@ export default function Detail(): JSX.Element {
       }
     };
 
-    // if (boardDetail && boardDetail.boardId) {
     fetchData();
-    // }
   }, []);
 
   const toggleDropdown = () => {
@@ -59,14 +55,11 @@ export default function Detail(): JSX.Element {
   };
 
   const handleEdit = () => {
-    // 수정 버튼 클릭 시 처리할 로직 추가
     setEditBoardId(boardDetail.boardId);
     router.push(`/detail/edit`);
-    // router.push(`/detail/edit?id=${boardDetail.boardId}`);
   };
 
   const handleDelete = async () => {
-    // 삭제 버튼 클릭 시 처리할 로직 추가
     if (window.confirm("게시물을 삭제하시겠습니까?")) {
       try {
         const response = await axios({
@@ -84,7 +77,6 @@ export default function Detail(): JSX.Element {
   };
 
   return (
-    // <RecoilRoot>
     <div className="container relative">
       <header className="top w-full">
         <div className="w-full h-12 flex items-center ">
@@ -155,6 +147,5 @@ export default function Detail(): JSX.Element {
 
       <Menubar />
     </div>
-    // </RecoilRoot>
   );
 }
