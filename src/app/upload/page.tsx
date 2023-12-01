@@ -12,6 +12,7 @@ import { categories } from "@/component/category";
 import axios from "axios";
 import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Upload(): JSX.Element {
@@ -66,6 +67,16 @@ export default function Upload(): JSX.Element {
   );
 
   const handleComplete = async () => {
+    if (selectedImages.length === 0) {
+      alert("이미지를 추가해주세요!");
+      return;
+    }
+
+    if (content.trim() === "") {
+      alert("글을 작성해주세요!");
+      return;
+    }
+
     try {
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
         (acc, subCategories) => acc.concat(subCategories),
@@ -116,7 +127,13 @@ export default function Upload(): JSX.Element {
               window.history.back();
             }}
           />
-          <h2>등록하기</h2>
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={150}
+            height={90}
+          />
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
           </button>
@@ -132,7 +149,7 @@ export default function Upload(): JSX.Element {
             onImagesSelected={handleImagesSelected}
             initialImages={[]}
           />
-          <hr />
+          <br />
           <TextArea
             content={content}
             placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"

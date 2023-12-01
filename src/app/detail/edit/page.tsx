@@ -12,6 +12,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 import { categories } from "@/component/category";
+import Image from "next/image";
 
 const mapSubCategoriesToCategory = (
   subCategories: string[],
@@ -162,7 +163,7 @@ export default function EditDetail(): JSX.Element {
       });
 
       console.log(response.data); // 서버 응답 확인
-      alert("게시물 수정 완료");
+      alert("게시물 수정 완료!");
       window.location.href = "/feed";
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -182,7 +183,13 @@ export default function EditDetail(): JSX.Element {
               window.history.back();
             }}
           />
-          <h2>수정하기</h2>
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={150}
+            height={90}
+          />
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
           </button>
@@ -192,12 +199,13 @@ export default function EditDetail(): JSX.Element {
         <hr />
       </header>
       <section className="main">
+        <h2>수정하기</h2>
         <div className="content">
           <ImageUpload
             onImagesSelected={handleImagesSelected}
             initialImages={initialImages}
           />
-          <hr />
+          <br />
           <TextArea
             content={content}
             placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"

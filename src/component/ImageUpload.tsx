@@ -65,14 +65,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           Array.from(existingImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={image.imageUrl} alt={`Image ${index}`} />
-              <button onClick={() => removeExistingImage(index)}>삭제</button>
+              <button onClick={() => removeExistingImage(index)}>❌</button>
             </div>
           ))}
         {selectedImages &&
           Array.from(selectedImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-              <button onClick={() => removeImage(index)}>삭제</button>
+              <button onClick={() => removeImage(index)}>❌</button>
             </div>
           ))}
         <label htmlFor="upload-input">
