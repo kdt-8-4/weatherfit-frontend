@@ -26,16 +26,34 @@ interface MyPostProps {
 export default function MyPost(props: MyPostProps) {
   const { myPostData } = props;
 
-  // const posts = [1, 2, 3, 4, 5, 6, 7];
-
-  // const [feedata, setFeedd] = useState<any>([]);
-  // const email = "user91@test.com";
+  console.log("mypost 데이터: ", myPostData);
 
   return (
     <div className="post_box">
-      {/* {myPostData.map((item) => (
-        <div key={item.boardId} className="post">
-          {item.images ? (
+      {myPostData.length > 0 ? (
+        myPostData.map((item) => (
+          <div key={item.boardId} className="post">
+            {item.images && (
+              <Image
+                src={item.images.image_url}
+                alt="코디 이미지"
+                layout="fill"
+                objectFit="cover"
+              />
+            )}
+          </div>
+        ))
+      ) : (
+        <>
+          <p>게시물을 등록해주세요.</p>
+        </>
+      )}
+    </div>
+  );
+}
+
+{
+  /* {item.images ? (
             <Image
               src={item.images.image_url}
               alt="코디 이미지"
@@ -46,9 +64,5 @@ export default function MyPost(props: MyPostProps) {
             <>
               <p>게시물을 등록해주세요.</p>
             </>
-          )}
-        </div>
-      ))} */}
-    </div>
-  );
+          )} */
 }

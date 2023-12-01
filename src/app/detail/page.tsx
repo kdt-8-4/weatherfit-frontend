@@ -41,9 +41,9 @@ export default function Detail(): JSX.Element {
       try {
         const response = await axios.get(
           // 메인용
-          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
+          // `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
           // 테스트용
-          // "https://www.jerneithe.site/board/detail/4",
+          "https://www.jerneithe.site/board/detail/4"
         );
         setBoardDetail(response.data);
       } catch (error) {
@@ -114,7 +114,8 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center">
+                  className="ml-auto flex flex-col items-center"
+                >
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -126,12 +127,14 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         삭제
                       </button>
                     </div>

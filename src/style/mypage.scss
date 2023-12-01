@@ -27,6 +27,7 @@
   }
   .mypage_body {
     width: 90%;
+    height: 100%;
     // ------------ 프로필 부분
     .user {
       display: flex;
@@ -97,6 +98,7 @@
         font-weight: bold;
         text-align: center;
         background-color: thistle;
+        position: relative;
       }
     }
   }
