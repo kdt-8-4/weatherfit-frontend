@@ -123,7 +123,7 @@ export default function Upload(): JSX.Element {
             onImagesSelected={handleImagesSelected}
             initialImages={[]}
           />
-          <hr />
+          <br />
           <TextArea
             content={content}
             placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
