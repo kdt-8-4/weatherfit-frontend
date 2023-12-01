@@ -17,10 +17,12 @@ export default function Upload(): JSX.Element {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
+  const [initialSubCategories, setInitialSubCategories] = useState<string[][]>(
+    Array(Object.entries(categories).length).fill([]),
+  );
   const [selectedCategories, setSelectedCategories] = useState<
     Record<string, string[]>
   >({});
-  // const [icon, setIcon] = useRecoilState(WeatherIcons);
   const [token, setToken] = useRecoilState(Login_token);
 
   const accessToken = Cookies.get("accessToken");
@@ -121,16 +123,19 @@ export default function Upload(): JSX.Element {
         </div>
         <div className="category">
           <div>
-            {Object.entries(categories).map(([category, subCategories]) => (
-              <SelectCategory
-                key={category}
-                category={category}
-                subCategories={subCategories}
-                onSelect={(selectedSubCategories) =>
-                  handleCategorySelect(category, selectedSubCategories)
-                }
-              />
-            ))}
+            {Object.entries(categories).map(
+              ([category, subCategories], index) => (
+                <SelectCategory
+                  key={category}
+                  category={category}
+                  subCategories={subCategories}
+                  initialSelectedSubCategories={initialSubCategories[index]}
+                  onSelect={(selectedSubCategories) =>
+                    handleCategorySelect(category, selectedSubCategories)
+                  }
+                />
+              ),
+            )}
           </div>
         </div>
       </section>
