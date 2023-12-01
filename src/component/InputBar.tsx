@@ -9,6 +9,7 @@ interface InputBarProps {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   button?: boolean; // 버튼 여부를 추가
   buttonId?: string;
   buttonText?: string;
@@ -22,6 +23,7 @@ const InputBar: React.FC<InputBarProps> = ({
   placeholder,
   value,
   onChange,
+  onBlur,
   button,
   buttonId,
   buttonText,
@@ -43,7 +45,8 @@ const InputBar: React.FC<InputBarProps> = ({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
           }
-        />
+          onBlur={onBlur}
+          />
         {button && (
           <button type="button" id={buttonId} onClick={onButtonClick}>
             {buttonText}

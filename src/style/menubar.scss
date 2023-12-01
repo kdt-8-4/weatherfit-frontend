@@ -8,6 +8,14 @@
   height: 50px;
   position: fixed;
   bottom: 0;
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+
+  .menubar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
 
   .menu_box {
     display: flex;

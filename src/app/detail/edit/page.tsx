@@ -9,11 +9,10 @@ import SelectCategory from "@/component/SelectCategory";
 import { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-
-import { Login_token } from "@/recoilAtom/Login_token";
 import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 import { categories } from "@/component/category";
+import Image from "next/image";
 
 const mapSubCategoriesToCategory = (
   subCategories: string[],
@@ -70,9 +69,7 @@ async function urlToFile(url: any, filename: any) {
 export default function EditDetail(): JSX.Element {
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  // const [initialImagesURLs, setInitialImagesURLs] = useState<string[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
-  const [imageIdsToDelete, setImageIdsToDelete] = useState<number[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
@@ -96,8 +93,6 @@ export default function EditDetail(): JSX.Element {
     const data = response.data;
     console.log("게시물 데이터: ", data);
 
-    // const initialImagesURLs = data.images.map((image: any) => image.image_url);
-    // setInitialImagesURLs(initialImagesURLs);
     const initialImages = data.images.map((image: any) => ({
       imageId: image.imageId,
       imageUrl: image.image_url,
@@ -112,10 +107,6 @@ export default function EditDetail(): JSX.Element {
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
-
-  const handleImageDelete = (imageId: number) => {
-    setImageIdsToDelete((prevIds) => [...prevIds, imageId]);
-  };
 
   const handleContent = (text: string) => {
     setContent(text);
@@ -133,13 +124,6 @@ export default function EditDetail(): JSX.Element {
 
   const handleComplete = async () => {
     try {
-      // const existingImagesAsFiles = await Promise.all(
-      //   initialImages.map((image) => {
-      //     const filename = image.imageUrl.split("/").pop() || "image";
-      //     return urlToFile(image.imageUrl, filename);
-      //   }),
-      // );
-
       const existingImagesAsFiles = (
         await Promise.all(
           initialImages.map((image) => {
@@ -161,7 +145,6 @@ export default function EditDetail(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
-        // imageIdsToDelete,
       };
 
       formData.append("board", JSON.stringify(boardData));
@@ -180,7 +163,7 @@ export default function EditDetail(): JSX.Element {
       });
 
       console.log(response.data); // 서버 응답 확인
-      alert("게시물 수정 완료");
+      alert("게시물 수정 완료!");
       window.location.href = "/feed";
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -191,7 +174,6 @@ export default function EditDetail(): JSX.Element {
   };
 
   return (
-    // <RecoilRoot>
     <div className="container">
       <header>
         <div className="top">
@@ -201,7 +183,13 @@ export default function EditDetail(): JSX.Element {
               window.history.back();
             }}
           />
-          <h2>수정하기</h2>
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={150}
+            height={90}
+          />
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
           </button>
@@ -211,13 +199,13 @@ export default function EditDetail(): JSX.Element {
         <hr />
       </header>
       <section className="main">
+        <h2>수정하기</h2>
         <div className="content">
           <ImageUpload
             onImagesSelected={handleImagesSelected}
             initialImages={initialImages}
-            // onImageDelete={handleImageDelete}
           />
-          <hr />
+          <br />
           <TextArea
             content={content}
             placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
@@ -246,6 +234,5 @@ export default function EditDetail(): JSX.Element {
 
       <Menubar />
     </div>
-    // </RecoilRoot>
   );
 }

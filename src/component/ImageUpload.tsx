@@ -8,21 +8,14 @@ interface Image {
 }
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
-  // initialImagesURLs: string[];
   initialImages: Image[];
-  // onImageDelete: (imageId: number) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
-  // initialImagesURLs,
   initialImages,
-}: // onImageDelete,
-ImageUploadProps) => {
+}: ImageUploadProps) => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  // const [existingImages, setExistingImages] =
-  //   useState<string[]>(initialImagesURLs);
-  // const [imageIdsToDelete, setImageIdsToDelete] = useState<number[]>([]);
   const [existingImages, setExistingImages] = useState<Image[]>(initialImages);
 
   useEffect(() => {
@@ -62,7 +55,6 @@ ImageUploadProps) => {
       const imageId = existingImages[index].imageId;
       newImages.splice(index, 1);
       setExistingImages(newImages);
-      // onImageDelete(imageId);
     }
   };
 
@@ -73,14 +65,14 @@ ImageUploadProps) => {
           Array.from(existingImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={image.imageUrl} alt={`Image ${index}`} />
-              <button onClick={() => removeExistingImage(index)}>삭제</button>
+              <button onClick={() => removeExistingImage(index)}>❌</button>
             </div>
           ))}
         {selectedImages &&
           Array.from(selectedImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-              <button onClick={() => removeImage(index)}>삭제</button>
+              <button onClick={() => removeImage(index)}>❌</button>
             </div>
           ))}
         <label htmlFor="upload-input">
