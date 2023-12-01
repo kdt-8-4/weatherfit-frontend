@@ -38,10 +38,8 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // 메인용
           `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
-          // 테스트용
-          // "https://www.jerneithe.site/board/detail/4",
+          // "https://www.jerneithe.site/board/detail/18",
         );
         setBoardDetail(response.data);
       } catch (error) {
