@@ -51,6 +51,16 @@ export default function Upload(): JSX.Element {
   );
 
   const handleComplete = async () => {
+    if (selectedImages.length === 0) {
+      alert("이미지를 추가해주세요!");
+      return;
+    }
+
+    if (content.trim() === "") {
+      alert("글을 작성해주세요!");
+      return;
+    }
+
     try {
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
         (acc, subCategories) => acc.concat(subCategories),
