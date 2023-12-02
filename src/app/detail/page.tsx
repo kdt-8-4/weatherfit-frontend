@@ -18,11 +18,22 @@ import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 
+interface boardCommentType {
+  id: number;
+  boardId: number;
+  nickname: string;
+  content: string;
+  createdDate: string;
+  createdTime: string;
+  replyList: [];
+}
+
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const [localBoardId, setLocalBoardId] = useState<number | null>(0);
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
+  const [comment, setComment] = useState<boardCommentType[]>([]);
 
   const router = useRouter();
 
@@ -52,7 +63,10 @@ export default function Detail(): JSX.Element {
           `https://www.jerneithe.site/board/detail/${localBoardId}`,
           // `https://www.jerneithe.site/board/detail/3`,
         );
+        console.log("detail response: ", response.data);
+        console.log("댓글: ", response.data.comments);
         setBoardDetail(response.data);
+        setComment(response.data.comments);
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -164,7 +178,11 @@ export default function Detail(): JSX.Element {
             </div>
             <div className="button flex w-full px-3">
               <Like />
-              <CommentIcon />
+              <CommentIcon
+                accessToken={accessToken}
+                boardComment={comment}
+                decoded_nickName={decoded_nickName}
+              />
             </div>
             <CategoryDetail category={boardDetail.category} />
           </>
