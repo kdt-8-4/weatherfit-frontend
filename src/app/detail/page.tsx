@@ -12,7 +12,7 @@ import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
 import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CommentIcon from "@/component/CommentIcon";
 import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,8 @@ interface boardCommentType {
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [localBoardId, setLocalBoardId] = useState<number | null>(0);
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [comment, setComment] = useState<boardCommentType[]>([]);
 
@@ -46,30 +47,42 @@ export default function Detail(): JSX.Element {
   console.log("디코딩", decodedToken);
 
   useEffect(() => {
+    //여기서 localStorae의 값을 가져와 정수로 바꾸기
+    const boardId_in = localStorage.getItem("getBoardId_local");
+    const boardIdNumber = boardId_in ? parseInt(boardId_in) : null;
+    setLocalBoardId(boardIdNumber);
+
+    console.log("정수 변환", boardIdNumber);
+    console.log("로컬에서 불러온 아이읻", localBoardId);
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`
-          //`https://www.jerneithe.site/board/detail/4`
+          `https://www.jerneithe.site/board/detail/${localBoardId}`,
+          // `https://www.jerneithe.site/board/detail/3`,
         );
         console.log("detail response: ", response.data);
         console.log("댓글: ", response.data.comments);
         setBoardDetail(response.data);
         setComment(response.data.comments);
+        console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [localBoardId, setLocalBoardId]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
   const handleEdit = () => {
-    setEditBoardId(boardDetail.boardId);
+    // setEditBoardId(boardDetail.boardId);
+    setEditBoardId(localBoardId);
     router.push(`/detail/edit`);
   };
 
@@ -92,30 +105,38 @@ export default function Detail(): JSX.Element {
 
   return (
     <div className="container flex flex-col items-center">
-      <header className="top w-full flex justify-between items-center">
-        <Image
-          src="/images/back.svg"
-          width={15}
-          height={15}
-          className="ml-3 cursor-pointer"
-          alt="back"
-          onClick={() => {
-            window.history.back();
-          }}
-        />
-        <Image
-          className="mx-auto"
-          src="/images/logo2.svg"
-          alt="옷늘날씨"
-          width={150}
-          height={90}
-        />
+      <header className="w-full">
+        <div className="top">
+          <div className="flex items-center">
+            <Image
+              src="/images/back.svg"
+              width={15}
+              height={15}
+              className="ml-2.5 cursor-pointer"
+              alt="back"
+              onClick={() => {
+                window.history.back();
+              }}
+            />
+          </div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Image
+              className="mx-auto mb-2.5"
+              src="/images/logo2.svg"
+              alt="옷늘날씨"
+              width={150}
+              height={90}
+            />
+          </div>
+        </div>
+        <hr className="w-full border-t-1" />
+        <WeatherBar />
+        <hr className="w-full border-t-1" />
       </header>
-      <hr className="w-full border-t-1" />
-      <WeatherBar />
-      <hr className="w-full border-t-1" />
 
-      <section className="w-5/6 flex flex-col items-center">
+      <section
+        className="main flex flex-col items-center"
+        style={{ width: "70%" }}>
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
@@ -123,8 +144,7 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center"
-                >
+                  className="ml-auto flex flex-col items-center p-3">
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -136,14 +156,12 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         삭제
                       </button>
                     </div>
@@ -158,7 +176,7 @@ export default function Detail(): JSX.Element {
                 hashTag={boardDetail.hashTag}
               />
             </div>
-            <div className="button flex">
+            <div className="button flex w-full px-3">
               <Like />
               <CommentIcon
                 accessToken={accessToken}
@@ -174,83 +192,4 @@ export default function Detail(): JSX.Element {
       <Menubar />
     </div>
   );
-  // return (
-  //   <div className="container relative">
-  //     <header className="top w-full">
-  //       <div className="w-full h-20 flex items-center">
-  //         <Image
-  //           src="/images/back.svg"
-  //           width={15}
-  //           height={15}
-  //           className="ml-3 cursor-pointer"
-  //           alt="back"
-  //           onClick={() => {
-  //             window.history.back();
-  //           }}
-  //         />
-  //         <Image
-  //           className="logo absolute text-center"
-  //           src="/images/logo2.svg"
-  //           alt="옷늘날씨"
-  //           width={150}
-  //           height={90}
-  //         />
-  //       </div>
-  //       <hr className="w-full h-px" />
-  //       <WeatherBar />
-  //       <hr className="w-full h-px" />
-  //     </header>
-
-  //     <section className="main w-5/6 h-auto">
-  //       {boardDetail && (
-  //         <>
-  //           <div className="w-full flex items-center">
-  //             <Profile nickName={boardDetail.nickName} />
-  //             {decoded_nickName === boardDetail.nickName && (
-  //               <div
-  //                 onClick={toggleDropdown}
-  //                 className="ml-auto flex flex-col items-center">
-  //                 <Image
-  //                   src="/images/more.svg"
-  //                   alt="etc"
-  //                   width={30}
-  //                   height={30}
-  //                   className="cursor-pointer"
-  //                 />
-  //                 {dropdownVisible && (
-  //                   <div className="dropdown absolute mt-7 z-10">
-  //                     <button
-  //                       onClick={handleEdit}
-  //                       className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
-  //                       수정
-  //                     </button>
-  //                     <button
-  //                       onClick={handleDelete}
-  //                       className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
-  //                       삭제
-  //                     </button>
-  //                   </div>
-  //                 )}
-  //               </div>
-  //             )}
-  //           </div>
-  //           <div className="contents w-full">
-  //             <ImageDetail images={boardDetail.images} />
-  //             <ContentDetail
-  //               content={boardDetail.content}
-  //               hashTag={boardDetail.hashTag}
-  //             />
-  //           </div>
-  //           <div className="button flex">
-  //             <Like />
-  //             <CommentIcon />
-  //           </div>
-  //           <CategoryDetail category={boardDetail.category} />
-  //         </>
-  //       )}
-  //     </section>
-
-  //     <Menubar />
-  //   </div>
-  // );
 }

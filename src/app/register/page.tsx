@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import InputBar from "@/component/InputBar";
 import Menubar from "@/component/MenuBar";
 import axios from "axios";
+import { METHODS } from "http";
 
 ///////////////////////////해야하는 작업/////////////////////////////
 
@@ -17,14 +18,22 @@ import axios from "axios";
 ///////////////////////////////////////////////////////////////////
 export default function Register(): JSX.Element {
   const [email, setEmail] = useState<string>("");
+  const [email_code, setEmail_code] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repassword, setRepassword] = useState<string>("");
   
   //중복검사
-  const [emailcheck, setEmailCheck] = useState<string>("이메일을 입력하세요");
-  const [nickname_check, setNickCHeck] = useState<string>("닉네임을 입력하세요");
+  const [emailcheck, setEmailCheck] = useState<string>("");
+  const [nickname_check, setNickCHeck] = useState<string>("");
+
+  //이메일 인증 인풋바 생성
+  const [emailCertified, setCertified] = useState<boolean>(false);
+
+  //이메일 인증이 되어야만 회원가입 데이터 전송 가능
+  const [permission, setPermission] = useState<boolean>(false);
+  const [permission_status, setPstatus] = useState<string>("");
 
   const validateEmail = (inputValue: string) => {
     const emailFormat =
@@ -42,32 +51,110 @@ export default function Register(): JSX.Element {
   };
 
   //이메일 중복 검사
-  const check_email = () => {
-    console.log("onBlur 잘돌아가는지 확인", email);
+  const check_email = async() => {
+    try {
+      const duplication_email = await axios({
+        method: "POST",
+        url: "https://www.jerneithe.site/user/signup/email",
+        data: {
+          email : email
+        },
+      });
+
+      console.log(duplication_email.data.result);
+      
+      if(duplication_email.data.result) {
+        setEmailCheck("");
+      } else {
+        setEmailCheck("사용할 수 없는 이메일입니다. 다시 입력해주세요.");
+      }
+      
+    } catch (error) {
+      console.log("이메일 데이터를 보내지 못했습니다", error);
+    }
+
+    console.log("onBlur 동작", email);
   }
 
   //닉네임 중복 검사
+  const check_nickname = async() => {
+    console.log("잘 동작하는지 확인", nickname);
+    try {
+
+      const duplication_nickname = await axios({
+        method: "POST",
+        url: "https://www.jerneithe.site/user/signup/nickname",
+        data: {
+          nickname: nickname,
+        },
+      });
+
+      
+      if(duplication_nickname.data.result) {
+        setNickCHeck("");
+      } else {
+        setNickCHeck("사용할 수 없는 닉네임입니다. 다시 입력해주세요.");
+      }
+      
+    } catch (error) {
+      console.log("닉네임 데이터를 보내지 못했습니다", nickname,error);
+    }
 
 
+  }
+
+  //이메일 전송
   const verify_btn = async () => {
     console.log("Verify 버튼이 클릭되었습니다.");
 
-    const verify_email = await axios({
-      method: "POST",
-      url: "https://www.jerneithe.site/user/profile",
-      data: email,
-    });
+    try {
+      const verify_email = await axios({
+        method: "POST",
+        url: "https://www.jerneithe.site/user/signup/email/send",
+        data: {email},
+      });
+
+      console.log(verify_email.data);
+
+      if(verify_email.data.result){
+        setCertified(true);
+      }else{
+        setCertified(false);
+      }
+
+    } catch (error) {
+      console.log("이메일 인증 코드 전송 실패", error);
+    }
   };
 
-  const caster_register = async () => {
-    // const req_regdata = {
-    //   email : email,
-    //   name : name,
-    //   nickname : nickname,
-    //   password : password,
-    // };
+  //이메일 인증 코드 수신 후 전송
+  const code_btn = async() => {
+    try {
+      const send_code = await axios({
+        method: "POST",
+        url: "https://www.jerneithe.site/user/signup/email/verify",
+        data: {
+          email: email,
+          code: email_code,
+        }
+      });
+      console.log(send_code.data);
+      if(send_code.data.result){
+        setPstatus("인증 성공!");
+        setPermission(true);
+      }else{
+        setPstatus("인증코드가 일치하지 않습니다.");
+        setPermission(false);
+      }
 
-    // console.log("데이터 확인", req_regdata);
+      console.log("permission", permission);
+    } catch (error) {
+      console.log("이메일 인증 실패", error);
+    }
+  }
+
+
+  const caster_register = async () => {
 
     console.log(
       email, 
@@ -76,18 +163,26 @@ export default function Register(): JSX.Element {
       password
       )
 
-    const register_data = await axios({
-      method: "POST",
-      url: "https://www.jerneithe.site/user/api/signup",
-      data : {
-        email : email,
-        name : name,
-        nickname : nickname,
-        password : password
+    if(permission){
+      try {
+        const register_data = await axios({
+          method: "POST",
+          url: "https://www.jerneithe.site/user/api/signup",
+          data : {
+            email : email,
+            name : name,
+            nickname : nickname,
+            password : password
+          }
+        });
+  
+        console.log("회원가입 됐는지 확인", register_data);
+        
+      } catch (error) {
+        console.log("이메일 인증에 실패했기 떄문에 회원가입 불가",error); 
       }
-    });
-
-    console.log("회원가입 됐는지 확인", register_data);
+    }
+    
   };
 
   return (
@@ -107,7 +202,7 @@ export default function Register(): JSX.Element {
               label="이메일"
               id="email"
               type="email"
-              placeholder={emailcheck}
+              placeholder="이메일을 입력하세요"
               value={email}
               onChange={(value: string) => setEmail(value)}
               onBlur={check_email}
@@ -117,17 +212,45 @@ export default function Register(): JSX.Element {
               onButtonClick={verify_btn}
               autoFocus
             />
+            <div className="permission_msg">
+              {emailcheck}
+            </div>
+
+            {/* 이메일 인증 코드 입력 인풋바 */}
+            {emailCertified ? 
+              <InputBar
+              label="이메일 인증 코드"
+              id="email_code"
+              type="text"
+              placeholder="인증코드을 입력하세요"
+              value={email_code}
+              onChange={(value: string) => setEmail_code(value)}
+              button // 버튼을 사용한다고 명시
+              buttonId="btn_code"
+              buttonText="전송"
+              onButtonClick={code_btn}
+              autoFocus
+            /> :
+            <div></div>
+            }
+            <div className="permission_msg">
+              {permission_status}
+            </div>
 
             {/* 닉네임 👉🏻 중복검사*/}
             <InputBar
               label="닉네임"
               id="nickname"
               type="text"
-              placeholder={nickname_check}
+              placeholder="닉네임을 입력하세요"
               value={nickname}
               onChange={(value: string) => setNickname(value)}
+              onBlur={check_nickname}
               autoFocus
             />
+            <div className="permission_msg">
+              {nickname_check}
+            </div>
 
             {/* 이름*/}
             <InputBar

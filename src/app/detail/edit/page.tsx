@@ -49,6 +49,8 @@ async function urlToFile(url: any, filename: any) {
     let mimeType = "";
     switch (extension) {
       case "jpg":
+        mimeType = "image/jpg";
+        break;
       case "jpeg":
         mimeType = "image/jpeg";
         break;
@@ -164,7 +166,7 @@ export default function EditDetail(): JSX.Element {
 
       console.log(response.data); // 서버 응답 확인
       alert("게시물 수정 완료!");
-      window.location.href = "/feed";
+      window.location.href = "/detail";
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error(error.response.data);

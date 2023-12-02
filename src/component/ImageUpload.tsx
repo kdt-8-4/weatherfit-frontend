@@ -22,6 +22,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setExistingImages(initialImages);
   }, [initialImages]);
 
+  useEffect(() => {
+    console.log("selectedImages", selectedImages);
+  }, [selectedImages]);
+
+  useEffect(() => {
+    console.log("existingImages", existingImages);
+  }, [existingImages]);
+
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = event.target.files;
     if (files) {
@@ -52,7 +60,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const removeExistingImage = (index: number) => {
     if (existingImages) {
       const newImages = [...existingImages];
-      const imageId = existingImages[index].imageId;
       newImages.splice(index, 1);
       setExistingImages(newImages);
     }
