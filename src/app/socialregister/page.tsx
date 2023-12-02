@@ -13,14 +13,14 @@ export default function CompleteProfile() {
   useEffect(()=>{
     const url = new URL(window.location.href);
     const hashParams = new URLSearchParams(url.hash.substring(1));
-    const callback_token = hashParams.get("access_token");
+    const callback_token = hashParams.get("state");
     setGoogle(callback_token);
   },[]);
 
   const send = async() => {
     await axios({
               method: "POST",
-              url: "https://www.jerneithe.site/user/api/token",
+              url: "https://www.jerneithe.site/user/login/google/token",
               data: {
                 token: googleToken,
               },

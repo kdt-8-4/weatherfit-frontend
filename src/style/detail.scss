@@ -1,18 +1,29 @@
 @import "_util.scss";
+
 .container {
-  font-family: "EASTARJET-Medium";
   font-weight: 600;
   align-items: center;
+  overflow-y: scroll;
   justify-content: flex-start;
-}
-header {
-  width: 100%;
-}
-
-hr {
-  background-color: #252525;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
+.top {
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  hr {
+    background-color: #252525;
+    width: 100%;
+    height: 1px;
+  }
+}
 @media only screen and (min-width: 320px) and (max-width: 768px) {
 }
 
@@ -20,4 +31,10 @@ hr {
 }
 
 @media only screen and (min-width: 1024px) {
+  .contents {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
 }

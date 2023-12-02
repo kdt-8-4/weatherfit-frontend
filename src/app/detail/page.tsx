@@ -12,15 +12,18 @@ import axios from "axios";
 import ContentDetail from "@/component/ContentDetail";
 import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CommentIcon from "@/component/CommentIcon";
 import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 
+
+
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [localBoardId, setLocalBoardId] = useState<number | null>(0);
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
 
   const router = useRouter();
@@ -35,20 +38,35 @@ export default function Detail(): JSX.Element {
   console.log("디코딩", decodedToken);
 
   useEffect(() => {
+
+    //여기서 localStorae의 값을 가져와 정수로 바꾸기
+    const boardId_in = localStorage.getItem("getBoardId_local");
+    const boardIdNumber = boardId_in ? parseInt(boardId_in) : null;
+    setLocalBoardId(boardIdNumber);
+
+    console.log("정수 변환", boardIdNumber);
+    console.log("로컬에서 불러온 아이읻", localBoardId);
+    
+
+   
+  }, []);
+
+  useEffect(()=>{
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
-          // "https://www.jerneithe.site/board/detail/18",
+          `https://www.jerneithe.site/board/detail/${localBoardId}`,
         );
         setBoardDetail(response.data);
+        console.log(response);
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
-
+    }; 
+    
     fetchData();
-  }, []);
+  },[localBoardId, setLocalBoardId])
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -77,26 +95,39 @@ export default function Detail(): JSX.Element {
   };
 
   return (
-    <div className="container relative">
-      <header className="top w-full">
-        <div className="w-full h-12 flex items-center ">
-          <Image
-            src="/images/back.svg"
-            width={15}
-            height={15}
-            className="ml-3 cursor-pointer"
-            alt="back"
-            onClick={() => {
-              window.history.back();
-            }}
-          />
+    <div className="container flex flex-col items-center">
+      <header className="w-full">
+        <div className="top">
+          <div className="flex items-center">
+            <Image
+              src="/images/back.svg"
+              width={15}
+              height={15}
+              className="ml-2.5 cursor-pointer"
+              alt="back"
+              onClick={() => {
+                window.history.back();
+              }}
+            />
+          </div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Image
+              className="mx-auto mb-2.5"
+              src="/images/logo2.svg"
+              alt="옷늘날씨"
+              width={150}
+              height={90}
+            />
+          </div>
         </div>
-        <hr className="w-full h-px" />
+        <hr className="w-full border-t-1" />
         <WeatherBar />
-        <hr className="w-full h-px" />
+        <hr className="w-full border-t-1" />
       </header>
 
-      <section className="main w-5/6 h-auto">
+      <section
+        className="main flex flex-col items-center"
+        style={{ width: "70%" }}>
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
@@ -104,7 +135,7 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center">
+                  className="ml-auto flex flex-col items-center p-3">
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -136,7 +167,7 @@ export default function Detail(): JSX.Element {
                 hashTag={boardDetail.hashTag}
               />
             </div>
-            <div className="button flex">
+            <div className="button flex w-full px-3">
               <Like />
               <CommentIcon />
             </div>
