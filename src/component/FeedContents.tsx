@@ -23,6 +23,7 @@ interface FEEDATA {
   nickName: string;
   temperature: number;
   weather: string;
+  weatherIcon?: string;
 }
 
 export default function FeedContents() {
@@ -103,6 +104,8 @@ export default function FeedContents() {
 
   const goDetail = async (board_id: number) => {
     console.log("게시글 아이디", board_id);
+    localStorage.setItem("getBoardId_local", JSON.stringify(board_id));
+    router.push('/detail');
   };
 
 
@@ -133,7 +136,7 @@ export default function FeedContents() {
                   <div id="name_like">
                     <p id="nickName_feed">@{arr.nickName}</p>
                     <div id="like_feed_dj">
-                      <button>
+                      <button onClick={() => heart_plus(arr.boardId)}>
                         <Image
                           src="/images/likeuseFeed.svg"
                           alt="좋아요"
@@ -147,11 +150,13 @@ export default function FeedContents() {
                   <div id="weather">
                     <div>
                       {/* <Image 
-                                    src=""
-                                    alt="날씨아이콘"
-                                    width={100}
-                                    height={100}
-                                /> */}
+                          src={arr.weatherIcon}
+                          alt="날씨아이콘"
+                          width={100}
+                          height={100}
+                      /> */}
+                      <img src={arr.weatherIcon} alt="날씨 아이콘">
+                      </img>
                     </div>
                     <div>
                       <p>{arr.temperature}℃</p>
