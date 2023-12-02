@@ -49,9 +49,10 @@ const WeatherBar: React.FC = () => {
         setWeat(weatherData.weather[0].main);
         setIcon(weatherData.weather[0].icon);
 
-        // console.log("데이터", weatherData);
+        console.log("데이터", weatherData);
         // console.log(`온도 : ${temp} ,최고온도 ${max},최저온도 ${min}, 날씨 : ${weat}`);
-
+        
+        
         const addressResponse = await fetch(
           `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`,
           {
@@ -74,6 +75,7 @@ const WeatherBar: React.FC = () => {
 
     getLocation(); // getLocation 함수 실행
   }, []);
+
 
   // console.log("온도 아톰에 다 잘 들어갔는지 확인 현재, 최고, 최저", usetemp, max, min);
 
