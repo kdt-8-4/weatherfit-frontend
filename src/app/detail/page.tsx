@@ -18,10 +18,21 @@ import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 
+interface boardCommentType {
+  id: number;
+  boardId: number;
+  nickname: string;
+  content: string;
+  createdDate: string;
+  createdTime: string;
+  replyList: [];
+}
+
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
+  const [comment, setComment] = useState<boardCommentType[]>([]);
 
   const router = useRouter();
 
@@ -38,9 +49,13 @@ export default function Detail(): JSX.Element {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`,
+          `https://www.jerneithe.site/board/detail/${boardDetail.boardId}`
+          //`https://www.jerneithe.site/board/detail/4`
         );
+        console.log("detail response: ", response.data);
+        console.log("댓글: ", response.data.comments);
         setBoardDetail(response.data);
+        setComment(response.data.comments);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -145,7 +160,11 @@ export default function Detail(): JSX.Element {
             </div>
             <div className="button flex">
               <Like />
-              <CommentIcon />
+              <CommentIcon
+                accessToken={accessToken}
+                boardComment={comment}
+                decoded_nickName={decoded_nickName}
+              />
             </div>
             <CategoryDetail category={boardDetail.category} />
           </>

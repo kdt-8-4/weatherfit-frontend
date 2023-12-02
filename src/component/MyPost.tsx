@@ -36,7 +36,7 @@ export default function MyPost(props: MyPostProps) {
             {item.images && (
               <Image
                 src={item.images.image_url}
-                alt="코디 이미지"
+                alt="내 이미지"
                 layout="fill"
                 objectFit="cover"
               />
