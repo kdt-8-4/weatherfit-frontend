@@ -11,6 +11,8 @@ import Cookies from "js-cookie";
 import { categories } from "@/component/category";
 import axios from "axios";
 import { Login_token } from "@/recoilAtom/Login_token";
+import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
+import { TemNowControl } from "@/recoilAtom/TemNow";
 import { useRecoilState } from "recoil";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,6 +28,9 @@ export default function Upload(): JSX.Element {
     Record<string, string[]>
   >({});
   const [token, setToken] = useRecoilState(Login_token);
+  //openweathermap에서 제공하는 icon과 현재 온도
+  const [icon, setIcon] = useRecoilState(WeatherIcons);
+  const [usetemp, setTemp] = useRecoilState(TemNowControl);
 
   // 로그인 확인 후 페이지 로드
   const [logincheck, setCheck] = useState<boolean>(false);
@@ -88,6 +93,8 @@ export default function Upload(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
+        temperature: usetemp, 
+        weatherIcon: `https://openweathermap.org/img/wn/${icon}.png`,
       };
 
       formData.append("board", JSON.stringify(boardData));
@@ -115,6 +122,8 @@ export default function Upload(): JSX.Element {
 
   console.log("로그인 토큰 존재 확인", logincheck);
   console.log("로그인 토큰 값", logintoken);
+  console.log("icon", icon);
+  console.log("온도", usetemp);
 
   return (
     <>
