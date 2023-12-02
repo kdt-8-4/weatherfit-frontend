@@ -49,6 +49,8 @@ async function urlToFile(url: any, filename: any) {
     let mimeType = "";
     switch (extension) {
       case "jpg":
+        mimeType = "image/jpg";
+        break;
       case "jpeg":
         mimeType = "image/jpeg";
         break;
