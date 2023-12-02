@@ -116,75 +116,78 @@ export default function Upload(): JSX.Element {
   console.log("로그인 토큰 존재 확인", logincheck);
   console.log("로그인 토큰 값", logintoken);
 
-  return (<>
-    {logincheck ? 
-    <div className="container">
-      <header>
-        <div className="top">
-          <CloseIcon
-            id="x"
-            onClick={() => {
-              window.history.back();
-            }}
-          />
-          <Image
-            className="logo"
-            src="/images/logo2.svg"
-            alt="옷늘날씨"
-            width={150}
-            height={90}
-          />
-          <button type="button" id="btn_complete" onClick={handleComplete}>
-            완료
-          </button>
-        </div>
-        <hr />
-        <WeatherBar />
-        <hr />
-      </header>
-      <section className="main">
-        <h2>오늘 날씨의 옷차림을 올려주세요!</h2>
-        <div className="content">
-          <ImageUpload
-            onImagesSelected={handleImagesSelected}
-            initialImages={[]}
-          />
-          <br />
-          <TextArea
-            content={content}
-            placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
-            handleHashtags={handleHashtags}
-            handleContent={handleContent}
-          />
-        </div>
-        <div className="category">
-          <div>
-            {Object.entries(categories).map(
-              ([category, subCategories], index) => (
-                <SelectCategory
-                  key={category}
-                  category={category}
-                  subCategories={subCategories}
-                  initialSelectedSubCategories={initialSubCategories[index]}
-                  onSelect={(selectedSubCategories) =>
-                    handleCategorySelect(category, selectedSubCategories)
-                  }
-                />
-              ),
-            )}
-          </div>
-        </div>
-      </section>
-
-      <Menubar />
-    </div> : 
+  return (
     <>
-      <div>로그인 후에 업로드할 수 있습니다.</div>
-      <Link href={"/login"}>로그인 페이지로 이동</Link>
-      <Link href={"/"}>홈 페이지로 이동</Link>
-    </>  
-    }
+      {logincheck ? (
+        <div className="container">
+          <header>
+            <div className="top">
+              <CloseIcon
+                id="x"
+                onClick={() => {
+                  window.history.back();
+                }}
+              />
+              <div className="img_wrap">
+                <Image
+                  className="logo"
+                  src="/images/logo2.svg"
+                  alt="옷늘날씨"
+                  width={150}
+                  height={90}
+                />
+              </div>
+              <button type="button" id="btn_complete" onClick={handleComplete}>
+                완료
+              </button>
+            </div>
+            <hr />
+            <WeatherBar />
+            <hr />
+          </header>
+          <section className="main">
+            <h2>오늘 날씨의 옷차림을 올려주세요!</h2>
+            <div className="content">
+              <ImageUpload
+                onImagesSelected={handleImagesSelected}
+                initialImages={[]}
+              />
+              <br />
+              <TextArea
+                content={content}
+                placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
+                handleHashtags={handleHashtags}
+                handleContent={handleContent}
+              />
+            </div>
+            <div className="category">
+              <div>
+                {Object.entries(categories).map(
+                  ([category, subCategories], index) => (
+                    <SelectCategory
+                      key={category}
+                      category={category}
+                      subCategories={subCategories}
+                      initialSelectedSubCategories={initialSubCategories[index]}
+                      onSelect={(selectedSubCategories) =>
+                        handleCategorySelect(category, selectedSubCategories)
+                      }
+                    />
+                  ),
+                )}
+              </div>
+            </div>
+          </section>
 
-    
-    </>);
+          <Menubar />
+        </div>
+      ) : (
+        <>
+          <div>로그인 후에 업로드할 수 있습니다.</div>
+          <Link href={"/login"}>로그인 페이지로 이동</Link>
+          <Link href={"/"}>홈 페이지로 이동</Link>
+        </>
+      )}
+    </>
+  );
 }
