@@ -18,8 +18,6 @@ import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
 
-
-
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
@@ -38,7 +36,6 @@ export default function Detail(): JSX.Element {
   console.log("디코딩", decodedToken);
 
   useEffect(() => {
-
     //여기서 localStorae의 값을 가져와 정수로 바꾸기
     const boardId_in = localStorage.getItem("getBoardId_local");
     const boardIdNumber = boardId_in ? parseInt(boardId_in) : null;
@@ -46,34 +43,32 @@ export default function Detail(): JSX.Element {
 
     console.log("정수 변환", boardIdNumber);
     console.log("로컬에서 불러온 아이읻", localBoardId);
-    
-
-   
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `https://www.jerneithe.site/board/detail/${localBoardId}`,
+          // `https://www.jerneithe.site/board/detail/3`,
         );
         setBoardDetail(response.data);
         console.log(response);
-        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }; 
-    
+    };
+
     fetchData();
-  },[localBoardId, setLocalBoardId])
+  }, [localBoardId, setLocalBoardId]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
   const handleEdit = () => {
-    setEditBoardId(boardDetail.boardId);
+    // setEditBoardId(boardDetail.boardId);
+    setEditBoardId(localBoardId);
     router.push(`/detail/edit`);
   };
 
