@@ -2,7 +2,7 @@
 
 module.exports = {
   images: {
-    domains: ["weatherfit-board-image.s3.amazonaws.com"],
+    domains: ['weatherfit-board-image.s3.amazonaws.com'],
   },
 };
 

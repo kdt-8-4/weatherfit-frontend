@@ -13,7 +13,7 @@ export default function CompleteProfile() {
   useEffect(()=>{
     const url = new URL(window.location.href);
     const hashParams = new URLSearchParams(url.hash.substring(1));
-    const callback_token = hashParams.get("access_token");
+    const callback_token = hashParams.get("state");
     setGoogle(callback_token);
   },[]);
 

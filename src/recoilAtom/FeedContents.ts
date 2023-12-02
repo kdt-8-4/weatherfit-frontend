@@ -13,6 +13,7 @@ interface FEEDATA {
   nickName: string;
   temperature: number;
   weather: string;
+  weatherIcon?: string;
 }
 
 export const FeedContent = atom<FEEDATA[]>({
