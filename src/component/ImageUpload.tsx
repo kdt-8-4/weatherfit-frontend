@@ -9,13 +9,13 @@ interface Image {
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
   initialImages: Image[];
-  onDeleteImage: (imageUrl: string) => void;
+  onDeleteImage?: (imageUrl: string) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
   initialImages,
-  onDeleteImage,
+  onDeleteImage = () => {},
 }: ImageUploadProps) => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<Image[]>(initialImages);
