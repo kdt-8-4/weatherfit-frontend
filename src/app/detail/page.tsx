@@ -41,6 +41,17 @@ export default function Detail(): JSX.Element {
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
+  // const expirationTime = 3 * 60 * 60 * 1000;
+  // const currentTime = new Date().getTime();
+  // const storedTime = localStorage.getItem("accessTokenTime");
+  // if (
+  //   accessToken !== null &&
+  //   currentTime - parseInt(storedTime || "0", 10) > expirationTime
+  // ) {
+  //   Cookies.remove("accessToken"); // 혹은 다른 방법으로 쿠키를 삭제합니다.
+  //   setDropdownVisible(false); // 혹은 다른 상태값으로 수정 버튼 등을 숨깁니다.
+  // }
+
   const decodedToken = accessToken
     ? (jwt.decode(accessToken) as { [key: string]: any })
     : null;
@@ -55,26 +66,27 @@ export default function Detail(): JSX.Element {
 
     console.log("정수 변환", boardIdNumber);
     console.log("로컬에서 불러온 아이읻", localBoardId);
-  }, []);
+  }, [localBoardId]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `https://www.jerneithe.site/board/detail/${localBoardId}`,
-          // `https://www.jerneithe.site/board/detail/3`,
-        );
-        console.log("detail response: ", response.data);
-        console.log("댓글: ", response.data.comments);
-        setBoardDetail(response.data);
-        setComment(response.data.comments);
-        console.log(response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    if (localBoardId !== null) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `https://www.jerneithe.site/board/detail/${localBoardId}`,
+          );
+          console.log("detail response: ", response.data);
+          console.log("댓글: ", response.data.comments);
+          setBoardDetail(response.data);
+          setComment(response.data.comments);
+          console.log(response);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
 
-    fetchData();
+      fetchData();
+    }
   }, [localBoardId, setLocalBoardId]);
 
   const handleClick = () => {
@@ -95,7 +107,7 @@ export default function Detail(): JSX.Element {
       try {
         const response = await axios({
           method: "DELETE",
-          url: `https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
+          url: `https://www.jerneithe.site/board/delete/${localBoardId}`,
           headers: { Authorization: "Bearer " + accessToken },
         });
         console.log(response.data.result);
@@ -178,7 +190,10 @@ export default function Detail(): JSX.Element {
               <div className="w-full">
                 <ImageDetail images={boardDetail.images} />
                 <div className="button flex w-full px-3">
-                  <Like />
+                  <Like
+                    boardId={localBoardId || 0}
+                    accessToken={accessToken || ""}
+                  />
                   <CommentIcon
                     accessToken={accessToken}
                     boardComment={comment}
