@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface ImageDetailProps {
-  images: { imageId: number; boardId: number; image_url: string }[];
+  images: { imageId: number; boardId: number; imageUrl: string }[];
 }
 
 export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
@@ -44,7 +44,7 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
                   style={{ paddingBottom: "100%" }}>
                   <Image
                     key={images[currentIndex].imageId}
-                    src={images[currentIndex].image_url}
+                    src={images[currentIndex].imageUrl}
                     alt={`Image ${currentIndex}`}
                     layout="fill"
                   />
