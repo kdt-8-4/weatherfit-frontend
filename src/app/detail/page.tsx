@@ -17,6 +17,7 @@ import CommentIcon from "@/component/CommentIcon";
 import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
+import Link from "next/link";
 
 interface boardCommentType {
   id: number;
@@ -76,12 +77,15 @@ export default function Detail(): JSX.Element {
     fetchData();
   }, [localBoardId, setLocalBoardId]);
 
+  const handleClick = () => {
+    router.push("/");
+  };
+
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
   const handleEdit = () => {
-    // setEditBoardId(boardDetail.boardId);
     setEditBoardId(localBoardId);
     router.push(`/detail/edit`);
   };
@@ -110,9 +114,9 @@ export default function Detail(): JSX.Element {
           <div className="flex items-center">
             <Image
               src="/images/back.svg"
-              width={15}
-              height={15}
-              className="ml-2.5 cursor-pointer"
+              width={13}
+              height={13}
+              className="back ml-2.5 cursor-pointer"
               alt="back"
               onClick={() => {
                 window.history.back();
@@ -121,11 +125,12 @@ export default function Detail(): JSX.Element {
           </div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Image
-              className="mx-auto mb-2.5"
+              className="mx-auto mb-2.5 cursor-pointer"
               src="/images/logo2.svg"
               alt="옷늘날씨"
               width={150}
               height={90}
+              onClick={handleClick}
             />
           </div>
         </div>
