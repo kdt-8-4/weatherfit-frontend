@@ -38,7 +38,7 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
             <div className="image-slide">
               <div
                 className="image-container relative"
-                style={{ aspectRatio: "1/1", maxWidth: "450px" }}>
+                style={{ aspectRatio: "1/1" }}>
                 <div
                   className="image-wrapper"
                   style={{ paddingBottom: "100%" }}>

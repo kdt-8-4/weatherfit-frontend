@@ -170,18 +170,20 @@ export default function Detail(): JSX.Element {
               )}
             </div>
             <div className="contents w-full">
-              <ImageDetail images={boardDetail.images} />
+              <div className="w-full">
+                <ImageDetail images={boardDetail.images} />
+                <div className="button flex w-full px-3">
+                  <Like />
+                  <CommentIcon
+                    accessToken={accessToken}
+                    boardComment={comment}
+                    decoded_nickName={decoded_nickName}
+                  />
+                </div>
+              </div>
               <ContentDetail
                 content={boardDetail.content}
                 hashTag={boardDetail.hashTag}
-              />
-            </div>
-            <div className="button flex w-full px-3">
-              <Like />
-              <CommentIcon
-                accessToken={accessToken}
-                boardComment={comment}
-                decoded_nickName={decoded_nickName}
               />
             </div>
             <CategoryDetail category={boardDetail.category} />
