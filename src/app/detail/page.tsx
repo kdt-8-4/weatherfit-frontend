@@ -81,9 +81,6 @@ export default function Detail(): JSX.Element {
         console.log("댓글: ", response.data.comments);
         setBoardDetail(response.data);
         setComment(response.data.comments);
-        // setComment(
-        //   response.data.comments.filter((comment: any) => comment.status === 1)
-        // );
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -91,7 +88,6 @@ export default function Detail(): JSX.Element {
     }; 
     
     fetchData();
-
   }, [localBoardId, setLocalBoardId]);
 
   const handleClick = () => {
@@ -158,8 +154,7 @@ export default function Detail(): JSX.Element {
 
       <section
         className="main flex flex-col items-center"
-        style={{ width: "70%" }}
-      >
+        style={{ width: "70%" }}>
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
@@ -167,8 +162,7 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center p-3"
-                >
+                  className="ml-auto flex flex-col items-center p-3">
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -180,14 +174,12 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         삭제
                       </button>
                     </div>
@@ -204,10 +196,10 @@ export default function Detail(): JSX.Element {
                     accessToken={accessToken || ""}
                   />
                   <CommentIcon
-                     accessToken={accessToken}
-                boardComment={comment}
-                decoded_nickName={decoded_nickName}
-                localBoardId={localBoardId}
+                    accessToken={accessToken}
+                    boardComment={comment}
+                    decoded_nickName={decoded_nickName}
+                    localBoardId={localBoardId}
                   />
                 </div>
               </div>
