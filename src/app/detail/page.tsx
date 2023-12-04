@@ -86,7 +86,7 @@ export default function Detail(): JSX.Element {
     };
 
     fetchData();
-  }, [localBoardId, setLocalBoardId]);
+  }, [localBoardId]);
 
   const handleClick = () => {
     router.push("/");
