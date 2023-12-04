@@ -3,7 +3,7 @@ import { atom } from "recoil";
 interface IMAGE {
   boardId: number;
   imageId: number;
-  image_url: string;
+  imageUrl: string;
 }
 
 interface FEEDATA {

@@ -11,6 +11,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
+import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
+import { TemNowControl } from "@/recoilAtom/TemNow";
 import { categories } from "@/component/category";
 import Image from "next/image";
 
@@ -70,6 +72,10 @@ async function urlToFile(url: any, filename: any) {
 }
 
 export default function EditDetail(): JSX.Element {
+  //openweathermap에서 제공하는 icon과 현재 온도
+  const [icon, setIcon] = useRecoilState(WeatherIcons);
+  const [usetemp, setTemp] = useRecoilState(TemNowControl);
+
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
@@ -155,6 +161,8 @@ export default function EditDetail(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
+        temperature: usetemp, 
+        weatherIcon: `https://openweathermap.org/img/wn/${icon}.png`,
       };
 
       formData.append("board", JSON.stringify(boardData));

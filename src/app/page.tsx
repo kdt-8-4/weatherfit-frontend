@@ -48,7 +48,6 @@ export default function Mainpage() {
         <div>오늘 날씨에 손이 가는 아이템 추천</div>
         <div>좋아요 많은 순 게시물의 이미지 가지고 오기</div>
       </section>
-
       <Menubar />
     </div>
   );

@@ -13,7 +13,7 @@ import "../style/feedContent.scss";
 interface IMAGE {
   boardId: number;
   imageId: number;
-  image_url: string;
+  imageUrl: string;
 }
 
 interface FEEDATA {
@@ -75,31 +75,25 @@ export default function FeedContents() {
     console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
     console.log("하트 누른 피드의 boardId", board_id);
 
+    
+
+
     //임시 하트 증가
-    setFeedd((prev) => {
-      const newFeed = prev.map((myarr) => {
-        if (myarr.boardId === board_id) {
-          return { ...myarr, likeCount: myarr.likeCount + 1 };
-        }
-        return myarr;
-      });
-      return newFeed;
-    });
+    // setFeedd((prev) => {
+    //   const newFeed = prev.map((myarr) => {
+    //     if (myarr.boardId === board_id) {
+    //       return { ...myarr, likeCount: myarr.likeCount + 1 };
+    //     }
+    //     return myarr;
+    //   });
+    //   return newFeed;
+    // });
 
     //갱신된 데이터 보내야함
     //이름	유형	필수/선택
     //boardId	int	필수
     //userId	string	필수
 
-    //토큰 값에 유저 아이디 넣기
-
-    // await axios({
-    //     method: "POST",
-    //     url : `https://www.jerneithe.site/board/like/${board_id}`,
-    //     data: {
-
-    //     }
-    // })
   };
 
   const goDetail = async (board_id: number) => {
@@ -123,7 +117,7 @@ export default function FeedContents() {
                   onClick={() => goDetail(arr.boardId)}>
                   {arr.images && ( // 수정된 부분
                     <Image
-                      src={arr.images.image_url}
+                      src={arr.images.imageUrl}
                       alt="코디 이미지"
                       className="feedOnimage"
                       width={0}

@@ -23,6 +23,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   useEffect(() => {
     setExistingImages(initialImages);
+    console.log("setExistingImages", initialImages);
   }, [initialImages]);
 
   useEffect(() => {
@@ -32,6 +33,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   useEffect(() => {
     console.log("existingImages", existingImages);
   }, [existingImages]);
+
+  useEffect(()=>{
+    console.log("onImageSelect");
+  }, [onImagesSelected])
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = event.target.files;
