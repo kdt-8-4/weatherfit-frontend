@@ -60,7 +60,8 @@ async function urlToFile(url: any, filename: any) {
         mimeType = "image/png";
         break;
       default:
-        mimeType = "application/octet-stream"; // Fallback option
+        // mimeType = "application/octet-stream"; // Fallback option
+        mimeType = "image/*"; // Fallback option
     }
 
     return new File([blob], filename, { type: mimeType });
@@ -78,6 +79,7 @@ export default function EditDetail(): JSX.Element {
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
+  const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
@@ -103,7 +105,7 @@ export default function EditDetail(): JSX.Element {
 
     const initialImages = data.images.map((image: any) => ({
       imageId: image.imageId,
-      imageUrl: image.image_url,
+      imageUrl: image.imageUrl,
     }));
     setInitialImages(initialImages);
 
@@ -115,6 +117,10 @@ export default function EditDetail(): JSX.Element {
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
+
+  const handleDeleteImage = (imageUrl: string) => {
+    setDeleteImageUrls((prevUrls) => [...prevUrls, imageUrl]);
+  };
 
   const handleContent = (text: string) => {
     setContent(text);
@@ -141,6 +147,8 @@ export default function EditDetail(): JSX.Element {
         )
       ).filter(Boolean);
 
+      console.log(existingImagesAsFiles);
+
       const allImages = [...existingImagesAsFiles, ...selectedImages];
 
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
@@ -161,6 +169,12 @@ export default function EditDetail(): JSX.Element {
       allImages.forEach((image) => {
         formData.append("images", image);
       });
+
+      // deleteImageUrls.forEach((imageUrl) => {
+      //   formData.append("deletedImages", imageUrl);
+      // });
+
+      formData.append("deletedImages", JSON.stringify(deleteImageUrls));
 
       const response = await axios({
         method: "PATCH",
@@ -214,6 +228,7 @@ export default function EditDetail(): JSX.Element {
           <ImageUpload
             onImagesSelected={handleImagesSelected}
             initialImages={initialImages}
+            onDeleteImage={handleDeleteImage}
           />
           <br />
           <TextArea

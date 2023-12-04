@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface ImageDetailProps {
-  images: { imageId: number; boardId: number; image_url: string }[];
+  images: { imageId: number; boardId: number; imageUrl: string }[];
 }
 
 export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
@@ -38,31 +38,33 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
             <div className="image-slide">
               <div
                 className="image-container relative"
-                style={{ aspectRatio: "1/1", maxWidth: "450px" }}>
+                style={{ aspectRatio: "1/1" }}>
                 <div
                   className="image-wrapper"
                   style={{ paddingBottom: "100%" }}>
                   <Image
                     key={images[currentIndex].imageId}
-                    src={images[currentIndex].image_url}
+                    src={images[currentIndex].imageUrl}
                     alt={`Image ${currentIndex}`}
                     layout="fill"
                   />
                 </div>
               </div>
             </div>
-            <div
-              className="button-group absolute flex w-full"
-              style={{
-                padding: "10px",
-                position: "absolute",
-                top: "50%",
-                justifyContent: "space-between",
-                transform: "translateY(-50%)",
-              }}>
-              <button onClick={handlePrevious}>◀️</button>
-              <button onClick={handleNext}>▶️</button>
-            </div>
+            {images.length > 1 && (
+              <div
+                className="button-group absolute flex w-full"
+                style={{
+                  padding: "10px",
+                  position: "absolute",
+                  top: "50%",
+                  justifyContent: "space-between",
+                  transform: "translateY(-50%)",
+                }}>
+                <button onClick={handlePrevious}>◀️</button>
+                <button onClick={handleNext}>▶️</button>
+              </div>
+            )}
           </div>
         )}
       </div>
