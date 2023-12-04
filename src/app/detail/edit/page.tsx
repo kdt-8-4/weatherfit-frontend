@@ -46,7 +46,6 @@ async function urlToFile(url: any, filename: any) {
       throw new Error(errorObj.error);
     }
     const blob = await res.blob();
-    // const extension = filename.split(".").pop();
     const extension = filename.split(".").pop();
 
     let mimeType = "";
@@ -147,9 +146,7 @@ export default function EditDetail(): JSX.Element {
         await Promise.all(
           initialImages.map((image) => {
             const filename = image.imageUrl.split("/").pop() || "image";
-            const filenameWithoutPath =
-              filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
-            return urlToFile(image.imageUrl, filenameWithoutPath);
+            return urlToFile(image.imageUrl, filename);
           }),
         )
       ).filter(Boolean);
@@ -170,8 +167,6 @@ export default function EditDetail(): JSX.Element {
         content: content,
         deletedImages: deleteImageIds,
       };
-
-      // imageUrl 보낼 때 앞에 https://~~ 다 지우고 test1.jpeg만 보내는 형식으로
 
       formData.append("board", JSON.stringify(boardData));
       allImages.forEach((image) => {
