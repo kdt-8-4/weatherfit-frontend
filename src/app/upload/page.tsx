@@ -93,7 +93,7 @@ export default function Upload(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
-        temperature: usetemp, 
+        temperature: usetemp,
         weatherIcon: `https://openweathermap.org/img/wn/${icon}.png`,
       };
 
