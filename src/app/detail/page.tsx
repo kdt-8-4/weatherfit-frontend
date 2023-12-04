@@ -40,7 +40,7 @@ export default function Detail(): JSX.Element {
   const [comment, setComment] = useState<boardCommentType[]>([]);
 
   const router = useRouter();
-
+  console.log(router);
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
@@ -88,7 +88,7 @@ export default function Detail(): JSX.Element {
     }; 
     
     fetchData();
-  }, [localBoardId, setLocalBoardId]);
+  }, [localBoardId]);
 
   const handleClick = () => {
     router.push("/");
