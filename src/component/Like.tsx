@@ -57,7 +57,7 @@ export default function Like({
         />
       ) : (
         <Image
-          src="/images/unlike.svg"
+          src="/images/unLike.svg"
           alt="like"
           width={20}
           height={20}
