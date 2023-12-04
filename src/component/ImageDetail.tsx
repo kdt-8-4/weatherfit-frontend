@@ -51,18 +51,20 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
                 </div>
               </div>
             </div>
-            <div
-              className="button-group absolute flex w-full"
-              style={{
-                padding: "10px",
-                position: "absolute",
-                top: "50%",
-                justifyContent: "space-between",
-                transform: "translateY(-50%)",
-              }}>
-              <button onClick={handlePrevious}>◀️</button>
-              <button onClick={handleNext}>▶️</button>
-            </div>
+            {images.length > 1 && (
+              <div
+                className="button-group absolute flex w-full"
+                style={{
+                  padding: "10px",
+                  position: "absolute",
+                  top: "50%",
+                  justifyContent: "space-between",
+                  transform: "translateY(-50%)",
+                }}>
+                <button onClick={handlePrevious}>◀️</button>
+                <button onClick={handleNext}>▶️</button>
+              </div>
+            )}
           </div>
         )}
       </div>
