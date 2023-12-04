@@ -8,11 +8,34 @@ import Image from "next/image";
 
 interface MyPageProfileProps {
   nickname: string;
-  postnum: number;
-  myPostData: FEEDATA[];
+  // postnum: number;
+  postData: FEEDATA[];
   userProfileImage: string | null;
 }
 
+interface IMAGE {
+  boardId: number;
+  imageId: number;
+  imageUrl: string;
+}
+
+interface LIKE {
+  likeId: number;
+  nickName: string;
+}
+
+interface FEEDATA {
+  boardId: number;
+  images: IMAGE;
+  likeCount: number;
+  likelist: LIKE;
+  nickName: string;
+  temperature: number;
+  weather: string;
+  weatherIcon?: string;
+}
+
+/*
 interface IMAGE {
   boardId: number;
   imageId: number;
@@ -27,9 +50,17 @@ interface FEEDATA {
   temperature: number;
   weather: string;
 }
+*/
 
 export default function MypageProfile(props: MyPageProfileProps) {
-  const { nickname, postnum, myPostData, userProfileImage } = props;
+  const { nickname, postData, userProfileImage } = props;
+
+  const [myPostData, setMyPostData] = useState<FEEDATA[]>([]);
+
+  useEffect(() => {
+    const filteredData = postData.filter((item) => item.nickName === nickname);
+    setMyPostData(filteredData);
+  }, [nickname, postData]);
 
   return (
     <>
@@ -52,7 +83,7 @@ export default function MypageProfile(props: MyPageProfileProps) {
         <div className="user_info">
           <div className="num_box">
             <p className="user_post">내 게시물</p>
-            <p className="user_post_num">{postnum}</p>
+            <p className="user_post_num">{myPostData.length}</p>
           </div>
           <div className="num_box">
             <p className="user_like">좋아요 한 게시물</p>
