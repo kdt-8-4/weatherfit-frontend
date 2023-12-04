@@ -11,6 +11,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
+import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
+import { TemNowControl } from "@/recoilAtom/TemNow";
 import { categories } from "@/component/category";
 import Image from "next/image";
 
@@ -58,7 +60,8 @@ async function urlToFile(url: any, filename: any) {
         mimeType = "image/png";
         break;
       default:
-        mimeType = "application/octet-stream"; // Fallback option
+        // mimeType = "application/octet-stream"; // Fallback option
+        mimeType = "image/*"; // Fallback option
     }
 
     return new File([blob], filename, { type: mimeType });
@@ -69,9 +72,14 @@ async function urlToFile(url: any, filename: any) {
 }
 
 export default function EditDetail(): JSX.Element {
+  //openweathermap에서 제공하는 icon과 현재 온도
+  const [icon, setIcon] = useRecoilState(WeatherIcons);
+  const [usetemp, setTemp] = useRecoilState(TemNowControl);
+
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
+  const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
@@ -97,7 +105,7 @@ export default function EditDetail(): JSX.Element {
 
     const initialImages = data.images.map((image: any) => ({
       imageId: image.imageId,
-      imageUrl: image.image_url,
+      imageUrl: image.imageUrl,
     }));
     setInitialImages(initialImages);
 
@@ -109,6 +117,10 @@ export default function EditDetail(): JSX.Element {
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
+
+  const handleDeleteImage = (imageUrl: string) => {
+    setDeleteImageUrls((prevUrls) => [...prevUrls, imageUrl]);
+  };
 
   const handleContent = (text: string) => {
     setContent(text);
@@ -135,6 +147,8 @@ export default function EditDetail(): JSX.Element {
         )
       ).filter(Boolean);
 
+      console.log(existingImagesAsFiles);
+
       const allImages = [...existingImagesAsFiles, ...selectedImages];
 
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
@@ -147,12 +161,20 @@ export default function EditDetail(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
+        temperature: usetemp, 
+        weatherIcon: `https://openweathermap.org/img/wn/${icon}.png`,
       };
 
       formData.append("board", JSON.stringify(boardData));
       allImages.forEach((image) => {
         formData.append("images", image);
       });
+
+      // deleteImageUrls.forEach((imageUrl) => {
+      //   formData.append("deletedImages", imageUrl);
+      // });
+
+      formData.append("deletedImages", JSON.stringify(deleteImageUrls));
 
       const response = await axios({
         method: "PATCH",
@@ -206,6 +228,7 @@ export default function EditDetail(): JSX.Element {
           <ImageUpload
             onImagesSelected={handleImagesSelected}
             initialImages={initialImages}
+            onDeleteImage={handleDeleteImage}
           />
           <br />
           <TextArea
