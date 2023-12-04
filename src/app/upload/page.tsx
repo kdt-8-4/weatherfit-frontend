@@ -55,6 +55,7 @@ export default function Upload(): JSX.Element {
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
     setSelectedImages(files ? Array.from(files) : []);
+    console.log("handleImagesSelected");
   }, []);
 
   const handleContent = (text: string) => {
