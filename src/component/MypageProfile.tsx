@@ -4,11 +4,13 @@ import { useRecoilState } from "recoil";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { FeedContent } from "@/recoilAtom/FeedContents";
 import TabBar from "./TabBar";
+import Image from "next/image";
 
 interface MyPageProfileProps {
   nickname: string;
   postnum: number;
   myPostData: FEEDATA[];
+  userProfileImage: string | null;
 }
 
 interface IMAGE {
@@ -27,13 +29,24 @@ interface FEEDATA {
 }
 
 export default function MypageProfile(props: MyPageProfileProps) {
-  const { nickname, postnum, myPostData } = props;
+  const { nickname, postnum, myPostData, userProfileImage } = props;
 
   return (
     <>
       <div className="user">
         <div className="user_profile">
-          <AccountCircleOutlinedIcon className="user_image" />
+          <div className="user_image">
+            {userProfileImage == null ? (
+              <AccountCircleOutlinedIcon className="user_image_icon" />
+            ) : (
+              <Image
+                src={userProfileImage}
+                alt="프로필 이미지"
+                layout="fill"
+                objectFit="cover"
+              />
+            )}
+          </div>
           <p className="user_name">{nickname}</p>
         </div>
         <div className="user_info">
