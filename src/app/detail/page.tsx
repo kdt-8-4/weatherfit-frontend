@@ -17,6 +17,7 @@ import CommentIcon from "@/component/CommentIcon";
 import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
+import Link from "next/link";
 
 interface boardCommentType {
   id: number;
@@ -26,6 +27,7 @@ interface boardCommentType {
   createdDate: string;
   createdTime: string;
   replyList: [];
+  status: number;
 }
 
 export default function Detail(): JSX.Element {
@@ -40,6 +42,17 @@ export default function Detail(): JSX.Element {
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
+  // const expirationTime = 3 * 60 * 60 * 1000;
+  // const currentTime = new Date().getTime();
+  // const storedTime = localStorage.getItem("accessTokenTime");
+  // if (
+  //   accessToken !== null &&
+  //   currentTime - parseInt(storedTime || "0", 10) > expirationTime
+  // ) {
+  //   Cookies.remove("accessToken"); // 혹은 다른 방법으로 쿠키를 삭제합니다.
+  //   setDropdownVisible(false); // 혹은 다른 상태값으로 수정 버튼 등을 숨깁니다.
+  // }
+
   const decodedToken = accessToken
     ? (jwt.decode(accessToken) as { [key: string]: any })
     : null;
@@ -53,7 +66,7 @@ export default function Detail(): JSX.Element {
     setLocalBoardId(boardIdNumber);
 
     console.log("정수 변환", boardIdNumber);
-    console.log("로컬에서 불러온 아이읻", localBoardId);
+    console.log("로컬에서 불러온 아이디", localBoardId);
   }, []);
 
   useEffect(() => {
@@ -61,12 +74,14 @@ export default function Detail(): JSX.Element {
       try {
         const response = await axios.get(
           `https://www.jerneithe.site/board/detail/${localBoardId}`,
-          // `https://www.jerneithe.site/board/detail/3`,
         );
         console.log("detail response: ", response.data);
         console.log("댓글: ", response.data.comments);
         setBoardDetail(response.data);
         setComment(response.data.comments);
+        // setComment(
+        //   response.data.comments.filter((comment: any) => comment.status === 1)
+        // );
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -74,14 +89,18 @@ export default function Detail(): JSX.Element {
     };
 
     fetchData();
+
   }, [localBoardId, setLocalBoardId]);
+
+  const handleClick = () => {
+    router.push("/");
+  };
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
   const handleEdit = () => {
-    // setEditBoardId(boardDetail.boardId);
     setEditBoardId(localBoardId);
     router.push(`/detail/edit`);
   };
@@ -91,7 +110,7 @@ export default function Detail(): JSX.Element {
       try {
         const response = await axios({
           method: "DELETE",
-          url: `https://www.jerneithe.site/board/delete/${boardDetail.boardId}`,
+          url: `https://www.jerneithe.site/board/delete/${localBoardId}`,
           headers: { Authorization: "Bearer " + accessToken },
         });
         console.log(response.data.result);
@@ -110,9 +129,9 @@ export default function Detail(): JSX.Element {
           <div className="flex items-center">
             <Image
               src="/images/back.svg"
-              width={15}
-              height={15}
-              className="ml-2.5 cursor-pointer"
+              width={13}
+              height={13}
+              className="back ml-2.5 cursor-pointer"
               alt="back"
               onClick={() => {
                 window.history.back();
@@ -121,11 +140,12 @@ export default function Detail(): JSX.Element {
           </div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Image
-              className="mx-auto mb-2.5"
+              className="mx-auto mb-2.5 cursor-pointer"
               src="/images/logo2.svg"
               alt="옷늘날씨"
               width={150}
               height={90}
+              onClick={handleClick}
             />
           </div>
         </div>
@@ -136,7 +156,8 @@ export default function Detail(): JSX.Element {
 
       <section
         className="main flex flex-col items-center"
-        style={{ width: "70%" }}>
+        style={{ width: "70%" }}
+      >
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
@@ -144,7 +165,8 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center p-3">
+                  className="ml-auto flex flex-col items-center p-3"
+                >
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -156,12 +178,14 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         삭제
                       </button>
                     </div>
@@ -170,18 +194,24 @@ export default function Detail(): JSX.Element {
               )}
             </div>
             <div className="contents w-full">
-              <ImageDetail images={boardDetail.images} />
+              <div className="w-full">
+                <ImageDetail images={boardDetail.images} />
+                <div className="button flex w-full px-3">
+                  <Like
+                    boardId={localBoardId || 0}
+                    accessToken={accessToken || ""}
+                  />
+                  <CommentIcon
+                     accessToken={accessToken}
+                boardComment={comment}
+                decoded_nickName={decoded_nickName}
+                localBoardId={localBoardId}
+                  />
+                </div>
+              </div>
               <ContentDetail
                 content={boardDetail.content}
                 hashTag={boardDetail.hashTag}
-              />
-            </div>
-            <div className="button flex w-full px-3">
-              <Like />
-              <CommentIcon
-                accessToken={accessToken}
-                boardComment={comment}
-                decoded_nickName={decoded_nickName}
               />
             </div>
             <CategoryDetail category={boardDetail.category} />

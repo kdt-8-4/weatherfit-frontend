@@ -72,14 +72,10 @@ const ContentDetail = ({
     console.log("Clicked hashtag:", hashTag);
   };
 
-  // return (
-  //   <div className="content-detail w-full p-3">
-  //     {extractAndStyleHashtags(content)}
-  //   </div>
-  // );
-
   return (
-    <div className="content-detail w-full p-3">
+    <div
+      className="content-detail w-full p-3"
+      style={{ paddingBottom: "30px", height: "100%" }}>
       <div
         id="content"
         className={`${

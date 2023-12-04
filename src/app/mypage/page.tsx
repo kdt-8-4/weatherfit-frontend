@@ -30,12 +30,25 @@ interface FEEDATA {
   weather: string;
 }
 
+// interface userProfileType {
+//   id: number;
+//   email: string;
+//   fromSocial: boolean;
+//   image: string | null;
+//   name: string;
+//   nickname: string;
+//   password: string;
+//   phone: number | null;
+//   status: boolean;
+// }
+
 export default function Mypage() {
   // 회원 정보 수정 모달
   const [showProfileModify, setShowProfileModify] = useState<boolean>(false);
 
   // 회원 정보
   const [userPofile, setUserProfile] = useState<any>(null);
+  const [userImage, setUserImage] = useState<string | null>("");
   const [nickname, setNickname] = useState<string | undefined>("");
   const [password, setPassword] = useState<string | undefined>("");
 
@@ -63,7 +76,6 @@ export default function Mypage() {
     }
 
     setEmail(localStorage.getItem("user_email"));
-
   }, [logintoken]);
 
   // ------------------------------------------------------------------------
@@ -94,36 +106,33 @@ export default function Mypage() {
         const decoded_nickName = decodedToken?.sub;
         console.log("디코딩", decodedToken);
 
-        const response = await axios.post(
-          `https://www.jerneithe.site/user/api/profile`,
-          { email: "user95@test.com" }
-        );
-        setUserProfile(response.data);
+        // const response = await axios({
+        //   method: "POST",
+        //   url: "https://www.jerneithe.site/user/api/profile",
+        //   data: {
+        //     email: email,
+        //   },
+        // });
 
-        // 비밀번호 디코딩
-        // console.log("회원정보 pw: ", response.data.password);
-        // let pw_jwt = response.data.password;
-        // let pw_payload = pw_jwt.substring(
-        //   pw_jwt.indexOf(".") + 1,
-        //   pw_jwt.lastIndexOf(".")
+        // const response = await axios.post(
+        //   `https://www.jerneithe.site/user/api/profile`,
+        //   { email: "user100@test.com" }
         // );
 
-        // console.log("pw_payload: ", pw_payload);
+        const response = await axios({
+          method: "POST",
+          url: `https://www.jerneithe.site/user/api/profile`,
+          headers: {
+            Authorization: "Bearer " + accessToken,
+          },
+          data: {
+            email: localStorage.getItem("user_email"),
+          },
+        });
 
-        // let pw_decode = base64.decode(pw_payload);
-
-        // console.log("pw 디코딩: ", pw_decode);
-
-        // 기존 것
-        // let password_jwt: string = response.data.password;
-        // const decodedPass = password_jwt
-        //   ? (jwt.decode(password_jwt) as { [key: string]: any })
-        //   : null;
-        // // console.log("디코딩 비번", decodedPass);
-        // const decoded_password = decodedPass?.sub;
-        // setPassword(decoded_password);
-
-        console.log("회원정보 Data: ", response.data);
+        setUserProfile(response.data);
+        setNickname(response.data.nickname);
+        setUserImage(response.data.image);
       } catch (error) {
         console.error("회원정보 에러: ", error);
       }
@@ -131,14 +140,16 @@ export default function Mypage() {
     profileData();
   }, []);
 
+  console.log("회원정보 Data: ", userPofile);
+
   // ------------------------------------------------------------------------
 
-  // board 이미지 데이터 불러오기
+  // board 이미지 데이터 불러오기 (my post)
   useEffect(() => {
     const postData = async () => {
       const req = await axios.get("https://www.jerneithe.site/board/list");
       const data: FEEDATA[] = req.data;
-      const filteredData = data.filter((item) => item.nickName === "테스터");
+      const filteredData = data.filter((item) => item.nickName === nickname);
       console.log("filterData: ", filteredData);
       setMyPostData(filteredData);
     };
@@ -168,6 +179,7 @@ export default function Mypage() {
                   nickname={userPofile.nickname}
                   postnum={myPostData.length}
                   myPostData={myPostData}
+                  userProfileImage={userImage}
                 />
               </>
             )}
@@ -191,6 +203,8 @@ export default function Mypage() {
           email={userPofile.email}
           name={userPofile.name}
           password={userPofile.password}
+          userProfileImage={userImage}
+          accessToken={logintoken}
         />
       )}
     </>
