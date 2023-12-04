@@ -57,6 +57,7 @@ export default function CommentTest(props: CommentModalProps) {
         isEditing: false,
         editedContent: "",
         isReplying: false,
+        isReplyMode: false,
       }))
   ); // 댓글 목록
 
@@ -64,32 +65,7 @@ export default function CommentTest(props: CommentModalProps) {
     console.log("댓글 목록 업데이트: ", boardCommentList);
   }, [boardCommentList]);
 
-  // const [boardCommentList, setBoardCommentList] = useState(
-  //   boardComment
-  //     .filter(
-  //       (comment) =>
-  //         comment.status === 1 ||
-  //         (comment.status === 0 && comment.content === "삭제된 댓글입니다.")
-  //     )
-  //     .map((comment) => ({
-  //       ...comment,
-  //       replyList: comment.replyList.filter((reply) => reply.status === 1),
-  //       isEditing: false,
-  //       editedContent: "",
-  //       isReplying: false,
-  //     }))
-  // );
-
   console.log("새로운 댓글 목록: ", boardCommentList);
-
-  // const [boardCommentList, setBoardCommentList] = useState(
-  //   boardComment.map((comment) => ({
-  //     ...comment,
-  //     isEditing: false,
-  //     editedContent: "",
-  //     isReplying: false,
-  //   }))
-  // ); // 댓글 목록
 
   const [comment, setComment] = useState<string>(""); // 댓글 input
   const [reply, setReply] = useState<replyListType[]>([]); // 답글 input
@@ -139,6 +115,7 @@ export default function CommentTest(props: CommentModalProps) {
           editedContent: "",
           status: comResData.status,
           isReplying: false,
+          isReplyMode: false,
         },
       ]);
       setComment("");
@@ -285,29 +262,6 @@ export default function CommentTest(props: CommentModalProps) {
     } catch (err) {
       console.log("댓글 삭제 에러: ", err);
     }
-
-    // 기존 코드
-    // const deletedComment = boardCommentList[index];
-    // console.log("댓글 삭제 deletedComment: ", deletedComment);
-
-    // try {
-    //   const result = await axios({
-    //     method: "DELETE",
-    //     url: `https://www.jerneithe.site/comment/remove?commentId=${deletedComment.id}`,
-    //     headers: {
-    //       Authorization: "Bearer " + accessToken,
-    //     },
-    //   });
-
-    //   console.log("댓글 삭제 응답: ", result);
-
-    //   setBoardCommentList((prevList) =>
-    //     prevList.filter((item, idx) => idx !== index)
-    //   );
-    //   console.log("댓글 삭제 후: ", boardCommentList);
-    // } catch (err) {
-    //   console.log("댓글 삭제 에러: ", err);
-    // }
   };
 
   // ---------------------------------------------------------------------
@@ -316,7 +270,13 @@ export default function CommentTest(props: CommentModalProps) {
   const handleReplyModeToggle = (index: number) => {
     setBoardCommentList((prevList) =>
       prevList.map((item, idx) =>
-        idx === index ? { ...item, isReplying: !item.isReplying } : item
+        idx === index
+          ? {
+              ...item,
+              isReplying: !item.isReplying,
+              isReplyMode: !item.isReplyMode,
+            }
+          : item
       )
     );
   };
@@ -546,14 +506,13 @@ export default function CommentTest(props: CommentModalProps) {
                     <button onClick={() => handleDeleteClick(commentIndex)}>
                       삭제
                     </button>
-                    <br />
-                    <button onClick={() => handleReplyModeToggle(commentIndex)}>
-                      답글 보기
-                    </button>
                   </>
                 )}
 
                 {/* 답글 작성 폼 및 답글 목록 */}
+                <button onClick={() => handleReplyModeToggle(commentIndex)}>
+                  {comment.isReplyMode ? "답글 닫기" : "답글 보기"}
+                </button>
                 {comment.isReplying && (
                   <div>
                     {comment.replyList.map((reply, replyIndex) => (
@@ -614,6 +573,7 @@ export default function CommentTest(props: CommentModalProps) {
                         )}
                       </div>
                     ))}
+                    <br />
                     <form
                       className="reply_form"
                       onSubmit={(e) => handleReplySubmit(e, commentIndex)}
