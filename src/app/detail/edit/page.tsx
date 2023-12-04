@@ -161,7 +161,7 @@ export default function EditDetail(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
-        temperature: usetemp, 
+        temperature: usetemp,
         weatherIcon: `https://openweathermap.org/img/wn/${icon}.png`,
       };
 
@@ -207,13 +207,15 @@ export default function EditDetail(): JSX.Element {
               window.history.back();
             }}
           />
-          <Image
-            className="logo"
-            src="/images/logo2.svg"
-            alt="옷늘날씨"
-            width={150}
-            height={90}
-          />
+          <div className="img_wrap">
+            <Image
+              className="logo"
+              src="/images/logo2.svg"
+              alt="옷늘날씨"
+              width={150}
+              height={90}
+            />
+          </div>
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
           </button>
