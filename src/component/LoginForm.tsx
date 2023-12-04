@@ -23,8 +23,8 @@ export default function LoginForm() {
     //   console.error(error);
     // }
     window.location.href =
-    "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&scope=email&state=FnOs2B9peyHie3pfwVOFMaqIFqlifucO4v6jmFPEc_M%3D&redirect_uri=http://localhost:3000/socialregister";
-    
+    // "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&scope=email&state=FnOs2B9peyHie3pfwVOFMaqIFqlifucO4v6jmFPEc_M%3D&redirect_uri=http://localhost:3000/socialregister";
+    "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=http://localhost:3000/socialregister&response_type=token&scope=email";
   };
 
   const handleLogin = async (e: FormEvent) => {
