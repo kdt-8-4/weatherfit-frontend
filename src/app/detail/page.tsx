@@ -30,19 +30,25 @@ interface boardCommentType {
   status: number;
 }
 
+interface LIKE {
+  likeId : number;
+  nickName: string;
+}
 
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-  const [localBoardId, setLocalBoardId] = useState<number | null>(0);
+  const [localBoardId, setLocalBoardId] = useState<number | null | undefined>();
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [comment, setComment] = useState<boardCommentType[]>([]);
+  const [likelist, setLikelist] = useState<LIKE[]>([]);//리코일로 만드는게 나을듯 일단은 이대로 ㄱㄱ
+  const [likeCount, setLikeCount] = useState<number>();
 
   const router = useRouter();
-  console.log(router);
+  // console.log(router);
   const accessToken = Cookies.get("accessToken");
-  console.log("accessToken 값: ", accessToken);
+  // console.log("accessToken 값: ", accessToken);
 
   // const expirationTime = 3 * 60 * 60 * 1000;
   // const currentTime = new Date().getTime();
@@ -59,7 +65,7 @@ export default function Detail(): JSX.Element {
     ? (jwt.decode(accessToken) as { [key: string]: any })
     : null;
   const decoded_nickName = decodedToken?.sub;
-  console.log("디코딩", decodedToken);
+  // console.log("디코딩", decodedToken);
 
   useEffect(() => {
     //여기서 localStorae의 값을 가져와 정수로 바꾸기
@@ -67,28 +73,32 @@ export default function Detail(): JSX.Element {
     const boardIdNumber = boardId_in ? parseInt(boardId_in) : null;
     setLocalBoardId(boardIdNumber);
 
-    console.log("정수 변환", boardIdNumber);
-    console.log("로컬에서 불러온 아이디", localBoardId);
-  }, [localBoardId]);
+    // console.log("정수 변환", boardIdNumber);
+    // console.log("로컬에서 불러온 아이디", localBoardId);
 
-  useEffect(() => {
+  }, []);
+
+  useEffect(()=>{
     const fetchData = async () => {
+      if (!localBoardId) return;
       try {
         const response = await axios.get(
           `https://www.jerneithe.site/board/detail/${localBoardId}`,
         );
         console.log("detail response: ", response.data);
         console.log("댓글: ", response.data.comments);
+        setLikelist(response.data.likelist);
+        setLikeCount(response.data.likeCount);
         setBoardDetail(response.data);
         setComment(response.data.comments);
-        console.log(response);
+        // console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }; 
     
     fetchData();
-  }, [localBoardId]);
+  },[localBoardId, setLocalBoardId])
 
   const handleClick = () => {
     router.push("/");
@@ -119,6 +129,8 @@ export default function Detail(): JSX.Element {
       }
     }
   };
+
+  console.log("보낼 좋아요 카운트와 리스트", likeCount, likelist);
 
   return (
     <div className="container flex flex-col items-center">
@@ -194,6 +206,9 @@ export default function Detail(): JSX.Element {
                   <Like
                     boardId={localBoardId || 0}
                     accessToken={accessToken || ""}
+                    nickname = {decoded_nickName}
+                    likelist = {likelist}
+                    likeCount = {likeCount}
                   />
                   <CommentIcon
                     accessToken={accessToken}
