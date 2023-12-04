@@ -30,6 +30,8 @@ interface boardCommentType {
   status: number;
 }
 
+
+
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
@@ -67,7 +69,7 @@ export default function Detail(): JSX.Element {
 
     console.log("정수 변환", boardIdNumber);
     console.log("로컬에서 불러온 아이디", localBoardId);
-  }, []);
+  }, [localBoardId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,8 +88,8 @@ export default function Detail(): JSX.Element {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
-
+    }; 
+    
     fetchData();
 
   }, [localBoardId, setLocalBoardId]);
