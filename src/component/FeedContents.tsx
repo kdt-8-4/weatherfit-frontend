@@ -112,7 +112,7 @@ export default function FeedContents() {
             likelist: isLiked
               ? myarr.likelist.filter((like) => like.nickName !== decodeNick)
               : decodeNick // decodeNick이 undefined가 아닐 때만 추가
-              ? [...myarr.likelist, { likeId: -1, nickName: decodeNick }]
+              ? [...(Array.isArray(myarr.likelist) ? myarr.likelist : []), { likeId: -1, nickName: decodeNick }]
               : myarr.likelist,
           };
         }
@@ -140,10 +140,17 @@ export default function FeedContents() {
     router.push('/detail');
   };
 
-  const isUserLiked = (likelist:LIKE[], userNickname:string | undefined) => {
+  // const isUserLiked = (likelist:LIKE[], userNickname:string | undefined) => {
+    
+  //   if (!likelist) return false;
+  //   return likelist.some((like) => like.nickName === userNickname);
+  //   // some: 위의 조건을 만족할 경우 순회를 중단 한다 즉, true 값을 리턴한다.
+  //   // 만족 못한다면 false를 보냄
+  // };
+
+  const isUserLiked = (likelist:LIKE[] | undefined, userNickname:string | undefined) => {
+    if (!likelist || !Array.isArray(likelist)) return false;
     return likelist.some((like) => like.nickName === userNickname);
-    // some: 위의 조건을 만족할 경우 순회를 중단 한다 즉, true 값을 리턴한다.
-    // 만족 못한다면 false를 보냄
   };
 
   console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);

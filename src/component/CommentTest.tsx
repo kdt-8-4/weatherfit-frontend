@@ -8,7 +8,7 @@ interface CommentModalProps {
   accessToken: string | undefined;
   boardComment: boardCommentType[];
   decoded_nickName: string;
-  localBoardId: number | null;
+  localBoardId: number | null | undefined;
 }
 
 interface boardCommentType {
