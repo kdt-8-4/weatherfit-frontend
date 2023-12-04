@@ -46,6 +46,7 @@ async function urlToFile(url: any, filename: any) {
       throw new Error(errorObj.error);
     }
     const blob = await res.blob();
+    // const extension = filename.split(".").pop();
     const extension = filename.split(".").pop();
 
     let mimeType = "";
@@ -79,7 +80,8 @@ export default function EditDetail(): JSX.Element {
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
-  const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([]);
+  // const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([]);
+  const [deleteImageIds, setDeleteImageIds] = useState<number[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
@@ -118,8 +120,11 @@ export default function EditDetail(): JSX.Element {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
 
-  const handleDeleteImage = (imageUrl: string) => {
-    setDeleteImageUrls((prevUrls) => [...prevUrls, imageUrl]);
+  // const handleDeleteImage = (imageUrl: string) => {
+  //   setDeleteImageUrls((prevUrls) => [...prevUrls, imageUrl]);
+  // };
+  const handleDeleteImage = (imageId: number) => {
+    setDeleteImageIds((prevIds) => [...prevIds, imageId]);
   };
 
   const handleContent = (text: string) => {
@@ -142,7 +147,9 @@ export default function EditDetail(): JSX.Element {
         await Promise.all(
           initialImages.map((image) => {
             const filename = image.imageUrl.split("/").pop() || "image";
-            return urlToFile(image.imageUrl, filename);
+            const filenameWithoutPath =
+              filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
+            return urlToFile(image.imageUrl, filenameWithoutPath);
           }),
         )
       ).filter(Boolean);
@@ -161,9 +168,10 @@ export default function EditDetail(): JSX.Element {
         hashTag: hashtags,
         category: allSelectedSubCategories,
         content: content,
-        temperature: usetemp, 
-        weatherIcon: `https://openweathermap.org/img/wn/${icon}.png`,
+        deletedImages: deleteImageIds,
       };
+
+      // imageUrl 보낼 때 앞에 https://~~ 다 지우고 test1.jpeg만 보내는 형식으로
 
       formData.append("board", JSON.stringify(boardData));
       allImages.forEach((image) => {
@@ -174,7 +182,24 @@ export default function EditDetail(): JSX.Element {
       //   formData.append("deletedImages", imageUrl);
       // });
 
-      formData.append("deletedImages", JSON.stringify(deleteImageUrls));
+      // formData.append("deletedImages", JSON.stringify(deleteImageUrls));
+      // formData.append("deletedImages", JSON.stringify(deleteImageIds)); // 결과값: "[20, 10]"
+
+      // formData.append(
+      //   "deletedImages",
+      //   JSON.stringify(deleteImageIds.map(String)),
+      // ); // 결과값: "["20", "10"]"
+      // console.log("deleteImages", JSON.stringify(deleteImageIds.map(String)));
+
+      if (allImages.length === 0) {
+        alert("이미지를 추가해주세요!");
+        return;
+      }
+
+      if (content.trim() === "") {
+        alert("글을 작성해주세요!");
+        return;
+      }
 
       const response = await axios({
         method: "PATCH",
@@ -185,6 +210,11 @@ export default function EditDetail(): JSX.Element {
           Authorization: "Bearer " + accessToken,
         },
       });
+
+      //** formData 키:값 출력
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
 
       console.log(response.data); // 서버 응답 확인
       alert("게시물 수정 완료!");
@@ -207,13 +237,15 @@ export default function EditDetail(): JSX.Element {
               window.history.back();
             }}
           />
-          <Image
-            className="logo"
-            src="/images/logo2.svg"
-            alt="옷늘날씨"
-            width={150}
-            height={90}
-          />
+          <div className="img_wrap">
+            <Image
+              className="logo"
+              src="/images/logo2.svg"
+              alt="옷늘날씨"
+              width={150}
+              height={90}
+            />
+          </div>
           <button type="button" id="btn_complete" onClick={handleComplete}>
             완료
           </button>

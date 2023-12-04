@@ -59,7 +59,7 @@ export default function FeedSearch(){
 
         //req 데이터 형식 확인 후 setFeedd로 데이터 넣기
 
-        console.log(req.data);
+        // console.log(req.data);
         setFeedd(req.data);
     }
 

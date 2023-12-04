@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { FeedContent } from "@/recoilAtom/FeedContents";
 import Image from "next/image";
 
+/*
 interface IMAGE {
   boardId: number;
   imageId: number;
@@ -17,6 +18,28 @@ interface FEEDATA {
   nickName: string;
   temperature: number;
   weather: string;
+}
+*/
+interface IMAGE {
+  boardId: number;
+  imageId: number;
+  imageUrl: string;
+}
+
+interface LIKE {
+  likeId: number;
+  nickName: string;
+}
+
+interface FEEDATA {
+  boardId: number;
+  images: IMAGE;
+  likeCount: number;
+  likelist: LIKE;
+  nickName: string;
+  temperature: number;
+  weather: string;
+  weatherIcon?: string;
 }
 
 interface MyPostProps {
@@ -35,8 +58,8 @@ export default function MyPost(props: MyPostProps) {
           <div key={item.boardId} className="post">
             {item.images && (
               <Image
-                src={item.images.image_url}
-                alt="내 이미지"
+                src={item.images.imageUrl}
+                alt="내 게시물 이미지"
                 layout="fill"
                 objectFit="cover"
               />
@@ -50,19 +73,4 @@ export default function MyPost(props: MyPostProps) {
       )}
     </div>
   );
-}
-
-{
-  /* {item.images ? (
-            <Image
-              src={item.images.image_url}
-              alt="코디 이미지"
-              layout="fill"
-              objectFit="cover"
-            />
-          ) : (
-            <>
-              <p>게시물을 등록해주세요.</p>
-            </>
-          )} */
 }

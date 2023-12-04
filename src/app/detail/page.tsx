@@ -30,6 +30,8 @@ interface boardCommentType {
   status: number;
 }
 
+
+
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
@@ -38,7 +40,7 @@ export default function Detail(): JSX.Element {
   const [comment, setComment] = useState<boardCommentType[]>([]);
 
   const router = useRouter();
-
+  console.log(router);
   const accessToken = Cookies.get("accessToken");
   console.log("accessToken 값: ", accessToken);
 
@@ -67,7 +69,7 @@ export default function Detail(): JSX.Element {
 
     console.log("정수 변환", boardIdNumber);
     console.log("로컬에서 불러온 아이디", localBoardId);
-  }, []);
+  }, [localBoardId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,18 +81,14 @@ export default function Detail(): JSX.Element {
         console.log("댓글: ", response.data.comments);
         setBoardDetail(response.data);
         setComment(response.data.comments);
-        // setComment(
-        //   response.data.comments.filter((comment: any) => comment.status === 1)
-        // );
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
-
+    }; 
+    
     fetchData();
-
-  }, [localBoardId, setLocalBoardId]);
+  }, [localBoardId]);
 
   const handleClick = () => {
     router.push("/");
@@ -156,8 +154,7 @@ export default function Detail(): JSX.Element {
 
       <section
         className="main flex flex-col items-center"
-        style={{ width: "70%" }}
-      >
+        style={{ width: "70%" }}>
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
@@ -165,8 +162,7 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center p-3"
-                >
+                  className="ml-auto flex flex-col items-center p-3">
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -178,14 +174,12 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         삭제
                       </button>
                     </div>
@@ -202,10 +196,10 @@ export default function Detail(): JSX.Element {
                     accessToken={accessToken || ""}
                   />
                   <CommentIcon
-                     accessToken={accessToken}
-                boardComment={comment}
-                decoded_nickName={decoded_nickName}
-                localBoardId={localBoardId}
+                    accessToken={accessToken}
+                    boardComment={comment}
+                    decoded_nickName={decoded_nickName}
+                    localBoardId={localBoardId}
                   />
                 </div>
               </div>

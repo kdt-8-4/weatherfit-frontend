@@ -83,7 +83,7 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
     
     //선택한 카테고리 useRecoilState 배열에 넣기 
     const cate_btn = ( btnval: string ) => {
-        console.log(btnval);
+        // console.log(btnval);
         console.log("현재 카테고리", categorytitle)
 
         //btnval값이 배열에 존재하지 않을때만 push

@@ -18,6 +18,29 @@ import jwt from "jsonwebtoken";
 interface IMAGE {
   boardId: number;
   imageId: number;
+  imageUrl: string;
+}
+
+interface LIKE {
+  likeId: number;
+  nickName: string;
+}
+
+interface FEEDATA {
+  boardId: number;
+  images: IMAGE;
+  likeCount: number;
+  likelist: LIKE;
+  nickName: string;
+  temperature: number;
+  weather: string;
+  weatherIcon?: string;
+}
+
+/*
+interface IMAGE {
+  boardId: number;
+  imageId: number;
   image_url: string;
 }
 
@@ -29,6 +52,7 @@ interface FEEDATA {
   temperature: number;
   weather: string;
 }
+*/
 
 // interface userProfileType {
 //   id: number;
@@ -49,7 +73,7 @@ export default function Mypage() {
   // 회원 정보
   const [userPofile, setUserProfile] = useState<any>(null);
   const [userImage, setUserImage] = useState<string | null>("");
-  const [nickname, setNickname] = useState<string | undefined>("");
+  const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string | undefined>("");
 
   // 로그인 확인 후 페이지 로드
@@ -57,7 +81,8 @@ export default function Mypage() {
   // 토큰 값
   const [logintoken, setToken] = useState<string | undefined>("");
 
-  const [myPostData, setMyPostData] = useState<FEEDATA[]>([]);
+  const [postData, setPostData] = useState<FEEDATA[]>([]);
+  // const [myPostData, setMyPostData] = useState<FEEDATA[]>([]);
   const [email, setEmail] = useState<string | null>("");
 
   const cookie = () => {
@@ -84,6 +109,52 @@ export default function Mypage() {
   console.log("로그인 토큰 값", logintoken);
   console.log("유저 이메일", email);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      // 프로필 데이터 가져오기
+      try {
+        const accessToken = Cookies.get("accessToken");
+        console.log("accessToken 값: ", accessToken);
+
+        const decodedToken = accessToken
+          ? (jwt.decode(accessToken) as { [key: string]: any })
+          : null;
+        const decoded_nickName = decodedToken?.sub;
+        console.log("디코딩", decodedToken);
+
+        const response = await axios({
+          method: "POST",
+          url: `https://www.jerneithe.site/user/api/profile`,
+          headers: {
+            Authorization: "Bearer " + accessToken,
+          },
+          data: {
+            email: localStorage.getItem("user_email"),
+          },
+        });
+
+        setUserProfile(response.data);
+        setNickname(response.data.nickname);
+        setUserImage(response.data.image);
+
+        // 게시물 데이터 가져오기
+        const req = await axios.get("https://www.jerneithe.site/board/list");
+        const data: FEEDATA[] = req.data;
+
+        setPostData(data);
+        // const filteredData = data.filter(
+        //   (item) => item.nickName === response.data.nickname
+        // );
+        // console.log("filterData: ", filteredData);
+        // setMyPostData(filteredData);
+      } catch (error) {
+        console.error("데이터 로딩 에러: ", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  /*
   useEffect(() => {
     const profileData = async () => {
       // 회원 정보 데이터
@@ -133,6 +204,8 @@ export default function Mypage() {
         setUserProfile(response.data);
         setNickname(response.data.nickname);
         setUserImage(response.data.image);
+
+
       } catch (error) {
         console.error("회원정보 에러: ", error);
       }
@@ -141,9 +214,11 @@ export default function Mypage() {
   }, []);
 
   console.log("회원정보 Data: ", userPofile);
+  */
 
   // ------------------------------------------------------------------------
 
+  /*
   // board 이미지 데이터 불러오기 (my post)
   useEffect(() => {
     const postData = async () => {
@@ -155,11 +230,14 @@ export default function Mypage() {
     };
     postData();
   }, []);
+  */
 
   // 회원 정보 수정 모달 이벤트
   const handleSettingsClick = () => {
     setShowProfileModify(!showProfileModify);
   };
+
+  console.log("mypage의 게시물 data: ", postData);
 
   return (
     <>
@@ -176,11 +254,16 @@ export default function Mypage() {
             {userPofile && (
               <>
                 <MypageProfile
+                  nickname={nickname}
+                  postData={postData}
+                  userProfileImage={userImage}
+                />
+                {/* <MypageProfile
                   nickname={userPofile.nickname}
                   postnum={myPostData.length}
                   myPostData={myPostData}
                   userProfileImage={userImage}
-                />
+                /> */}
               </>
             )}
             {/* --------------------------------------- */}

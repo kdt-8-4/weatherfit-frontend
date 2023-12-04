@@ -51,17 +51,19 @@ export default function Like({
           src="/images/like.svg"
           alt="like"
           className="cursor-pointer"
+          style={{ marginRight: "3px" }}
           width={20}
           height={20}
           onClick={handleLikeClick}
         />
       ) : (
         <Image
-          src="/images/unlike.svg"
+          src="/images/unLike.svg"
           alt="like"
           width={20}
           height={20}
           className="cursor-pointer"
+          style={{ marginRight: "3px" }}
           onClick={handleLikeClick}
         />
       )}
