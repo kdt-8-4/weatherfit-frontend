@@ -1,21 +1,5 @@
 @import "_util.scss";
 
-* {
-  box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #f5f5f5;
-}
-
-// .logo {
-//   position: absolute;
-//   text-align: center;
-// }
-
 .div-button {
   width: 100%;
   display: flex;
@@ -75,11 +59,25 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+
+  .img_wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .logo {
+      margin: 0 auto;
+      margin-bottom: 0.625rem;
+    }
+  }
 
   #btn_complete {
     font-weight: 500;
     background-color: $color-main;
     color: white;
+    margin: 10px;
     padding: 5px 10px;
     border-radius: 5px;
     border: none;

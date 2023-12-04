@@ -1,10 +1,10 @@
 // ImageDetail.tsx
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface ImageDetailProps {
-  images: { imageId: number; boardId: number; image_url: string }[];
+  images: { imageId: number; boardId: number; imageUrl: string }[];
 }
 
 export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
@@ -31,23 +31,40 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
   };
 
   return (
-    <div className="uploadedImg w-full h-100">
-      <div className="relative overflow-hidden w-95 h-100 md:w-18 md:h-18 lg:w-18 lg:h-18">
+    <div className="uploadedImg w-full h-100 p-3">
+      <div className="relative overflow-hidden w-95 h-80">
         {images && images.length > 0 && (
           <div>
             <div className="image-slide">
-              <Image
-                key={images[currentIndex].imageId}
-                src={images[currentIndex].image_url}
-                alt={`Image ${currentIndex}`}
-                width={100}
-                height={100}
-              />
+              <div
+                className="image-container relative"
+                style={{ aspectRatio: "1/1" }}>
+                <div
+                  className="image-wrapper"
+                  style={{ paddingBottom: "100%" }}>
+                  <Image
+                    key={images[currentIndex].imageId}
+                    src={images[currentIndex].imageUrl}
+                    alt={`Image ${currentIndex}`}
+                    layout="fill"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="button-group">
-              <button onClick={handlePrevious}>.</button>
-              <button onClick={handleNext}>.</button>
-            </div>
+            {images.length > 1 && (
+              <div
+                className="button-group absolute flex w-full"
+                style={{
+                  padding: "10px",
+                  position: "absolute",
+                  top: "50%",
+                  justifyContent: "space-between",
+                  transform: "translateY(-50%)",
+                }}>
+                <button onClick={handlePrevious}>◀️</button>
+                <button onClick={handleNext}>▶️</button>
+              </div>
+            )}
           </div>
         )}
       </div>

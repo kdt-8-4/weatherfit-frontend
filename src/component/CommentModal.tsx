@@ -5,12 +5,11 @@ import Reply from "./Reply";
 import axios from "axios";
 import { Result } from "postcss";
 
-// interface handleCommentClickProps {
-//   handleCommentClick: () => void;
-// }
-
 interface CommentModalProps {
   handleModalToggle: () => void;
+  accessToken: string | undefined;
+  boardComment: boardCommentType[];
+  decoded_nickName: string;
 }
 
 interface ReplyType {
@@ -20,21 +19,46 @@ interface ReplyType {
 }
 
 interface CommentType {
-  id: number;
+  id: number; // id
   nickname: string;
-  comment: string;
-  reply: ReplyType[];
+  comment: string; // 댓글 내용
+  reply: ReplyType[]; // 답글
   showReplyInput: boolean;
   isDeleted: boolean;
   createdAt: Date;
 }
 
-export default function CommentModal(props: CommentModalProps) {
-  const { handleModalToggle } = props;
+interface boardCommentType {
+  id: number;
+  boardId: number;
+  nickname: string;
+  content: string;
+  createdDate: string;
+  createdTime: string;
+  replyList: replyListType[];
+}
 
-  const [comment, setComment] = useState("");
-  const [reply, setReply] = useState<ReplyType[]>([]);
-  const [comments, setComments] = useState<CommentType[]>([]);
+interface replyListType {
+  id: number;
+  content: string;
+  createdDate: string;
+  createdTime: string;
+  nickname: string;
+}
+
+export default function CommentModal(props: CommentModalProps) {
+  const { handleModalToggle, accessToken, boardComment, decoded_nickName } =
+    props;
+
+  console.log("모달 댓글: ", boardComment);
+
+  const [boardCommentList, setBoardCommentList] = useState<boardCommentType[]>(
+    []
+  );
+
+  const [comment, setComment] = useState(""); // 댓글 내용
+  const [reply, setReply] = useState<ReplyType[]>([]); // 답글 내용
+  const [comments, setComments] = useState<CommentType[]>([]); // 댓글 목록
   const [editing, setEditing] = useState<
     | {
         index: number;
@@ -45,10 +69,12 @@ export default function CommentModal(props: CommentModalProps) {
   >(undefined);
   const [editText, setEditText] = useState("");
 
+  // 댓글 input 값
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
 
+  // 답글 input 값
   const handleReplyChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -58,6 +84,7 @@ export default function CommentModal(props: CommentModalProps) {
     setReply(newReply);
   };
 
+  // 댓글 작성
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -71,11 +98,10 @@ export default function CommentModal(props: CommentModalProps) {
         method: "POST",
         url: "https://www.jerneithe.site/comment/write",
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDEzOTI0NTUsImV4cCI6MTcwMTQwMzI1NSwic3ViIjoi7YWM7Iqk7YSwIn0.IW2xr6LD3aq0Wsxl1kBqce-YtxQBn4whGBAsrTDKNc0",
+          Authorization: "Bearer " + accessToken,
         },
         data: {
-          boardId: 4,
+          boardId: 5,
           content: comment,
         },
       });
@@ -100,26 +126,9 @@ export default function CommentModal(props: CommentModalProps) {
     } catch (err) {
       console.log("댓글 작성 에러: ", err);
     }
-
-    // 기존 코드
-    // if (comment.trim() === "") {
-    //   alert("댓글을 입력해주세요");
-    //   return;
-    // }
-    // setComments([
-    //   ...comments,
-    //   {
-    //     nickname: user.nickname,
-    //     comment: comment,
-    //     reply: [],
-    //     showReplyInput: false,
-    //     isDeleted: false,
-    //     createdAt: new Date(),
-    //   },
-    // ]);
-    // setComment("");
   };
 
+  // 답글 작성
   const handleReplySubmit = async (e: React.FormEvent, index: number) => {
     e.preventDefault();
     if (!reply[index]?.text || reply[index]?.text.trim() === "") {
@@ -132,8 +141,7 @@ export default function CommentModal(props: CommentModalProps) {
         method: "POST",
         url: "https://www.jerneithe.site/comment/reply",
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDEzOTI0NTUsImV4cCI6MTcwMTQwMzI1NSwic3ViIjoi7YWM7Iqk7YSwIn0.IW2xr6LD3aq0Wsxl1kBqce-YtxQBn4whGBAsrTDKNc0",
+          Authorization: "Bearer " + accessToken,
         },
         data: {
           commentId: comments[index].id, // 답글을 작성할 댓글 ID
@@ -160,15 +168,6 @@ export default function CommentModal(props: CommentModalProps) {
     } catch (err) {
       console.log(err);
     }
-
-    // 기존 코드
-    // comments[index].reply.push(reply[index]);
-    // setComments([...comments]);
-    // setReply([
-    //   ...reply.slice(0, index),
-    //   { text: "", createdAt: new Date() },
-    //   ...reply.slice(index + 1),
-    // ]);
   };
 
   const handleReplyClick = (index: number) => {
@@ -209,8 +208,7 @@ export default function CommentModal(props: CommentModalProps) {
             method: "PATCH",
             url: "https://www.jerneithe.site/comment/modify",
             headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDEzOTI0NTUsImV4cCI6MTcwMTQwMzI1NSwic3ViIjoi7YWM7Iqk7YSwIn0.IW2xr6LD3aq0Wsxl1kBqce-YtxQBn4whGBAsrTDKNc0",
+              Authorization: "Bearer " + accessToken,
             },
             data: {
               id: comments[editing.index].id, // 수정할 댓글 ID
@@ -237,8 +235,7 @@ export default function CommentModal(props: CommentModalProps) {
               method: "PATCH",
               url: "https://www.jerneithe.site/comment/modify/reply",
               headers: {
-                Authorization:
-                  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDEzOTI0NTUsImV4cCI6MTcwMTQwMzI1NSwic3ViIjoi7YWM7Iqk7YSwIn0.IW2xr6LD3aq0Wsxl1kBqce-YtxQBn4whGBAsrTDKNc0",
+                Authorization: "Bearer " + accessToken,
               },
               data: {
                 id: comments[editing.index].reply[editing.replyIndex].id, // 수정할 답글 ID
@@ -256,36 +253,60 @@ export default function CommentModal(props: CommentModalProps) {
             console.log(err);
           }
         }
-        // 나머지 코드...
       }
     }
-
-    // 기존 코드
-    // if (editing) {
-    //   if (editing.type === "comment") {
-    //     comments[editing.index].comment = editText;
-    //   } else if (editing.type === "reply" && editing.replyIndex !== undefined) {
-    //     comments[editing.index].reply[editing.replyIndex].text = editText;
-    //   }
-    //   setComments([...comments]);
-    //   setEditing(undefined);
-    //   setEditText("");
-    // }
   };
 
-  const handleDelete = (index: number) => {
-    if (comments[index].reply.length > 0) {
-      comments[index].comment = "삭제된 댓글입니다.";
-      comments[index].isDeleted = true;
-    } else {
-      comments.splice(index, 1);
+  // 댓글 삭제
+  const handleDelete = async (index: number) => {
+    const commentId = comments[index].id;
+    console.log("delete commentId: ", commentId);
+
+    try {
+      const result = await axios({
+        method: "DELETE",
+        url: `https://www.jerneithe.site/comment/remove?commentId=${commentId}`,
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+
+      if (result.status === 200) {
+        if (comments[index].reply.length > 0) {
+          comments[index].comment = "삭제된 댓글입니다.";
+          comments[index].isDeleted = true;
+        } else {
+          comments.splice(index, 1);
+        }
+        setComments([...comments]);
+      }
+    } catch (err) {
+      console.log("댓글 삭제 에러: ", err);
     }
-    setComments([...comments]);
   };
 
-  const handleReplyDelete = (index: number, replyIndex: number) => {
-    comments[index].reply.splice(replyIndex, 1);
-    setComments([...comments]);
+  // 답글 삭제
+  const handleReplyDelete = async (index: number, replyIndex: number) => {
+    const replyId = comments[index].reply[replyIndex].id;
+
+    console.log("delete replyId: ", replyId);
+
+    try {
+      const result = await axios({
+        method: "DELETE",
+        url: `https://www.jerneithe.site/comment/remove/reply?replyId=${replyId}`,
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+
+      if (result.status === 200) {
+        comments[index].reply.splice(replyIndex, 1);
+        setComments([...comments]);
+      }
+    } catch (err) {
+      console.log("답글 삭제 에러: ", err);
+    }
   };
 
   // 시간 표시 데이터
@@ -312,6 +333,7 @@ export default function CommentModal(props: CommentModalProps) {
     nickname: "김똥이",
   };
 
+  console.log("comment: ", comments);
   // ----------------------------------------------------------------------------------------------------------------------
 
   return (
@@ -376,7 +398,7 @@ export default function CommentModal(props: CommentModalProps) {
             ))}
           </div>
           <form className="comment_form" onSubmit={handleFormSubmit}>
-            <p>{user.nickname}</p>
+            <p>{decoded_nickName}</p>
             <input
               type="text"
               placeholder="댓글을 입력하세요."

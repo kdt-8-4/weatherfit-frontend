@@ -9,18 +9,34 @@ interface Image {
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
   initialImages: Image[];
+  onDeleteImage?: (imageUrl: string) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
   initialImages,
+  onDeleteImage = () => {},
 }: ImageUploadProps) => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<Image[]>(initialImages);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]); // 추가된 상태
 
   useEffect(() => {
     setExistingImages(initialImages);
+    console.log("setExistingImages", initialImages);
   }, [initialImages]);
+
+  useEffect(() => {
+    console.log("selectedImages", selectedImages);
+  }, [selectedImages]);
+
+  useEffect(() => {
+    console.log("existingImages", existingImages);
+  }, [existingImages]);
+
+  useEffect(()=>{
+    console.log("onImageSelect");
+  }, [onImagesSelected])
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = event.target.files;
@@ -49,12 +65,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  const removeExistingImage = (index: number) => {
+  const removeExistingImage = (index: number, url: string) => {
     if (existingImages) {
       const newImages = [...existingImages];
-      const imageId = existingImages[index].imageId;
       newImages.splice(index, 1);
       setExistingImages(newImages);
+      onDeleteImage(url); // 상위 컴포넌트에 삭제된 이미지의 URL 전달
     }
   };
 
@@ -65,7 +81,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           Array.from(existingImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={image.imageUrl} alt={`Image ${index}`} />
-              <button onClick={() => removeExistingImage(index)}>❌</button>
+              <button
+                onClick={() => removeExistingImage(index, image.imageUrl)}>
+                ❌
+              </button>
             </div>
           ))}
         {selectedImages &&

@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState, FormEvent } from "react";
+import React, { ChangeEvent, useRef, useState, FormEvent } from "react";
 import "../style/modal.scss";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,21 +12,48 @@ interface handleSettingsClickProps {
   email: string;
   name: string;
   password: string;
+  userProfileImage: string | null;
+  accessToken: string | undefined;
 }
 
 export default function ProfileModal(props: handleSettingsClickProps) {
-  const { handleSettingsClick, email, name, password } = props;
+  const {
+    handleSettingsClick,
+    email,
+    name,
+    password,
+    userProfileImage,
+    accessToken,
+  } = props;
 
   console.log("현재 pw: ", password);
 
   // 프로필 이미지
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(
+    userProfileImage
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 닉네임, 비밀번호 변경용
   const [nickname, setNickname] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDefaultImageClick = () => {
+    setSelectedImage(null);
+  };
 
   /*
   const defaultIcon = (
@@ -80,11 +107,6 @@ export default function ProfileModal(props: handleSettingsClickProps) {
       return;
     }
 
-    // if (currentPassword !== password) {
-    //   alert("현재 비밀번호를 다시 입력하세요.");
-    //   return;
-    // }
-
     // 변경 비밀번호 확인
     if (newPassword !== confirmPassword) {
       alert("비밀번호 재확인을 다시 입력하세요.");
@@ -109,6 +131,26 @@ export default function ProfileModal(props: handleSettingsClickProps) {
     }
   };
 
+  // -------------------------------------------------------------------------
+
+  const handleUserDelete = async () => {
+    try {
+      if (confirm("정말로 탈퇴하시겠습니까?")) {
+        const response = await axios({
+          method: "DELETE",
+          url: `https://www.jerneithe.site/comment/write/user/api/profile/remove/${email}`,
+          headers: {
+            Authorization: "Bearer " + accessToken,
+          },
+        });
+        console.log("회원 탈퇴 response: ", response);
+        alert("그동안 옷늘날씨를 찾아주셔서 감사합니다.");
+      }
+    } catch (error) {
+      console.log("회원 탈퇴 err: ", error);
+    }
+  };
+
   return (
     <div className="modal_back">
       <div className="modal_body">
@@ -118,6 +160,29 @@ export default function ProfileModal(props: handleSettingsClickProps) {
         </div>
         <div className="modal_content">
           <form className="modal_form" onSubmit={handleSubmit}>
+            <div className="user_image">
+              {selectedImage == null ? (
+                <AccountCircleOutlinedIcon className="user_image_icon" />
+              ) : (
+                <img src={selectedImage} alt="프로필 이미지" />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                이미지 선택
+              </button>
+              <button type="button" onClick={handleDefaultImageClick}>
+                기본 이미지
+              </button>
+            </div>
             {/* <div className="image_box">
               {selectedImage ? (
                 <img
@@ -195,7 +260,11 @@ export default function ProfileModal(props: handleSettingsClickProps) {
           </form>
           <button type="button">로그아웃</button>
         </div>
-        <button type="button" className="user_out_btn">
+        <button
+          type="button"
+          className="user_out_btn"
+          onClick={handleUserDelete}
+        >
           회원탈퇴
         </button>
       </div>
