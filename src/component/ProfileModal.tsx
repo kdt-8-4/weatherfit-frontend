@@ -133,18 +133,20 @@ export default function ProfileModal(props: handleSettingsClickProps) {
 
   // -------------------------------------------------------------------------
 
+  // 회원 탈퇴
   const handleUserDelete = async () => {
     try {
       if (confirm("정말로 탈퇴하시겠습니까?")) {
         const response = await axios({
           method: "DELETE",
-          url: `https://www.jerneithe.site/comment/write/user/api/profile/remove/${email}`,
+          url: `https://www.jerneithe.site/user/api/profile/remove/${email}`,
           headers: {
             Authorization: "Bearer " + accessToken,
           },
         });
         console.log("회원 탈퇴 response: ", response);
-        alert("그동안 옷늘날씨를 찾아주셔서 감사합니다.");
+        alert("그동안 옷늘날씨를 이용해 주셔서 감사합니다.");
+        window.location.href = "/";
       }
     } catch (error) {
       console.log("회원 탈퇴 err: ", error);

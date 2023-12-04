@@ -12,6 +12,28 @@ import { FeedContent } from "@/recoilAtom/FeedContents";
 interface IMAGE {
   boardId: number;
   imageId: number;
+  imageUrl: string;
+}
+
+interface LIKE {
+  likeId: number;
+  nickName: string;
+}
+
+interface FEEDATA {
+  boardId: number;
+  images: IMAGE;
+  likeCount: number;
+  likelist: LIKE;
+  nickName: string;
+  temperature: number;
+  weather: string;
+  weatherIcon?: string;
+}
+/*
+interface IMAGE {
+  boardId: number;
+  imageId: number;
   image_url: string;
 }
 
@@ -23,6 +45,7 @@ interface FEEDATA {
   temperature: number;
   weather: string;
 }
+*/
 
 interface TabbarProps {
   myPostData: FEEDATA[];
