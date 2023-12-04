@@ -74,8 +74,8 @@ const ContentDetail = ({
 
   return (
     <div
-      className="content-detail w-full h-full p-3"
-      style={{ paddingBottom: "30px" }}>
+      className="content-detail w-full p-3"
+      style={{ paddingBottom: "30px", height: "100%" }}>
       <div
         id="content"
         className={`${
