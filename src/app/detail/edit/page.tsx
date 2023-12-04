@@ -46,6 +46,7 @@ async function urlToFile(url: any, filename: any) {
       throw new Error(errorObj.error);
     }
     const blob = await res.blob();
+    // const extension = filename.split(".").pop();
     const extension = filename.split(".").pop();
 
     let mimeType = "";
@@ -147,7 +148,7 @@ export default function EditDetail(): JSX.Element {
           initialImages.map((image) => {
             const filename = image.imageUrl.split("/").pop() || "image";
             const filenameWithoutPath =
-              filename.split("_weatherift_").pop() || filename; // 이미지 파일명 추출
+              filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
             return urlToFile(image.imageUrl, filenameWithoutPath);
           }),
         )
