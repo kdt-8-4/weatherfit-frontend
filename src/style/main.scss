@@ -34,3 +34,11 @@ header {
     }
   }
 }
+
+.main {
+  width: 95%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

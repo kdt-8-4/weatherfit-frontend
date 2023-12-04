@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Upload(): JSX.Element {
+  const [isUploading, setIsUploading] = useState(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -82,6 +83,10 @@ export default function Upload(): JSX.Element {
       alert("글을 작성해주세요!");
       return;
     }
+    if (isUploading) {
+      return;
+    }
+    setIsUploading(true);
 
     try {
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
@@ -119,6 +124,8 @@ export default function Upload(): JSX.Element {
     } catch (error) {
       console.error(error);
     }
+
+    setIsUploading(false);
   };
 
   console.log("로그인 토큰 존재 확인", logincheck);
@@ -147,7 +154,11 @@ export default function Upload(): JSX.Element {
                   height={90}
                 />
               </div>
-              <button type="button" id="btn_complete" onClick={handleComplete}>
+              <button
+                type="button"
+                id="btn_complete"
+                onClick={handleComplete}
+                disabled={isUploading}>
                 완료
               </button>
             </div>

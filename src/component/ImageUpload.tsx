@@ -9,7 +9,8 @@ interface Image {
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
   initialImages: Image[];
-  onDeleteImage?: (imageUrl: string) => void;
+  // onDeleteImage?: (imageUrl: string) => void;
+  onDeleteImage?: (imageId: number) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -19,7 +20,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 }: ImageUploadProps) => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<Image[]>(initialImages);
-  const [deletedImages, setDeletedImages] = useState<string[]>([]); // 추가된 상태
 
   useEffect(() => {
     setExistingImages(initialImages);
@@ -34,9 +34,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     console.log("existingImages", existingImages);
   }, [existingImages]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("onImageSelect");
-  }, [onImagesSelected])
+  }, [onImagesSelected]);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = event.target.files;
@@ -65,12 +65,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  const removeExistingImage = (index: number, url: string) => {
+  // const removeExistingImage = (index: number, url: string) => {
+  const removeExistingImage = (index: number, id: number) => {
     if (existingImages) {
       const newImages = [...existingImages];
       newImages.splice(index, 1);
       setExistingImages(newImages);
-      onDeleteImage(url); // 상위 컴포넌트에 삭제된 이미지의 URL 전달
+      onDeleteImage(id); // 상위 컴포넌트에 삭제된 이미지의 URL 전달
     }
   };
 
@@ -82,7 +83,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             <div key={index} className="image-preview">
               <img src={image.imageUrl} alt={`Image ${index}`} />
               <button
-                onClick={() => removeExistingImage(index, image.imageUrl)}>
+                // onClick={() => removeExistingImage(index, image.imageUrl)}>
+                onClick={() => removeExistingImage(index, image.imageId)}>
                 ❌
               </button>
             </div>
