@@ -79,7 +79,6 @@ export default function EditDetail(): JSX.Element {
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
-  // const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([]);
   const [deleteImageIds, setDeleteImageIds] = useState<number[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -119,9 +118,6 @@ export default function EditDetail(): JSX.Element {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
 
-  // const handleDeleteImage = (imageUrl: string) => {
-  //   setDeleteImageUrls((prevUrls) => [...prevUrls, imageUrl]);
-  // };
   const handleDeleteImage = (imageId: number) => {
     setDeleteImageIds((prevIds) => [...prevIds, imageId]);
   };
@@ -146,7 +142,9 @@ export default function EditDetail(): JSX.Element {
         await Promise.all(
           initialImages.map((image) => {
             const filename = image.imageUrl.split("/").pop() || "image";
-            return urlToFile(image.imageUrl, filename);
+            const filenameWithoutPath =
+              filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
+            return urlToFile(image.imageUrl, filenameWithoutPath);
           }),
         )
       ).filter(Boolean);
@@ -172,19 +170,6 @@ export default function EditDetail(): JSX.Element {
       allImages.forEach((image) => {
         formData.append("images", image);
       });
-
-      // deleteImageUrls.forEach((imageUrl) => {
-      //   formData.append("deletedImages", imageUrl);
-      // });
-
-      // formData.append("deletedImages", JSON.stringify(deleteImageUrls));
-      // formData.append("deletedImages", JSON.stringify(deleteImageIds)); // 결과값: "[20, 10]"
-
-      // formData.append(
-      //   "deletedImages",
-      //   JSON.stringify(deleteImageIds.map(String)),
-      // ); // 결과값: "["20", "10"]"
-      // console.log("deleteImages", JSON.stringify(deleteImageIds.map(String)));
 
       if (allImages.length === 0) {
         alert("이미지를 추가해주세요!");
