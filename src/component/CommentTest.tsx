@@ -8,6 +8,7 @@ interface CommentModalProps {
   accessToken: string | undefined;
   boardComment: boardCommentType[];
   decoded_nickName: string;
+  localBoardId: number | null;
 }
 
 interface boardCommentType {
@@ -18,6 +19,7 @@ interface boardCommentType {
   createdDate: string;
   createdTime: string;
   replyList: replyListType[];
+  status: number;
 }
 
 interface replyListType {
@@ -26,33 +28,71 @@ interface replyListType {
   createdDate: string;
   createdTime: string;
   nickname: string;
+  isEditing: boolean;
+  editedContent: string;
+  status: number;
 }
 
 export default function CommentTest(props: CommentModalProps) {
-  const { handleModalToggle, accessToken, boardComment, decoded_nickName } =
-    props;
+  const {
+    handleModalToggle,
+    accessToken,
+    boardComment,
+    decoded_nickName,
+    localBoardId,
+  } = props;
 
   const [boardCommentList, setBoardCommentList] = useState(
-    boardComment.map((comment) => ({
-      ...comment,
-      isEditing: false,
-      editedContent: "",
-    }))
+    boardComment
+      .filter(
+        (comment) =>
+          comment.status === 1 ||
+          (comment.status === 0 &&
+            comment.content === "삭제된 댓글입니다." &&
+            comment.replyList.some((reply) => reply.status === 1))
+      )
+      .map((comment) => ({
+        ...comment,
+        replyList: comment.replyList.filter((reply) => reply.status === 1),
+        isEditing: false,
+        editedContent: "",
+        isReplying: false,
+      }))
   ); // 댓글 목록
 
-  //   const [replyList, setReplyList] = useState<replyListType[]>([]); // 답글 목록
+  useEffect(() => {
+    console.log("댓글 목록 업데이트: ", boardCommentList);
+  }, [boardCommentList]);
+
+  // const [boardCommentList, setBoardCommentList] = useState(
+  //   boardComment
+  //     .filter(
+  //       (comment) =>
+  //         comment.status === 1 ||
+  //         (comment.status === 0 && comment.content === "삭제된 댓글입니다.")
+  //     )
+  //     .map((comment) => ({
+  //       ...comment,
+  //       replyList: comment.replyList.filter((reply) => reply.status === 1),
+  //       isEditing: false,
+  //       editedContent: "",
+  //       isReplying: false,
+  //     }))
+  // );
+
+  console.log("새로운 댓글 목록: ", boardCommentList);
+
+  // const [boardCommentList, setBoardCommentList] = useState(
+  //   boardComment.map((comment) => ({
+  //     ...comment,
+  //     isEditing: false,
+  //     editedContent: "",
+  //     isReplying: false,
+  //   }))
+  // ); // 댓글 목록
 
   const [comment, setComment] = useState<string>(""); // 댓글 input
   const [reply, setReply] = useState<replyListType[]>([]); // 답글 input
-
-  //   useEffect(() => {
-  //     const replies: replyListType[] = boardCommentList.flatMap(
-  //       (comment) => comment.replyList
-  //     );
-  //     setReplyList(replies);
-  //   }, []);
-
-  //   console.log("답글 목록: ", replyList);
 
   // 댓글 input 값
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +116,7 @@ export default function CommentTest(props: CommentModalProps) {
           Authorization: "Bearer " + accessToken,
         },
         data: {
-          boardId: 4,
+          boardId: localBoardId,
           content: comment,
         },
       });
@@ -97,6 +137,8 @@ export default function CommentTest(props: CommentModalProps) {
           replyList: [],
           isEditing: false,
           editedContent: "",
+          status: comResData.status,
+          isReplying: false,
         },
       ]);
       setComment("");
@@ -138,6 +180,8 @@ export default function CommentTest(props: CommentModalProps) {
       alert("수정 내용을 입력해주세요");
       return;
     }
+
+    console.log("댓글 수정 editedComment: ", editedComment);
 
     try {
       const result = await axios({
@@ -186,12 +230,278 @@ export default function CommentTest(props: CommentModalProps) {
 
       console.log("댓글 삭제 응답: ", result);
 
-      setBoardCommentList((prevList) =>
-        prevList.filter((item, idx) => idx !== index)
+      const newList = await Promise.all(
+        boardCommentList.map(async (item, idx) => {
+          // 경우 1: 해당 댓글의 답글이 없는 경우
+          if (idx === index && item.replyList.length === 0) {
+            return null;
+          }
+
+          // 경우 2: 해당 댓글에 replyList.status=1인 답글이 있다면 댓글의 내용이 '삭제된 댓글입니다.' 로 바뀜
+          if (
+            idx === index &&
+            item.replyList.some((reply) => reply.status === 1)
+          ) {
+            const updatedComment = {
+              ...item,
+              content: "삭제된 댓글입니다.",
+              status: 0,
+            };
+
+            // 댓글 내용 수정 API 호출
+            await axios({
+              method: "PATCH",
+              url: "https://www.jerneithe.site/comment/modify",
+              data: {
+                id: updatedComment.id,
+                content: updatedComment.content,
+              },
+              headers: {
+                Authorization: "Bearer " + accessToken,
+              },
+            });
+
+            return updatedComment;
+          }
+
+          // 경우 3: 해당 댓글의 답글들의 status가 모두 0이라면 댓글도 삭제됨
+          if (
+            idx === index &&
+            item.replyList.every((reply) => reply.status === 0)
+          ) {
+            return null;
+          }
+
+          return item;
+        })
       );
+
+      const filteredList = newList.filter(
+        (item) => item !== null
+      ) as typeof boardCommentList;
+      setBoardCommentList(filteredList);
+
       console.log("댓글 삭제 후: ", boardCommentList);
     } catch (err) {
       console.log("댓글 삭제 에러: ", err);
+    }
+
+    // 기존 코드
+    // const deletedComment = boardCommentList[index];
+    // console.log("댓글 삭제 deletedComment: ", deletedComment);
+
+    // try {
+    //   const result = await axios({
+    //     method: "DELETE",
+    //     url: `https://www.jerneithe.site/comment/remove?commentId=${deletedComment.id}`,
+    //     headers: {
+    //       Authorization: "Bearer " + accessToken,
+    //     },
+    //   });
+
+    //   console.log("댓글 삭제 응답: ", result);
+
+    //   setBoardCommentList((prevList) =>
+    //     prevList.filter((item, idx) => idx !== index)
+    //   );
+    //   console.log("댓글 삭제 후: ", boardCommentList);
+    // } catch (err) {
+    //   console.log("댓글 삭제 에러: ", err);
+    // }
+  };
+
+  // ---------------------------------------------------------------------
+
+  // 답글 작성 모드 토글
+  const handleReplyModeToggle = (index: number) => {
+    setBoardCommentList((prevList) =>
+      prevList.map((item, idx) =>
+        idx === index ? { ...item, isReplying: !item.isReplying } : item
+      )
+    );
+  };
+
+  // 답글 작성
+  const handleReplySubmit = async (e: React.FormEvent, index: number) => {
+    e.preventDefault();
+
+    const replyContent = boardCommentList[index].editedContent;
+    if (replyContent.trim() === "") {
+      alert("답글을 입력해주세요");
+      return;
+    }
+
+    try {
+      const replyRes = await axios({
+        method: "POST",
+        url: "https://www.jerneithe.site/comment/reply",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+        data: {
+          commentId: boardCommentList[index].id,
+          content: replyContent,
+        },
+      });
+
+      console.log("답글 작성 응답: ", replyRes.data);
+
+      const replyResData = replyRes.data;
+
+      setBoardCommentList((prevList) =>
+        prevList.map((item, idx) =>
+          idx === index
+            ? {
+                ...item,
+                replyList: [
+                  ...item.replyList,
+                  {
+                    id: replyResData.id,
+                    content: replyContent,
+                    createdDate: replyResData.createdDate,
+                    createdTime: replyResData.createdTime,
+                    nickname: replyResData.nickname,
+                    isEditing: false,
+                    editedContent: "",
+                    status: replyResData.status,
+                  },
+                ],
+                editedContent: "",
+              }
+            : item
+        )
+      );
+    } catch (err) {
+      console.log("답글 작성 에러: ", err);
+    }
+  };
+
+  // 답글 수정 버튼
+  const handleReplyEditClick = (commentIndex: number, replyIndex: number) => {
+    setBoardCommentList((prevList) =>
+      prevList.map((item, idx) =>
+        idx === commentIndex
+          ? {
+              ...item,
+              replyList: item.replyList.map((reply, idx) =>
+                idx === replyIndex
+                  ? { ...reply, isEditing: true, editedContent: reply.content }
+                  : reply
+              ),
+            }
+          : item
+      )
+    );
+  };
+
+  // 답글 수정 input
+  const handleReplyEditChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    commentIndex: number,
+    replyIndex: number
+  ) => {
+    const { value } = e.target;
+    setBoardCommentList((prevList) =>
+      prevList.map((item, idx) =>
+        idx === commentIndex
+          ? {
+              ...item,
+              replyList: item.replyList.map((reply, idx) =>
+                idx === replyIndex ? { ...reply, editedContent: value } : reply
+              ),
+            }
+          : item
+      )
+    );
+  };
+
+  // 답글 수정 저장
+  const handleReplyEditSubmit = async (
+    e: React.MouseEvent,
+    commentIndex: number,
+    replyIndex: number
+  ) => {
+    e.preventDefault();
+
+    const editedReply = boardCommentList[commentIndex].replyList[replyIndex];
+    if (editedReply.editedContent.trim() === "") {
+      alert("수정 내용을 입력해주세요");
+      return;
+    }
+    console.log("답글 수정 editedReply: ", editedReply);
+
+    try {
+      const result = await axios({
+        method: "PATCH",
+        url: "https://www.jerneithe.site/comment/modify/reply",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+        data: {
+          id: editedReply.id,
+          content: editedReply.editedContent,
+        },
+      });
+
+      console.log("답글 수정 응답: ", result);
+
+      setBoardCommentList((prevList) =>
+        prevList.map((item, idx) =>
+          idx === commentIndex
+            ? {
+                ...item,
+                replyList: item.replyList.map((reply, idx) =>
+                  idx === replyIndex
+                    ? {
+                        ...reply,
+                        content: editedReply.editedContent,
+                        isEditing: false,
+                      }
+                    : reply
+                ),
+              }
+            : item
+        )
+      );
+    } catch (err) {
+      console.log("답글 수정 에러: ", err);
+    }
+  };
+
+  // 답글 삭제 기능
+  const handleReplyDeleteClick = async (
+    commentIndex: number,
+    replyIndex: number
+  ) => {
+    const deletedReply = boardCommentList[commentIndex].replyList[replyIndex];
+    console.log("답글 삭제 deletedReply: ", deletedReply);
+
+    try {
+      const result = await axios({
+        method: "DELETE",
+        url: `https://www.jerneithe.site/comment/remove/reply?replyId=${deletedReply.id}`,
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+
+      console.log("답글 삭제 응답: ", result);
+
+      setBoardCommentList((prevList) =>
+        prevList.map((item, idx) =>
+          idx === commentIndex
+            ? {
+                ...item,
+                replyList: item.replyList.filter(
+                  (_, idx) => idx !== replyIndex
+                ),
+              }
+            : item
+        )
+      );
+      console.log("답글 삭제 후: ", boardCommentList);
+    } catch (err) {
+      console.log("답글 삭제 에러: ", err);
     }
   };
 
@@ -203,36 +513,120 @@ export default function CommentTest(props: CommentModalProps) {
           <hr />
           <div className="commentList">
             {/* 댓글 목록 */}
-            {boardCommentList.map((item, index) => (
-              <div key={`comment-box-${index}`} className="comment_box">
-                <p key={`comment-${index}`}>
-                  {item.nickname}:{" "}
-                  {item.isEditing ? (
+            {boardCommentList.map((comment, commentIndex) => (
+              <div key={`comment-box-${commentIndex}`} className="comment_box">
+                <p key={`comment-${commentIndex}`}>
+                  {comment.nickname}:{" "}
+                  {comment.isEditing ? (
                     <input
                       type="text"
-                      value={item.editedContent}
-                      onChange={(e) => handleEditChange(e, index)}
+                      value={comment.editedContent}
+                      onChange={(e) => handleEditChange(e, commentIndex)}
                     />
                   ) : (
-                    item.content
+                    comment.content
                   )}{" "}
-                  ({item.createdDate})
+                  ({comment.createdDate})
                 </p>
-                {item.nickname === decoded_nickName && (
+                {comment.nickname === decoded_nickName && (
                   <>
-                    {item.isEditing ? (
-                      <button onClick={(e) => handleEditSubmit(e, index)}>
+                    {comment.isEditing ? (
+                      <button
+                        onClick={(e) => handleEditSubmit(e, commentIndex)}
+                      >
                         완료
                       </button>
                     ) : (
-                      <button onClick={() => handleEditClick(index)}>
-                        수정
-                      </button>
+                      <>
+                        <button onClick={() => handleEditClick(commentIndex)}>
+                          수정
+                        </button>
+                      </>
                     )}
-                    <button onClick={() => handleDeleteClick(index)}>
+                    <button onClick={() => handleDeleteClick(commentIndex)}>
                       삭제
                     </button>
+                    <br />
+                    <button onClick={() => handleReplyModeToggle(commentIndex)}>
+                      답글 보기
+                    </button>
                   </>
+                )}
+
+                {/* 답글 작성 폼 및 답글 목록 */}
+                {comment.isReplying && (
+                  <div>
+                    {comment.replyList.map((reply, replyIndex) => (
+                      <div
+                        key={`reply-box-${replyIndex}`}
+                        className="reply_box"
+                      >
+                        <p key={`reply-${replyIndex}`}>
+                          ㄴ{reply.nickname}:
+                          {reply.isEditing ? (
+                            <input
+                              type="text"
+                              value={reply.editedContent}
+                              onChange={(e) =>
+                                handleReplyEditChange(
+                                  e,
+                                  commentIndex,
+                                  replyIndex
+                                )
+                              }
+                            />
+                          ) : (
+                            reply.content
+                          )}{" "}
+                          ({reply.createdDate})
+                        </p>
+                        {reply.nickname === decoded_nickName && (
+                          <>
+                            {reply.isEditing ? (
+                              <button
+                                onClick={(e) =>
+                                  handleReplyEditSubmit(
+                                    e,
+                                    commentIndex,
+                                    replyIndex
+                                  )
+                                }
+                              >
+                                완료
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() =>
+                                  handleReplyEditClick(commentIndex, replyIndex)
+                                }
+                              >
+                                수정
+                              </button>
+                            )}
+                            <button
+                              onClick={() =>
+                                handleReplyDeleteClick(commentIndex, replyIndex)
+                              }
+                            >
+                              삭제
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                    <form
+                      className="reply_form"
+                      onSubmit={(e) => handleReplySubmit(e, commentIndex)}
+                    >
+                      <input
+                        type="text"
+                        placeholder="답글을 입력하세요."
+                        value={comment.editedContent}
+                        onChange={(e) => handleEditChange(e, commentIndex)}
+                      />
+                      <button type="submit">게시</button>
+                    </form>
+                  </div>
                 )}
               </div>
             ))}
