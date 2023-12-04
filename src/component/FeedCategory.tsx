@@ -68,7 +68,7 @@ export default function FeedCategory(){
         }
     }
 
-    console.log(tab_control);
+    // console.log(tab_control);
 
     const tem_btn = () => {
         if(tab_control == false) {

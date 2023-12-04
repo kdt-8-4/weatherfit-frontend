@@ -5,6 +5,8 @@ import { useRecoilState } from "recoil";
 import { FeedContent } from "@/recoilAtom/FeedContents";
 import { TemMaxControl } from "@/recoilAtom/TemMax";
 import { TemMinControl } from "@/recoilAtom/TemMin";
+import { FeedDecodeNickname } from "@/recoilAtom/FeedNickname";
+import { FeedLoginToken } from "@/recoilAtom/FeedLoginToken";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,10 +18,16 @@ interface IMAGE {
   imageUrl: string;
 }
 
+interface LIKE {
+  likeId : number;
+  nickName: string;
+}
+
 interface FEEDATA {
   boardId: number;
   images: IMAGE;
   likeCount: number;
+  likelist: LIKE[];
   nickName: string;
   temperature: number;
   weather: string;
@@ -29,8 +37,9 @@ interface FEEDATA {
 export default function FeedContents() {
   const [max, setMax] = useRecoilState(TemMaxControl);
   const [min, setMin] = useRecoilState(TemMinControl);
-
   const [feedata, setFeedd] = useRecoilState(FeedContent);
+  const [decodeNick, setNick] = useRecoilState(FeedDecodeNickname);
+  const [loginToken_feed, setFeedToken] = useRecoilState(FeedLoginToken);
 
   const router = useRouter();
 
@@ -43,6 +52,8 @@ export default function FeedContents() {
       });
 
       console.log("받아온 데이터", req.data);
+
+      //현재 로그인한 닉네임과 각 게시물의 likelist에 같은 닉네임이 있다면 
 
       const copy: FEEDATA[] = req.data;
 
@@ -71,29 +82,56 @@ export default function FeedContents() {
     //     // setFeedd(filter_feedata);
   }, [max, min, setFeedd]);
 
-  const heart_plus = async (board_id: number) => {
-    console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
+  const updateLikeStatus = async (boardId : number) => {
+    const url = `https://www.jerneithe.site/board/like/${boardId}`;
+  
+    try {
+      await axios({
+        method: "post",
+        url: url,
+        headers: { Authorization: "Bearer " + loginToken_feed },
+      });
+    } catch (error) {
+      console.error("좋아요 변경 실패:", error);
+    }
+  };
+
+  const heart_plus = async (board_id: number, isLiked:boolean) => {
     console.log("하트 누른 피드의 boardId", board_id);
+    console.log("피드 상위에서 받아온 토큰", loginToken_feed);
+
+    await updateLikeStatus(board_id);
+
+    setFeedd((prev) => {
+      const newFeed = prev.map((myarr) => {
+        if (myarr.boardId === board_id) {
+          const isLiked = isUserLiked(myarr.likelist, decodeNick);
+          return {
+            ...myarr,
+            likeCount: isLiked ? myarr.likeCount - 1 : myarr.likeCount + 1,
+            likelist: isLiked
+              ? myarr.likelist.filter((like) => like.nickName !== decodeNick)
+              : decodeNick // decodeNick이 undefined가 아닐 때만 추가
+              ? [...myarr.likelist, { likeId: -1, nickName: decodeNick }]
+              : myarr.likelist,
+          };
+        }
+        return myarr;
+      });
+      return newFeed;
+    });
+
+    // try {
+    //   await axios({
+    //     method: "post",
+    //     url: `https://www.jerneithe.site/board/like/${board_id}`,
+    //     headers: { Authorization: "Bearer " + loginToken_feed },
+    //   });
+    // } catch (error) {
+    //   console.error("좋아요 실패:", error);
+    // }
 
     
-
-
-    //임시 하트 증가
-    // setFeedd((prev) => {
-    //   const newFeed = prev.map((myarr) => {
-    //     if (myarr.boardId === board_id) {
-    //       return { ...myarr, likeCount: myarr.likeCount + 1 };
-    //     }
-    //     return myarr;
-    //   });
-    //   return newFeed;
-    // });
-
-    //갱신된 데이터 보내야함
-    //이름	유형	필수/선택
-    //boardId	int	필수
-    //userId	string	필수
-
   };
 
   const goDetail = async (board_id: number) => {
@@ -102,6 +140,11 @@ export default function FeedContents() {
     router.push('/detail');
   };
 
+  const isUserLiked = (likelist:LIKE[], userNickname:string | undefined) => {
+    return likelist.some((like) => like.nickName === userNickname);
+    // some: 위의 조건을 만족할 경우 순회를 중단 한다 즉, true 값을 리턴한다.
+    // 만족 못한다면 false를 보냄
+  };
 
   console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
 
@@ -110,6 +153,7 @@ export default function FeedContents() {
       <div className="feed_box">
         {feedata ? (
           feedata.map((arr) => {
+            const isLiked = isUserLiked(arr.likelist, decodeNick);
             return (
               <div className="feed" key={arr.boardId}>
                 <div
@@ -130,9 +174,9 @@ export default function FeedContents() {
                   <div id="name_like">
                     <p id="nickName_feed">@{arr.nickName}</p>
                     <div id="like_feed_dj">
-                      <button onClick={() => heart_plus(arr.boardId)}>
+                      <button onClick={() => heart_plus(arr.boardId, isLiked)}>
                         <Image
-                          src="/images/likeuseFeed.svg"
+                          src={isLiked ? "/images/like.svg" : "/images/unLike.svg"}
                           alt="좋아요"
                           width={25}
                           height={25}
