@@ -208,7 +208,7 @@ export default function Upload(): JSX.Element {
           <br />
           <br />
           <br />
-          <div id="login_msg"> "로그인 후에 업로드할 수 있습니다." </div>
+          <div id="login_msg"> 로그인 후에 업로드할 수 있습니다. </div>
           <br />
           <br />
           <Link className="goto" href={"/login"}>로그인 페이지로 이동</Link>
