@@ -23,7 +23,7 @@ export default function BestItem() {
         });
 
         setCategories(response.data.result);
-        console.log(response.data.result);
+        console.log("top5", categories);
       } catch (err) {
         console.error(err);
       }
@@ -33,12 +33,17 @@ export default function BestItem() {
   }, []);
 
   return (
-    <div className="categoryTop5">
-      {categories.map((category, index) => (
-        <button className="category_btn" key={index}>
-          {category._id}
-        </button>
-      ))}
+    <div>
+      <h2>
+        오늘 날씨, <span className="highlight">손이 많이 간</span> 아이템은?
+      </h2>
+      <div className="categoryTop5">
+        {categories.map((category, index) => (
+          <button className="category_btn" key={index}>
+            {category._id}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
