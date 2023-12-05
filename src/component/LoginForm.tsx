@@ -23,8 +23,8 @@ export default function LoginForm() {
     //   console.error(error);
     // }
     window.location.href =
-    // "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&scope=email&state=FnOs2B9peyHie3pfwVOFMaqIFqlifucO4v6jmFPEc_M%3D&redirect_uri=http://localhost:3000/socialregister";
-    "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=http://localhost:3000/socialregister&response_type=token&scope=email";
+      // "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&scope=email&state=FnOs2B9peyHie3pfwVOFMaqIFqlifucO4v6jmFPEc_M%3D&redirect_uri=http://localhost:3000/socialregister";
+      "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=http://localhost:3000/socialregister&response_type=token&scope=email";
   };
 
   const handleLogin = async (e: FormEvent) => {
@@ -33,8 +33,12 @@ export default function LoginForm() {
     try {
       const response = await axios({
         withCredentials: true,
-        method: "GET",
-        url: `https://www.jerneithe.site/user/login/api?email=${email}&password=${pw}`,
+        method: "POST",
+        url: `https://www.jerneithe.site/user/login/api`,
+        data: {
+          email,
+          password: pw,
+        },
       });
 
       alert(`${response.data.nickname}님 환영합니다!`);
@@ -42,15 +46,14 @@ export default function LoginForm() {
       const resData = response.data;
       console.log("resData: ", resData);
       console.log("resData token: ", resData.token);
-      
+
       // 토큰을 쿠키에 저장
       document.cookie = `accessToken=${resData.token}; path=/`;
       // 이메일을 로컬 스토리지에 저장
       localStorage.setItem("user_email", resData.email);
 
       setToken(resData.token);
-      router.push('/');
-
+      router.push("/");
     } catch (error: any) {
       setEmail("");
       setPw("");
@@ -65,8 +68,7 @@ export default function LoginForm() {
     (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
 
-
-  // Recoil로 로그인 체크할려했으나 새로고침하면 사라지는 문제가 여전히 존재해 패스    
+  // Recoil로 로그인 체크할려했으나 새로고침하면 사라지는 문제가 여전히 존재해 패스
   // useEffect(()=>{
   //   const cookie = () => {
   //     const accessToken = Cookies.get("accessToken");
@@ -80,7 +82,6 @@ export default function LoginForm() {
   //     setLogincheck(true);
   //   }
   // },[token]);
-
 
   console.log("resData token 적용됐는지: ", token);
 
