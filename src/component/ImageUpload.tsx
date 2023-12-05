@@ -13,12 +13,6 @@ interface ImageUploadProps {
   onDeleteImage?: (imageId: number) => void;
 }
 
-export const extractFileNameFromUrl = (imageUrl: string): string => {
-  const parts = imageUrl.split("_weatherfit_");
-  console.log("추출한 파일명", parts[parts.length - 1]);
-  return parts[parts.length - 1]; // 마지막 요소가 파일명이 됨
-};
-
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
   onExistingImagesSelected,
