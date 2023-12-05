@@ -67,7 +67,6 @@ export default function EditDetail(): JSX.Element {
       },
     );
     const data = response.data;
-    console.log("게시물 데이터: ", data);
 
     const initialImages = data.images.map((image: any) => ({
       imageId: image.imageId,
@@ -141,7 +140,7 @@ export default function EditDetail(): JSX.Element {
         return;
       }
 
-      const response = await axios({
+      await axios({
         method: "PATCH",
         url: `https://www.jerneithe.site/board/edit/${editBoardId}`,
         data: formData,
@@ -156,7 +155,6 @@ export default function EditDetail(): JSX.Element {
         console.log(`${key}: ${value}`);
       }
 
-      console.log("데이터", response.data); // 서버 응답 확인
       alert("게시물 수정 완료!");
       window.location.href = "/detail";
     } catch (error) {

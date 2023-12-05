@@ -53,7 +53,6 @@ export default function Detail(): JSX.Element {
   const decoded_nickName = decodedToken?.sub;
 
   useEffect(() => {
-    //여기서 localStorae의 값을 가져와 정수로 바꾸기
     const boardId_in = localStorage.getItem("getBoardId_local");
     const boardIdNumber = boardId_in ? parseInt(boardId_in) : null;
     setLocalBoardId(boardIdNumber);
@@ -66,8 +65,6 @@ export default function Detail(): JSX.Element {
         const response = await axios.get(
           `https://www.jerneithe.site/board/detail/${localBoardId}`,
         );
-        console.log("detail response: ", response.data);
-        console.log("댓글: ", response.data.comments);
         setLikelist(response.data.likelist);
         setLikeCount(response.data.likeCount);
         setBoardDetail(response.data);
