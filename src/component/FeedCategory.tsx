@@ -84,11 +84,13 @@ export default function FeedCategory(){
             <ul id="category_dj">
                 {
                     usetab.map((val) => {
-                        return<li key={val.id} className="tab_menu_dj" onClick={() => tab_title(val.val)}> | {val.title} |</li>
+                        return<li key={val.id} className="tab_menu_dj" onClick={() => tab_title(val.val)}>
+                              {val.title} <span>▼</span>
+                            </li>
                     })
                 }
             </ul>
-            <button onClick={tem_btn}>온도 조절</button>
+            <button onClick={tem_btn} id="temcontrol_btn">온도 조절</button>
         </div>
         {tab_control && <FeedcateDetail categorytitle = {send_val} tab_control = {tab_control} setControl = {setControl}/>}
         {temtab_control && <FeedTemControl  setTemtab = {setTemtab}/>}       

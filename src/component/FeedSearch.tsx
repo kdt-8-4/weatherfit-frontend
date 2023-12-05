@@ -1,7 +1,7 @@
 import { ChangeEventHandler, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import "../style/feedSearch.scss";
+import "@/style/feedSearch.scss";
 
 import { useRecoilState } from "recoil";
 import { FeedSearchdata } from "@/recoilAtom/FseahData";
@@ -63,6 +63,11 @@ export default function FeedSearch(){
         setFeedd(req.data);
     }
 
+    const search_cancle = () => {
+        setHval("");
+        setCateSearch([]);
+    }
+
 
     return(<>
         <div className="search_dj">
@@ -85,7 +90,7 @@ export default function FeedSearch(){
                     />
                 </button>
             </div>
-            <button id="cancle_btn_dj">취소</button>
+            <button id="cancle_btn_dj" onClick={search_cancle}>취소</button>
         </div>
     </>)
 }
