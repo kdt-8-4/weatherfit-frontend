@@ -510,9 +510,11 @@ export default function CommentTest(props: CommentModalProps) {
                 )}
 
                 {/* 답글 작성 폼 및 답글 목록 */}
-                <button onClick={() => handleReplyModeToggle(commentIndex)}>
-                  {comment.isReplyMode ? "답글 닫기" : "답글 보기"}
-                </button>
+                <div className="reply_mode_box">
+                  <button onClick={() => handleReplyModeToggle(commentIndex)}>
+                    {comment.isReplyMode ? "답글 닫기" : "답글 보기"}
+                  </button>
+                </div>
                 {comment.isReplying && (
                   <div>
                     {comment.replyList.map((reply, replyIndex) => (
