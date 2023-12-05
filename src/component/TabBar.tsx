@@ -24,7 +24,7 @@ interface FEEDATA {
   boardId: number;
   images: IMAGE;
   likeCount: number;
-  likelist: LIKE;
+  likelist: LIKE[];
   nickName: string;
   temperature: number;
   weather: string;
@@ -49,10 +49,11 @@ interface FEEDATA {
 
 interface TabbarProps {
   myPostData: FEEDATA[];
+  myLikePostData: FEEDATA[];
 }
 
 export default function TabBar(props: TabbarProps) {
-  const { myPostData } = props;
+  const { myPostData, myLikePostData } = props;
   const [grid, setGrid] = useState<boolean>(true);
   const [liked, setLiked] = useState<boolean>(false);
 
@@ -97,7 +98,7 @@ export default function TabBar(props: TabbarProps) {
       </div>
       {/* post 부분 */}
       {grid ? <MyPost myPostData={myPostData} /> : null}
-      {liked ? <LikePost /> : null}
+      {liked ? <LikePost myLikePostData={myLikePostData} /> : null}
     </>
   );
 }

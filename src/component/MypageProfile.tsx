@@ -28,7 +28,7 @@ interface FEEDATA {
   boardId: number;
   images: IMAGE;
   likeCount: number;
-  likelist: LIKE;
+  likelist: LIKE[];
   nickName: string;
   temperature: number;
   weather: string;
@@ -56,11 +56,27 @@ export default function MypageProfile(props: MyPageProfileProps) {
   const { nickname, postData, userProfileImage } = props;
 
   const [myPostData, setMyPostData] = useState<FEEDATA[]>([]);
+  const [myLikePostData, setMyLikePostData] = useState<FEEDATA[]>([]);
 
   useEffect(() => {
     const filteredData = postData.filter((item) => item.nickName === nickname);
     setMyPostData(filteredData);
+
+    const filteredLikeData = postData.filter((item) =>
+      item.likelist.some((like) => like.nickName === nickname)
+    );
+    setMyLikePostData(filteredLikeData);
   }, [nickname, postData]);
+
+  // useEffect(() => {
+  //   const filteredLikeData = postData.filter(
+  //     (item) => item.likelist.nickName === nickname
+  //   );
+  //   setMyLikePostData(filteredLikeData);
+  // }, [nickname, postData]);
+
+  // console.log("mypageprofile의 likedata: ", myLikePostData);
+  // console.log("mypageprofile의 posrdata: ", myPostData);
 
   return (
     <>
@@ -87,11 +103,11 @@ export default function MypageProfile(props: MyPageProfileProps) {
           </div>
           <div className="num_box">
             <p className="user_like">좋아요 한 게시물</p>
-            <p className="user_like_num">10</p>
+            <p className="user_like_num">{myLikePostData.length}</p>
           </div>
         </div>
       </div>
-      <TabBar myPostData={myPostData} />
+      <TabBar myPostData={myPostData} myLikePostData={myLikePostData} />
     </>
   );
 }

@@ -35,7 +35,7 @@ interface FEEDATA {
   boardId: number;
   images: IMAGE;
   likeCount: number;
-  likelist: LIKE;
+  likelist: LIKE[];
   nickName: string;
   temperature: number;
   weather: string;

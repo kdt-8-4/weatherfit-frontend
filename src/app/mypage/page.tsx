@@ -14,6 +14,7 @@ import Link from "next/link";
 import axios from "axios";
 import MypageProfile from "@/component/MypageProfile";
 import jwt from "jsonwebtoken";
+import ProfileModalTest from "@/component/ProfileModalTest";
 
 interface IMAGE {
   boardId: number;
@@ -30,7 +31,7 @@ interface FEEDATA {
   boardId: number;
   images: IMAGE;
   likeCount: number;
-  likelist: LIKE;
+  likelist: LIKE[];
   nickName: string;
   temperature: number;
   weather: string;
@@ -281,7 +282,7 @@ export default function Mypage() {
       )}
 
       {showProfileModify && (
-        <ProfileModal
+        <ProfileModalTest
           handleSettingsClick={handleSettingsClick}
           email={userPofile.email}
           name={userPofile.name}
@@ -293,3 +294,14 @@ export default function Mypage() {
     </>
   );
 }
+
+// {showProfileModify && (
+//   <ProfileModal
+//     handleSettingsClick={handleSettingsClick}
+//     email={userPofile.email}
+//     name={userPofile.name}
+//     password={userPofile.password}
+//     userProfileImage={userImage}
+//     accessToken={logintoken}
+//   />
+// )}
