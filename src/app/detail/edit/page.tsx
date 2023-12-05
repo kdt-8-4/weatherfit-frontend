@@ -15,6 +15,7 @@ import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
 import { TemNowControl } from "@/recoilAtom/TemNow";
 import { categories } from "@/component/category";
 import Image from "next/image";
+import { extractFileNameFromUrl } from "@/component/ImageUpload";
 
 const mapSubCategoriesToCategory = (
   subCategories: string[],
@@ -64,7 +65,9 @@ async function urlToFile(url: any, filename: any) {
         mimeType = "image/*"; // Fallback option
     }
 
-    return new File([blob], filename, { type: mimeType });
+    const filenameWithoutPath =
+      filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
+    return new File([blob], filenameWithoutPath, { type: mimeType });
   } catch (error) {
     console.error(`There was a problem with the fetch operation: ${error}`);
     return new File([], filename);
@@ -92,6 +95,10 @@ export default function EditDetail(): JSX.Element {
   useEffect(() => {
     fetchBoardDetail();
   }, []);
+
+  useEffect(() => {
+    console.log(deleteImageIds);
+  }, [deleteImageIds]);
 
   const fetchBoardDetail = async () => {
     const response = await axios.get(
@@ -138,20 +145,22 @@ export default function EditDetail(): JSX.Element {
 
   const handleComplete = async () => {
     try {
-      const existingImagesAsFiles = (
-        await Promise.all(
-          initialImages.map((image) => {
-            const filename = image.imageUrl.split("/").pop() || "image";
-            const filenameWithoutPath =
-              filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
-            return urlToFile(image.imageUrl, filenameWithoutPath);
-          }),
-        )
-      ).filter(Boolean);
+      // const existingImagesAsFiles = (
+      //   await Promise.all(
+      //     initialImages.map((image) => {
+      //       // const filename = image.imageUrl.split("/").pop() || "image";
+      //       // const filenameWithoutPath =
+      //       //   filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
+      //       const filename = extractFileNameFromUrl(image.imageUrl); // 파일명 추출
+      //       return urlToFile(image.imageUrl, filename);
+      //     }),
+      //   )
+      // ).filter(Boolean);
 
-      console.log(existingImagesAsFiles);
-
-      const allImages = [...existingImagesAsFiles, ...selectedImages];
+      // const allImages = [...existingImagesAsFiles, ...selectedImages];
+      const allImages = [...initialImages, ...selectedImages];
+      console.log("allImages", allImages);
+      console.log("selectedImages", selectedImages);
 
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
         (acc, subCategories) => acc.concat(subCategories),
@@ -167,9 +176,17 @@ export default function EditDetail(): JSX.Element {
       };
 
       formData.append("board", JSON.stringify(boardData));
-      allImages.forEach((image) => {
+      // allImages.forEach((image) => {
+      //   formData.append("images", image);
+      // });
+      selectedImages.forEach((image) => {
         formData.append("images", image);
       });
+
+      // if (allImages.length === 0) {
+      //   alert("이미지를 추가해주세요!");
+      //   return;
+      // }
 
       if (allImages.length === 0) {
         alert("이미지를 추가해주세요!");
@@ -196,7 +213,7 @@ export default function EditDetail(): JSX.Element {
         console.log(`${key}: ${value}`);
       }
 
-      console.log(response.data); // 서버 응답 확인
+      console.log("데이터", response.data); // 서버 응답 확인
       alert("게시물 수정 완료!");
       window.location.href = "/detail";
     } catch (error) {
