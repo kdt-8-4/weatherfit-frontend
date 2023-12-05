@@ -60,18 +60,35 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (currentPassword && newPassword && confirmPassword) {
-      const isPasswordMatch = await bcrypt.compare(currentPassword, password);
+    if (nickname.trim() === "") {
+      // 닉네임이 빈 값인 경우
+      alert("닉네임을 입력해주세요");
+      return;
+    }
 
-      if (!isPasswordMatch) {
-        alert("현재 비밀번호를 다시 입력하세요.");
-        return;
-      }
+    if (!currentPassword) {
+      // 현재 비밀번호가 빈 값인 경우
+      alert("현재 비밀번호를 입력해주세요.");
+      return;
+    }
 
-      if (newPassword !== confirmPassword) {
-        alert("비밀번호 재확인을 다시 입력하세요.");
-        return;
-      }
+    const isPasswordMatch = await bcrypt.compare(currentPassword, password);
+    if (!isPasswordMatch) {
+      // 현재 비밀번호가 일치하지 않는 경우
+      alert("현재 비밀번호를 다시 입력하세요.");
+      return;
+    }
+
+    if (newPassword === "") {
+      // 새로운 비밀번호가 빈 값인 경우
+      alert("새로운 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if (!confirmPassword || newPassword !== confirmPassword) {
+      // 비밀번호 재확인이 빈 값이거나, 새로운 비밀번호와 재확인 비밀번호가 일치하지 않는 경우
+      alert("비밀번호 재확인을 다시 입력하세요.");
+      return;
     }
 
     try {
@@ -92,7 +109,7 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
         //   );
 
         const response = await axios.patch(
-          `수정 url`,
+          `https://www.jerneithe.site/user/api/profile/modify`,
           { image: formData, nickname: nickname, password: newPassword },
           {
             headers: {
