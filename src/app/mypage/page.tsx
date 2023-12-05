@@ -276,10 +276,10 @@ export default function Mypage() {
         </div>
       ) : (
         <>
-                    <br />
           <br />
           <br />
-          <div id="login_msg"> "로그인을 해주세요." </div>
+          <br />
+          <div id="login_msg"> 로그인을 해주세요. </div>
           <br />
           <br />
           <Link className="goto" href={"/login"}>로그인 페이지로 이동</Link>
