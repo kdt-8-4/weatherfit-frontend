@@ -11,11 +11,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
-import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
-import { TemNowControl } from "@/recoilAtom/TemNow";
 import { categories } from "@/component/category";
 import Image from "next/image";
-import { extractFileNameFromUrl } from "@/component/ImageUpload";
 
 const mapSubCategoriesToCategory = (
   subCategories: string[],
@@ -39,49 +36,11 @@ interface Image {
   imageUrl: string;
 }
 
-async function urlToFile(url: any, filename: any) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      const errorObj = await res.json();
-      throw new Error(errorObj.error);
-    }
-    const blob = await res.blob();
-    const extension = filename.split(".").pop();
-
-    let mimeType = "";
-    switch (extension) {
-      case "jpg":
-        mimeType = "image/jpg";
-        break;
-      case "jpeg":
-        mimeType = "image/jpeg";
-        break;
-      case "png":
-        mimeType = "image/png";
-        break;
-      default:
-        // mimeType = "application/octet-stream"; // Fallback option
-        mimeType = "image/*"; // Fallback option
-    }
-
-    const filenameWithoutPath =
-      filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
-    return new File([blob], filenameWithoutPath, { type: mimeType });
-  } catch (error) {
-    console.error(`There was a problem with the fetch operation: ${error}`);
-    return new File([], filename);
-  }
-}
-
 export default function EditDetail(): JSX.Element {
-  //openweathermap에서 제공하는 icon과 현재 온도
-  const [icon, setIcon] = useRecoilState(WeatherIcons);
-  const [usetemp, setTemp] = useRecoilState(TemNowControl);
-
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
+  const [newExistingImages, setNewExistingImages] = useState<Image[]>([]);
   const [deleteImageIds, setDeleteImageIds] = useState<number[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -125,6 +84,10 @@ export default function EditDetail(): JSX.Element {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
 
+  const handleExistingImagesSelected = (images: Image[] | null) => {
+    setNewExistingImages(images ? Array.from(images) : []);
+  };
+
   const handleDeleteImage = (imageId: number) => {
     setDeleteImageIds((prevIds) => [...prevIds, imageId]);
   };
@@ -145,20 +108,7 @@ export default function EditDetail(): JSX.Element {
 
   const handleComplete = async () => {
     try {
-      // const existingImagesAsFiles = (
-      //   await Promise.all(
-      //     initialImages.map((image) => {
-      //       // const filename = image.imageUrl.split("/").pop() || "image";
-      //       // const filenameWithoutPath =
-      //       //   filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
-      //       const filename = extractFileNameFromUrl(image.imageUrl); // 파일명 추출
-      //       return urlToFile(image.imageUrl, filename);
-      //     }),
-      //   )
-      // ).filter(Boolean);
-
-      // const allImages = [...existingImagesAsFiles, ...selectedImages];
-      const allImages = [...initialImages, ...selectedImages];
+      const allImages = [...newExistingImages, ...selectedImages];
       console.log("allImages", allImages);
       console.log("selectedImages", selectedImages);
 
@@ -176,19 +126,12 @@ export default function EditDetail(): JSX.Element {
       };
 
       formData.append("board", JSON.stringify(boardData));
-      // allImages.forEach((image) => {
-      //   formData.append("images", image);
-      // });
+
       selectedImages.forEach((image) => {
         formData.append("images", image);
       });
 
-      // if (allImages.length === 0) {
-      //   alert("이미지를 추가해주세요!");
-      //   return;
-      // }
-
-      if (allImages.length === 0) {
+      if (allImages.length === 0 && initialImages.length === 0) {
         alert("이미지를 추가해주세요!");
         return;
       }
@@ -258,6 +201,7 @@ export default function EditDetail(): JSX.Element {
             onImagesSelected={handleImagesSelected}
             initialImages={initialImages}
             onDeleteImage={handleDeleteImage}
+            onExistingImagesSelected={handleExistingImagesSelected}
           />
           <br />
           <TextArea

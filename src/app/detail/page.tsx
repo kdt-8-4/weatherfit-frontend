@@ -31,10 +31,9 @@ interface boardCommentType {
 }
 
 interface LIKE {
-  likeId : number;
+  likeId: number;
   nickName: string;
 }
-
 
 export default function Detail(): JSX.Element {
   const [boardDetail, setBoardDetail] = useState<any>(null);
@@ -42,43 +41,25 @@ export default function Detail(): JSX.Element {
   const [localBoardId, setLocalBoardId] = useState<number | null | undefined>();
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [comment, setComment] = useState<boardCommentType[]>([]);
-  const [likelist, setLikelist] = useState<LIKE[]>([]);//리코일로 만드는게 나을듯 일단은 이대로 ㄱㄱ
+  const [likelist, setLikelist] = useState<LIKE[]>([]); //리코일로 만드는게 나을듯 일단은 이대로 ㄱㄱ
   const [likeCount, setLikeCount] = useState<number>();
 
   const router = useRouter();
-  // console.log(router);
   const accessToken = Cookies.get("accessToken");
-  // console.log("accessToken 값: ", accessToken);
-
-  // const expirationTime = 3 * 60 * 60 * 1000;
-  // const currentTime = new Date().getTime();
-  // const storedTime = localStorage.getItem("accessTokenTime");
-  // if (
-  //   accessToken !== null &&
-  //   currentTime - parseInt(storedTime || "0", 10) > expirationTime
-  // ) {
-  //   Cookies.remove("accessToken"); // 혹은 다른 방법으로 쿠키를 삭제합니다.
-  //   setDropdownVisible(false); // 혹은 다른 상태값으로 수정 버튼 등을 숨깁니다.
-  // }
 
   const decodedToken = accessToken
     ? (jwt.decode(accessToken) as { [key: string]: any })
     : null;
   const decoded_nickName = decodedToken?.sub;
-  // console.log("디코딩", decodedToken);
 
   useEffect(() => {
     //여기서 localStorae의 값을 가져와 정수로 바꾸기
     const boardId_in = localStorage.getItem("getBoardId_local");
     const boardIdNumber = boardId_in ? parseInt(boardId_in) : null;
     setLocalBoardId(boardIdNumber);
-
-    // console.log("정수 변환", boardIdNumber);
-    // console.log("로컬에서 불러온 아이디", localBoardId);
-
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       if (!localBoardId) return;
       try {
@@ -91,14 +72,13 @@ export default function Detail(): JSX.Element {
         setLikeCount(response.data.likeCount);
         setBoardDetail(response.data);
         setComment(response.data.comments);
-        // console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }; 
-    
+    };
+
     fetchData();
-  },[localBoardId, setLocalBoardId])
+  }, [localBoardId, setLocalBoardId]);
 
   const handleClick = () => {
     router.push("/");
@@ -206,9 +186,9 @@ export default function Detail(): JSX.Element {
                   <Like
                     boardId={localBoardId || 0}
                     accessToken={accessToken || ""}
-                    nickname = {decoded_nickName}
-                    likelist = {likelist}
-                    likeCount = {likeCount}
+                    nickname={decoded_nickName}
+                    likelist={likelist}
+                    likeCount={likeCount}
                   />
                   <CommentIcon
                     accessToken={accessToken}

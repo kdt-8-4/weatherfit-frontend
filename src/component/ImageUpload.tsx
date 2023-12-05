@@ -8,7 +8,7 @@ interface Image {
 }
 interface ImageUploadProps {
   onImagesSelected: (files: File[] | null) => void;
-  // onExistingImagesSelected?: (images: Image[] | null) => void;
+  onExistingImagesSelected?: (images: Image[] | null) => void;
   initialImages: Image[];
   onDeleteImage?: (imageId: number) => void;
 }
@@ -21,7 +21,7 @@ export const extractFileNameFromUrl = (imageUrl: string): string => {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onImagesSelected,
-  // onExistingImagesSelected
+  onExistingImagesSelected,
   initialImages,
   onDeleteImage = () => {},
 }: ImageUploadProps) => {
@@ -32,18 +32,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setExistingImages(initialImages);
     console.log("setExistingImages", initialImages);
   }, [initialImages]);
-
-  // useEffect(() => {
-  //   console.log("selectedImages", selectedImages);
-  // }, [selectedImages]);
-
-  // useEffect(() => {
-  //   console.log("existingImages", existingImages);
-  // }, [existingImages]);
-
-  // useEffect(() => {
-  //   console.log("onImageSelect");
-  // }, [onImagesSelected]);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = event.target.files;
@@ -72,14 +60,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  // const removeExistingImage = (index: number, url: string) => {
   const removeExistingImage = (index: number, id: number) => {
     if (existingImages) {
       onDeleteImage(id); // 상위 컴포넌트에 삭제된 이미지의 URL 전달
       const newImages = [...existingImages];
       newImages.splice(index, 1);
       setExistingImages(newImages);
-      // onExistingImagesSelected(newImages);
+      onExistingImagesSelected?.(newImages);
     }
   };
 
@@ -90,9 +77,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           Array.from(existingImages).map((image, index) => (
             <div key={index} className="image-preview">
               <img src={image.imageUrl} alt={`Image ${image.imageId}`} />
-              <button
-                // onClick={() => removeExistingImage(index, image.imageUrl)}>
-                onClick={() => removeExistingImage(index, image.imageId)}>
+              <button onClick={() => removeExistingImage(index, image.imageId)}>
                 ❌
               </button>
             </div>
