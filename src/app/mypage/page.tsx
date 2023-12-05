@@ -2,6 +2,7 @@
 
 import React, { SetStateAction, useEffect, useState } from "react";
 import "../../style/mypage.scss";
+import "@/style/GotoLogin.scss"
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
@@ -275,9 +276,15 @@ export default function Mypage() {
         </div>
       ) : (
         <>
-          <div>로그인을 해주세요.</div>
-          <Link href={"/login"}>로그인 페이지로 이동</Link>
-          <Link href={"/"}>홈 페이지로 이동</Link>
+                    <br />
+          <br />
+          <br />
+          <div id="login_msg"> "로그인을 해주세요." </div>
+          <br />
+          <br />
+          <Link className="goto" href={"/login"}>로그인 페이지로 이동</Link>
+          <br />
+          <Link className="goto" href={"/"}>홈 페이지로 이동</Link>
         </>
       )}
 
