@@ -1,8 +1,38 @@
 #category_dj{
     display: flex;
+    margin-top: 5px;
 }
 
 #category_dj_box{
     display: flex;
     justify-content: space-between;
+    margin: 5px 0;
+}
+
+.tab_menu_dj{
+    border: 2px solid #A0A0A0;
+    border-radius: 15px;
+
+    height: 30px;
+    width: 83px;
+
+    margin: 0 5px;
+    text-align: center;
+}
+
+.tab_menu_dj span{
+    color: #D1CDCD;
+}
+
+#temcontrol_btn{
+    // background-color: #E5EBFF;
+    color: #224863;
+
+    border: 1px solid #5a88a9;
+    border-radius: 10px;
+    
+    height: 30px;
+    width: 80px;
+
+    margin-top: 5px;
 }

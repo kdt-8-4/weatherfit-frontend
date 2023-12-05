@@ -3,6 +3,7 @@
 import FeedSearch from "@/component/FeedSearch";
 import WeatherBar from "@/component/WeatherBar";
 import FeedCategory from "@/component/FeedCategory";
+import FeedSort from "@/component/FeedSort";
 import FeedContenets from "@/component/FeedContents";
 import Menubar from "@/component/MenuBar";
 import jwt from "jsonwebtoken";
@@ -45,6 +46,7 @@ export default function Feed(){
             <hr />
             <WeatherBar />
             <FeedCategory />
+            <FeedSort />
             <FeedContenets />
             <Menubar />
 

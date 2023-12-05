@@ -183,7 +183,8 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
 
     return(<>
         <div id="tab_detail" style={{"display":"flex"}}>
-            <div>{/* 카테고리 목록 */}
+            {/* 카테고리 목록 */}
+            <div>
                 {view_arr && view_arr.map((myarr, index)=>{
                         return(<>
                             <button key={index} className="cate_btn_dj" onClick={()=>cate_btn(myarr)}>{myarr}</button>
@@ -202,8 +203,8 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
                 */}
                 {chooseCa && chooseCa.map((myarr, index)=>{
                     return(<>
-                        <div style={{"display":"flex"}}>
-                            <p key={index} className="chooseCa">{myarr} </p>
+                        <div key={index} style={{"display":"flex"}}>
+                            <p className="chooseCa">{myarr} </p>
                             <button onClick={() => del_choose(myarr)}> x</button> 
                         </div>
                     </>)

@@ -1,0 +1,20 @@
+.sort_box{
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 10px;
+}
+
+#allview_btn{
+    border-right: 2px dotted #A0A0A0;
+    border-left: 2px dotted #A0A0A0;
+    // border-radius: 15px;
+
+    height: 25px;
+    width: 83px;
+
+    margin: 0 5px;
+}
+
+#sortSelect_bar{
+    background-color:transparent;
+}

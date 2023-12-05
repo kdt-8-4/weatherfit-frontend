@@ -7,6 +7,7 @@ import { TemMaxControl } from "@/recoilAtom/TemMax";
 import { TemMinControl } from "@/recoilAtom/TemMin";
 import { FeedDecodeNickname } from "@/recoilAtom/FeedNickname";
 import { FeedLoginToken } from "@/recoilAtom/FeedLoginToken";
+import { FeedFullcontents } from "@/recoilAtom/FeedFulldata";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,6 +41,7 @@ export default function FeedContents() {
   const [feedata, setFeedd] = useRecoilState(FeedContent);
   const [decodeNick, setNick] = useRecoilState(FeedDecodeNickname);
   const [loginToken_feed, setFeedToken] = useRecoilState(FeedLoginToken);
+  const [fullfeeddata, setFulldata] = useRecoilState(FeedFullcontents);
 
   const router = useRouter();
 
@@ -52,10 +54,12 @@ export default function FeedContents() {
       });
 
       console.log("받아온 데이터", req.data);
+      setFulldata(req.data);
 
       //현재 로그인한 닉네임과 각 게시물의 likelist에 같은 닉네임이 있다면 
+      const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => b.boardId - a.boardId);
 
-      const copy: FEEDATA[] = req.data;
+      const copy: FEEDATA[] = sortedData;
 
       console.log("카피", copy);
 
