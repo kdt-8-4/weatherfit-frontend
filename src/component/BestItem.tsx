@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import "@/style/bestItem.scss";
+import "@/style/best_main.scss";
 import { useRecoilValue } from "recoil";
 import { WeatherState } from "@/recoilAtom/WeatherState";
 
@@ -34,7 +34,7 @@ export default function BestItem() {
 
   return (
     <div>
-      <h2 style={{ textAlign: "center" }}>
+      <h2>
         오늘 날씨, <span className="highlight">손이 많이 간</span> 아이템은?
       </h2>
       {categories.length > 0 ? ( // categories 배열의 길이가 0보다 큰지 확인

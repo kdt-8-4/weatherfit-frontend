@@ -47,8 +47,10 @@ export default function Mainpage() {
       </header>
       <section className="main">
         <MainWeather />
+        <br />
         <BestItem />
-        {/* <BestCoordi /> */}
+        <br />
+        <BestCoordi />
       </section>
       <Menubar />
     </div>
