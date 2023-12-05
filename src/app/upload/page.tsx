@@ -3,6 +3,7 @@ import Menubar from "@/component/MenuBar";
 import WeatherBar from "@/component/WeatherBar";
 import CloseIcon from "@mui/icons-material/Close";
 import "../../style/upload.scss";
+import "@/style/GotoLogin.scss"
 import ImageUpload from "@/component/ImageUpload";
 import TextArea from "@/component/TextArea";
 import SelectCategory from "@/component/SelectCategory";
@@ -204,9 +205,15 @@ export default function Upload(): JSX.Element {
         </div>
       ) : (
         <>
-          <div>로그인 후에 업로드할 수 있습니다.</div>
-          <Link href={"/login"}>로그인 페이지로 이동</Link>
-          <Link href={"/"}>홈 페이지로 이동</Link>
+          <br />
+          <br />
+          <br />
+          <div id="login_msg"> "로그인 후에 업로드할 수 있습니다." </div>
+          <br />
+          <br />
+          <Link className="goto" href={"/login"}>로그인 페이지로 이동</Link>
+          <br />
+          <Link className="goto" href={"/"}>홈 페이지로 이동</Link>
         </>
       )}
     </>
