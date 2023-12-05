@@ -30,12 +30,12 @@ const InputBar: React.FC<InputBarProps> = ({
   onButtonClick,
   autoFocus,
 }: InputBarProps) => {
-  const inputClass = `${type === "email" ? " email" : ""}`;
+  // const inputClass = `${type === "email" ? "email" : ""}`;
 
   return (
     <div className="input-wrapper">
       <label htmlFor={id}>{label}</label>
-      <div className={inputClass}>
+      <div className={id}>
         <input
           autoFocus={autoFocus}
           type={type}
@@ -46,7 +46,7 @@ const InputBar: React.FC<InputBarProps> = ({
             onChange(e.target.value)
           }
           onBlur={onBlur}
-          />
+        />
         {button && (
           <button type="button" id={buttonId} onClick={onButtonClick}>
             {buttonText}
