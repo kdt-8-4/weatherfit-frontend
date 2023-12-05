@@ -11,8 +11,6 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
-import { WeatherIcons } from "@/recoilAtom/WeatherIcon";
-import { TemNowControl } from "@/recoilAtom/TemNow";
 import { categories } from "@/component/category";
 import Image from "next/image";
 
@@ -38,49 +36,11 @@ interface Image {
   imageUrl: string;
 }
 
-async function urlToFile(url: any, filename: any) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      const errorObj = await res.json();
-      throw new Error(errorObj.error);
-    }
-    const blob = await res.blob();
-    // const extension = filename.split(".").pop();
-    const extension = filename.split(".").pop();
-
-    let mimeType = "";
-    switch (extension) {
-      case "jpg":
-        mimeType = "image/jpg";
-        break;
-      case "jpeg":
-        mimeType = "image/jpeg";
-        break;
-      case "png":
-        mimeType = "image/png";
-        break;
-      default:
-        // mimeType = "application/octet-stream"; // Fallback option
-        mimeType = "image/*"; // Fallback option
-    }
-
-    return new File([blob], filename, { type: mimeType });
-  } catch (error) {
-    console.error(`There was a problem with the fetch operation: ${error}`);
-    return new File([], filename);
-  }
-}
-
 export default function EditDetail(): JSX.Element {
-  //openweathermap에서 제공하는 icon과 현재 온도
-  const [icon, setIcon] = useRecoilState(WeatherIcons);
-  const [usetemp, setTemp] = useRecoilState(TemNowControl);
-
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<Image[]>([]);
-  // const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([]);
+  const [newExistingImages, setNewExistingImages] = useState<Image[]>([]);
   const [deleteImageIds, setDeleteImageIds] = useState<number[]>([]);
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -95,6 +55,10 @@ export default function EditDetail(): JSX.Element {
     fetchBoardDetail();
   }, []);
 
+  useEffect(() => {
+    console.log(deleteImageIds);
+  }, [deleteImageIds]);
+
   const fetchBoardDetail = async () => {
     const response = await axios.get(
       `https://www.jerneithe.site/board/detail/${editBoardId}`,
@@ -103,7 +67,6 @@ export default function EditDetail(): JSX.Element {
       },
     );
     const data = response.data;
-    console.log("게시물 데이터: ", data);
 
     const initialImages = data.images.map((image: any) => ({
       imageId: image.imageId,
@@ -120,9 +83,10 @@ export default function EditDetail(): JSX.Element {
     setSelectedImages(files ? Array.from(files) : []);
   }, []);
 
-  // const handleDeleteImage = (imageUrl: string) => {
-  //   setDeleteImageUrls((prevUrls) => [...prevUrls, imageUrl]);
-  // };
+  const handleExistingImagesSelected = (images: Image[] | null) => {
+    setNewExistingImages(images ? Array.from(images) : []);
+  };
+
   const handleDeleteImage = (imageId: number) => {
     setDeleteImageIds((prevIds) => [...prevIds, imageId]);
   };
@@ -143,20 +107,9 @@ export default function EditDetail(): JSX.Element {
 
   const handleComplete = async () => {
     try {
-      const existingImagesAsFiles = (
-        await Promise.all(
-          initialImages.map((image) => {
-            const filename = image.imageUrl.split("/").pop() || "image";
-            const filenameWithoutPath =
-              filename.split("_weatherfit_").pop() || filename; // 이미지 파일명 추출
-            return urlToFile(image.imageUrl, filenameWithoutPath);
-          }),
-        )
-      ).filter(Boolean);
-
-      console.log(existingImagesAsFiles);
-
-      const allImages = [...existingImagesAsFiles, ...selectedImages];
+      const allImages = [...newExistingImages, ...selectedImages];
+      console.log("allImages", allImages);
+      console.log("selectedImages", selectedImages);
 
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
         (acc, subCategories) => acc.concat(subCategories),
@@ -171,27 +124,13 @@ export default function EditDetail(): JSX.Element {
         deletedImages: deleteImageIds,
       };
 
-      // imageUrl 보낼 때 앞에 https://~~ 다 지우고 test1.jpeg만 보내는 형식으로
-
       formData.append("board", JSON.stringify(boardData));
-      allImages.forEach((image) => {
+
+      selectedImages.forEach((image) => {
         formData.append("images", image);
       });
 
-      // deleteImageUrls.forEach((imageUrl) => {
-      //   formData.append("deletedImages", imageUrl);
-      // });
-
-      // formData.append("deletedImages", JSON.stringify(deleteImageUrls));
-      // formData.append("deletedImages", JSON.stringify(deleteImageIds)); // 결과값: "[20, 10]"
-
-      // formData.append(
-      //   "deletedImages",
-      //   JSON.stringify(deleteImageIds.map(String)),
-      // ); // 결과값: "["20", "10"]"
-      // console.log("deleteImages", JSON.stringify(deleteImageIds.map(String)));
-
-      if (allImages.length === 0) {
+      if (allImages.length === 0 && initialImages.length === 0) {
         alert("이미지를 추가해주세요!");
         return;
       }
@@ -201,7 +140,7 @@ export default function EditDetail(): JSX.Element {
         return;
       }
 
-      const response = await axios({
+      await axios({
         method: "PATCH",
         url: `https://www.jerneithe.site/board/edit/${editBoardId}`,
         data: formData,
@@ -216,7 +155,6 @@ export default function EditDetail(): JSX.Element {
         console.log(`${key}: ${value}`);
       }
 
-      console.log(response.data); // 서버 응답 확인
       alert("게시물 수정 완료!");
       window.location.href = "/detail";
     } catch (error) {
@@ -261,6 +199,7 @@ export default function EditDetail(): JSX.Element {
             onImagesSelected={handleImagesSelected}
             initialImages={initialImages}
             onDeleteImage={handleDeleteImage}
+            onExistingImagesSelected={handleExistingImagesSelected}
           />
           <br />
           <TextArea

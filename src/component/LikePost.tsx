@@ -1,23 +1,69 @@
-export default function LikePost() {
-  const posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+interface IMAGE {
+  boardId: number;
+  imageId: number;
+  imageUrl: string;
+}
+
+interface LIKE {
+  likeId: number;
+  nickName: string;
+}
+
+interface FEEDATA {
+  boardId: number;
+  images: IMAGE;
+  likeCount: number;
+  likelist: LIKE[];
+  nickName: string;
+  temperature: number;
+  weather: string;
+  weatherIcon?: string;
+}
+
+interface LikePostProps {
+  myLikePostData: FEEDATA[];
+}
+
+export default function LikePost(props: LikePostProps) {
+  const { myLikePostData } = props;
+
+  console.log("myLikePostData 데이터: ", myLikePostData);
+
+  const router = useRouter();
+
+  const goDetail = async (board_id: number) => {
+    console.log("게시글 아이디", board_id);
+    localStorage.setItem("getBoardId_local", JSON.stringify(board_id));
+    router.push("/detail");
+  };
 
   return (
     <div className="post_box">
-      {posts.map((post, index) => (
-        <div key={index} className="post">
-          {post}
-        </div>
-      ))}
+      {myLikePostData.length > 0 ? (
+        myLikePostData.map((item) => (
+          <div
+            key={item.boardId}
+            className="post"
+            onClick={() => goDetail(item.boardId)}
+          >
+            {item.images && (
+              <Image
+                src={item.images.imageUrl}
+                alt="좋아요 게시물 이미지"
+                layout="fill"
+                objectFit="cover"
+              />
+            )}
+          </div>
+        ))
+      ) : (
+        <>
+          <p>게시물의 좋아요를 눌러주세요.</p>
+        </>
+      )}
     </div>
   );
-
-  // return (
-  //   <div className="post_box">
-  //     <div className="post">1</div>
-  //     <div className="post">2</div>
-  //     <div className="post">3</div>
-  //     <div className="post">4</div>
-  //     <div className="post">5</div>
-  //   </div>
-  // );
 }

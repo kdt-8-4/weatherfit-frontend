@@ -20,12 +20,16 @@
     //   position: fixed;
     //   bottom: 30px;
     // }
+    .comment_form {
+      display: flex;
+    }
     .commentList {
       height: 80%;
       overflow-y: auto;
       .comment_box {
         border-bottom: 1px solid;
         margin-bottom: 15px;
+        display: flex;
       }
     }
   }

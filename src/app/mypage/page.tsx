@@ -2,6 +2,7 @@
 
 import React, { SetStateAction, useEffect, useState } from "react";
 import "../../style/mypage.scss";
+import "@/style/GotoLogin.scss"
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
@@ -14,6 +15,7 @@ import Link from "next/link";
 import axios from "axios";
 import MypageProfile from "@/component/MypageProfile";
 import jwt from "jsonwebtoken";
+import ProfileModalTest from "@/component/ProfileModalTest";
 
 interface IMAGE {
   boardId: number;
@@ -30,7 +32,7 @@ interface FEEDATA {
   boardId: number;
   images: IMAGE;
   likeCount: number;
-  likelist: LIKE;
+  likelist: LIKE[];
   nickName: string;
   temperature: number;
   weather: string;
@@ -274,14 +276,20 @@ export default function Mypage() {
         </div>
       ) : (
         <>
-          <div>로그인을 해주세요.</div>
-          <Link href={"/login"}>로그인 페이지로 이동</Link>
-          <Link href={"/"}>홈 페이지로 이동</Link>
+          <br />
+          <br />
+          <br />
+          <div id="login_msg"> 로그인을 해주세요. </div>
+          <br />
+          <br />
+          <Link className="goto" href={"/login"}>로그인 페이지로 이동</Link>
+          <br />
+          <Link className="goto" href={"/"}>홈 페이지로 이동</Link>
         </>
       )}
 
       {showProfileModify && (
-        <ProfileModal
+        <ProfileModalTest
           handleSettingsClick={handleSettingsClick}
           email={userPofile.email}
           name={userPofile.name}
@@ -293,3 +301,14 @@ export default function Mypage() {
     </>
   );
 }
+
+// {showProfileModify && (
+//   <ProfileModal
+//     handleSettingsClick={handleSettingsClick}
+//     email={userPofile.email}
+//     name={userPofile.name}
+//     password={userPofile.password}
+//     userProfileImage={userImage}
+//     accessToken={logintoken}
+//   />
+// )}
