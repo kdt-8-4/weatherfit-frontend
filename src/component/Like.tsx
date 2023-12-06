@@ -12,16 +12,18 @@ export default function Like({
   accessToken,
   nickname,
   likelist,
-  likeCount,
+  // likeCount,
+  updateLikeCount,
 }: {
   boardId: number;
   accessToken: string;
   nickname: string;
   likelist: LIKE[];
-  likeCount: number | undefined;
+  // likeCount: number | undefined;
+  updateLikeCount: (boardId: number, newCount: number) => void;
 }): JSX.Element {
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCountState, setLikeCountState] = useState<number>(likeCount || 0);
+  // const [likeCountState, setLikeCountState] = useState<number>(likeCount || 0);
 
   useEffect(() => {
     setIsLiked(isUserLiked(likelist, nickname));
@@ -53,7 +55,7 @@ export default function Like({
     try {
       await updateLikeStatus(boardId);
       setIsLiked(!isLiked);
-      setLikeCountState(isLiked ? likeCountState - 1 : likeCountState + 1);
+      updateLikeCount(boardId, isLiked ? -1 : 1);
     } catch (error) {
       console.error("좋아요 변경 실패:", error);
     }
@@ -64,11 +66,10 @@ export default function Like({
       <Image
         src={isLiked ? "/images/like.svg" : "/images/unLike.svg"}
         alt="좋아요"
-        width={20}
-        height={20}
+        width={25}
+        height={25}
         onClick={handleLikeClick}
       />
-      <p>{likeCountState}</p>
     </>
   );
 }
