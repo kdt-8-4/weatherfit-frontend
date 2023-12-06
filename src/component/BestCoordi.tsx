@@ -50,18 +50,26 @@ export default function BestCoordi() {
       </h2>
       <div className="boardTop5">
         {boards.map((board, index) => (
-          <Link
-            href={"/detail"}
+          <div
             key={index}
-            onClick={() => sendDetail(board.id)}>
-            {/* <img src={board.imageUrl} alt={`Board ${board.id}`} /> */}
-            <Image
-              src={board.imageUrl}
-              alt={`Board ${board.id}`}
-              width={30}
-              height={40}
-            />
-          </Link>
+            onClick={() => sendDetail(board.id)}
+            style={{ cursor: "pointer", width: "100%", height: "100%" }}>
+            <div
+              className="image-wrapper"
+              style={{
+                position: "relative",
+                paddingBottom: "100%",
+                width: "100%",
+                height: "100%",
+              }}>
+              <Image
+                src={board.imageUrl}
+                alt={`Board ${board.id}`}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          </div>
         ))}
       </div>
     </div>
