@@ -12,6 +12,8 @@ import { FeedShoe } from "@/recoilAtom/Category_shoe";
 import { FeedBack } from "@/recoilAtom/Category_back";
 import { FeedHat } from "@/recoilAtom/Category_hat";
 
+import "@/style/feedCateDetail.scss";
+
 interface PROPS {
     categorytitle: string | undefined;
     setControl: Dispatch<SetStateAction<boolean>>;
@@ -180,36 +182,48 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
     // console.log("검색 데이터 배열",search);
     console.log("삭제할 카테고리", delData);
 
+    const close_cate = () => {
+        setControl(false);
+    }
 
     return(<>
-        <div id="tab_detail" style={{"display":"flex"}}>
-            {/* 카테고리 목록 */}
-            <div>
-                {view_arr && view_arr.map((myarr, index)=>{
-                        return(<>
-                            <button key={index} className="cate_btn_dj" onClick={()=>cate_btn(myarr)}>{myarr}</button>
-                            <br />
-                        </>)
-                    }
-                )}
+        <div className="tab_detail">
+            <div className="high_var">
+                <p id="cate_name">{categorytitle}</p>
+                <button id="cateclose_btn" onClick={close_cate}>X</button>
             </div>
-            <div id="choose">
-                {/* 
-                --선택한 카테고리 띄워주기--
-                기억해야하는것
-                - 앞에 chooseCa && 없이 그냥 쓴다면 chooseCa 배열에 값이 
-                존재하지 않을때에 대해 오류가 뜨기 때문에 앞에 단축평가로
-                오류 예방  
-                */}
-                {chooseCa && chooseCa.map((myarr, index)=>{
-                    return(<>
-                        <div key={index} style={{"display":"flex"}}>
-                            <p className="chooseCa">{myarr} </p>
-                            <button onClick={() => del_choose(myarr)}> x</button> 
-                        </div>
-                    </>)
-                })}
-                <button onClick={startSearch}>완료</button>
+            <hr />
+            {/* 카테고리 목록 */}
+            <div className="tab_flex_table">
+                <div className="tab_menu_box">
+                    {view_arr && view_arr.map((myarr, index)=>{
+                            return(<>
+                                <button key={index} className="cate_btn_dj" onClick={()=>cate_btn(myarr)}>{myarr}</button>
+                                <br />
+                            </>)
+                        }
+                    )}
+                </div>
+                <div className="choose_box">
+                    {/* 
+                    --선택한 카테고리 띄워주기--
+                    기억해야하는것
+                    - 앞에 chooseCa && 없이 그냥 쓴다면 chooseCa 배열에 값이 
+                    존재하지 않을때에 대해 오류가 뜨기 때문에 앞에 단축평가로
+                    오류 예방  
+                    */}
+                    <p style={{"fontWeight" : "bold"}}>선택한 카테고리</p>
+                    {chooseCa && chooseCa.map((myarr, index)=>{
+                        return(<>
+                            <div key={index} style={{"display":"flex"}} className="choose_small_box">
+                                <p className="chooseCa">{myarr} </p>
+                                <button className="catecancle_btn" onClick={() => del_choose(myarr)}> x</button> 
+                            </div>
+                            <hr />
+                        </>)
+                    })}
+                    <button onClick={startSearch} id="chooseDone">완료</button>
+                </div>
             </div>
         </div>
     </>)

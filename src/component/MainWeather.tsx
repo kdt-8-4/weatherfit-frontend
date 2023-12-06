@@ -7,6 +7,7 @@ export default function MainWeather() {
   const kakao_API_KEY = "3a6c3035c801405eaa71ebb9dc7f474b";
   const [weather, setWeather] = useRecoilState(WeatherState);
   const [address, setAddress] = useState<string | undefined>();
+  const [icon, setIcon] = useState<string | undefined>();
 
   useEffect(() => {
     // 위치 정보를 비동기적으로 가져오는 함수
@@ -25,6 +26,7 @@ export default function MainWeather() {
           `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`,
         );
         const weatherData = await weatherResponse.json();
+        setIcon(weatherData.weather[0].icon);
         setWeather({
           ...weather,
           weat: weatherData.weather[0].main,
@@ -56,13 +58,14 @@ export default function MainWeather() {
     getLocation(); // getLocation 함수 실행
   }, []);
 
+
   return (
-    <div>
+    <section className="">
       <div>현재 온도: {weather.usetemp}</div>
       <div>
         최고 온도: {weather.max} / 최저 온도: {weather.min}
       </div>
       <div>날씨: {weather.weat}</div>
-    </div>
+    </section>
   );
 }
