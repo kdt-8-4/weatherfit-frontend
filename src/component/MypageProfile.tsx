@@ -1,8 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { FeedContent } from "@/recoilAtom/FeedContents";
 import TabBar from "./TabBar";
 import Image from "next/image";
 
@@ -35,23 +32,6 @@ interface FEEDATA {
   weatherIcon?: string;
 }
 
-/*
-interface IMAGE {
-  boardId: number;
-  imageId: number;
-  image_url: string;
-}
-
-interface FEEDATA {
-  boardId: number;
-  images: IMAGE;
-  likeCount: number;
-  nickName: string;
-  temperature: number;
-  weather: string;
-}
-*/
-
 export default function MypageProfile(props: MyPageProfileProps) {
   const { nickname, postData, userProfileImage } = props;
 
@@ -67,16 +47,6 @@ export default function MypageProfile(props: MyPageProfileProps) {
     );
     setMyLikePostData(filteredLikeData);
   }, [nickname, postData]);
-
-  // useEffect(() => {
-  //   const filteredLikeData = postData.filter(
-  //     (item) => item.likelist.nickName === nickname
-  //   );
-  //   setMyLikePostData(filteredLikeData);
-  // }, [nickname, postData]);
-
-  // console.log("mypageprofile의 likedata: ", myLikePostData);
-  // console.log("mypageprofile의 posrdata: ", myPostData);
 
   return (
     <>

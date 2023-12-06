@@ -9,19 +9,19 @@ import Link from "next/link";
 export default function Menubar() {
   return (
     <div className="menubar">
-      <Link href="/" className="menu_box">
+      <Link href={'/'} className="menu_box">
         <HomeOutlinedIcon className="menu_icon" />
         <span>홈</span>
       </Link>
-      <Link href="/feed" className="menu_box">
+      <Link href={"/feed"} className="menu_box">
         <CheckroomOutlinedIcon className="menu_icon" />
         <span>구경</span>
       </Link>
-      <Link href="/upload" className="menu_box">
+      <Link href={"/upload"} className="menu_box">
         <AddBoxOutlinedIcon className="menu_icon" />
         <span>업로드</span>
       </Link>
-      <Link href="mypage" className="menu_box">
+      <Link href={"mypage"} className="menu_box">
         <PersonOutlineOutlinedIcon className="menu_icon" />
         <span>마이페이지</span>
       </Link>
