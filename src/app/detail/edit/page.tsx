@@ -167,8 +167,8 @@ export default function EditDetail(): JSX.Element {
 
   return (
     <div className="container">
-      <header>
-        <div className="top">
+      <header className="header_edit">
+        <div className="top_edit">
           <CloseIcon
             id="x"
             onClick={() => {
@@ -193,7 +193,7 @@ export default function EditDetail(): JSX.Element {
         <hr />
       </header>
       <section className="main">
-        <h2>수정하기</h2>
+        <h2 className="edit_text">수정하기</h2>
         <div className="content">
           <ImageUpload
             onImagesSelected={handleImagesSelected}
