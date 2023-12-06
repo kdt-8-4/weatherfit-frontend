@@ -3,20 +3,11 @@ import MainWeather from "@/component/MainWeather";
 import Menubar from "@/component/MenuBar";
 import axios from "axios";
 import "@/style/main.scss";
-// import { GetServerSideProps } from "next";
 import Image from "next/image";
 import BestItem from "@/component/BestItem";
 import BestCoordi from "@/component/BestCoordi";
 
-interface MainPageProps {
-  accessToken?: string;
-}
-
 export default function Mainpage() {
-
-  // const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
-  // console.log("accessToken: ", accessToken);
-
   return (
     <div className="container">
       <header>
@@ -43,13 +34,3 @@ export default function Mainpage() {
     </div>
   );
 }
-
-// export const getServerSideProps: GetServerSideProps<MainPageProps> = async ({ req }) => {
-//   const { accessToken } = req.cookies;
-
-//   return {
-//     props: {
-//       accessToken,
-//     },
-//   };
-// };

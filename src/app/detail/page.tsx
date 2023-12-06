@@ -186,7 +186,9 @@ export default function Detail(): JSX.Element {
             <div className="contents w-full">
               <div className="w-full">
                 <ImageDetail images={boardDetail.images} />
-                <p className="pl-3 pb-2 gray">좋아요 {likeCount}개</p>
+                <p className="pl-3 pb-2" style={{ color: "gray" }}>
+                  좋아요 <span style={{ color: "" }}>{likeCount}</span>개
+                </p>
                 <div className="button flex w-full px-3">
                   <Like
                     boardId={localBoardId || 0}

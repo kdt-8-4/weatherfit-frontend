@@ -69,6 +69,7 @@ export default function Like({
         width={25}
         height={25}
         onClick={handleLikeClick}
+        style={{ cursor: "pointer" }}
       />
     </>
   );
