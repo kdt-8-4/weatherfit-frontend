@@ -31,7 +31,7 @@ export default function Feed(){
         : null;
         const decoded_nickName = decodedToken?.sub;
         // console.log("디코딩", decodedToken);
-        console.log("디코딩 닉네임", decoded_nickName);
+        // console.log("디코딩 닉네임", decoded_nickName);
 
         setFeedToken(accessToken);
         setNick(decoded_nickName);
