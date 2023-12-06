@@ -17,6 +17,7 @@ interface handleSettingsClickProps {
   password: string;
   userProfileImage: string | null;
   accessToken: string | undefined;
+  nickname: string;
 }
 
 export default function ProfileModalTest(props: handleSettingsClickProps) {
@@ -27,17 +28,11 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
     password,
     userProfileImage,
     accessToken,
+    nickname,
   } = props;
 
   // 프로필 이미지
   const [selectedImage, setSelectedImage] = useState(null);
-
-  // 닉네임
-  const [nickname, setNickname] = useState<string>("");
-  // 닉네임 중복
-  const [nickname_check, setNickCHeck] = useState<string>("");
-  // 닉네임 중복 검사 상태
-  const [nicknameChecked, setNicknameChecked] = useState(false);
 
   // 비밀번호
   const [currentPassword, setCurrentPassword] = useState<string>("");
@@ -47,75 +42,6 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
   //----------------------------------------------------------------------
 
   // 정보 수정
-
-  //닉네임 중복 검사
-  const check_nickname = async () => {
-    if (nickname.trim() === "") {
-      // 닉네임이 빈 값인 경우
-      alert("닉네임을 입력해주세요");
-      return;
-    }
-
-    console.log("변경하려는 닉네임: ", nickname);
-
-    try {
-      const duplication_nickname = await axios({
-        method: "POST",
-        url: "https://www.jerneithe.site/user/signup/nickname",
-        data: {
-          nickname: nickname,
-        },
-      });
-
-      if (duplication_nickname.data.result) {
-        setNickCHeck("사용할 수 있는 닉네임입니다.");
-        setNicknameChecked(true); // 중복 검사를 완료한 상태로 설정
-      } else {
-        setNickCHeck("사용할 수 없는 닉네임입니다. 다시 입력해주세요.");
-        setNicknameChecked(true); // 중복 검사를 완료했지만 사용할 수 없는 닉네임
-      }
-    } catch (error) {
-      console.log("닉네임 데이터를 보내지 못했습니다", nickname, error);
-    }
-  };
-
-  // 닉네임 수정
-  const handleNicknameChange = (e: any) => {
-    setNickname(e.target.value);
-  };
-
-  // 닉네임 수정 전송
-  const handleNicknameSubmit = async () => {
-    if (nickname.trim() === "") {
-      // 닉네임이 빈 값인 경우
-      alert("닉네임을 입력해주세요");
-      return;
-    }
-
-    if (!nicknameChecked) {
-      alert("닉네임 중복 검사를 먼저 해주세요.");
-      return;
-    }
-
-    if (nickname_check === "사용할 수 없는 닉네임입니다. 다시 입력해주세요.") {
-      alert("새로운 닉네임을 다시 입력해주세요.");
-      setNicknameChecked(false);
-      return;
-    }
-
-    try {
-      if (confirm("닉네임을 수정하시겠습니까?")) {
-        const response = await axios.patch(
-          `https://www.jerneithe.site/user/api/profile/modify`,
-          { email: email, nickname: nickname }
-        );
-
-        console.log("닉네임 수정 Data:", response.data);
-      }
-    } catch (error) {
-      console.error("닉네임 에러: ", error);
-    }
-  };
 
   // 비밀번호 수정
   const handleCurrentPasswordChange = (e: any) => {
@@ -222,6 +148,43 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
     setSelectedImage(null); // 기본 이미지로 설정하면 userProfileImage가 null로 변경
   };
 
+  // -------------------------------------------------------------------------
+
+  // 로그아웃
+  const handleLogout = () => {
+    if (confirm("로그아웃 하시겠습니까?")) {
+      Cookies.remove("accessToken"); // 쿠키에 로그인 토큰 삭제
+      console.log("로그아웃 후 쿠키 확인: ", accessToken);
+      alert("로그아웃 되었습니다.");
+      window.location.href = "/";
+    }
+  };
+
+  // -------------------------------------------------------------------------
+
+  // 회원 탈퇴
+  const handleUserDelete = async () => {
+    try {
+      if (confirm("정말로 탈퇴하시겠습니까?")) {
+        const response = await axios({
+          method: "DELETE",
+          url: `https://www.jerneithe.site/user/api/profile/remove/${email}`,
+          headers: {
+            Authorization: "Bearer " + accessToken,
+          },
+        });
+        console.log("회원 탈퇴 response: ", response);
+        Cookies.remove("accessToken"); // 쿠키에 로그인 토큰 삭제
+        alert("그동안 옷늘날씨를 이용해 주셔서 감사합니다.");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.log("회원 탈퇴 err: ", error);
+    }
+  };
+
+  // -------------------------------------------------------------------------
+
   return (
     <div className="modal_back">
       <div className="modal_body">
@@ -258,6 +221,7 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
               <label htmlFor="imageUploadInput" className="profile_select_btn">
                 이미지 선택
               </label>
+              |
               <button
                 onClick={handleDefaultImage}
                 type="button"
@@ -276,46 +240,26 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
             {/* </form> */}
           </div>
           <hr />
-          {/* 이메일과 이름 부분 */}
-          <div className="fix_info_box">
-            <p className="info_p">이메일: </p>
-            <span className="info_span">{email}</span>
-            <p className="info_p">이름: </p>
-            <span className="info_span">{name}</span>
-          </div>
-          <hr />
-          {/* 닉네임 부분 */}
-          <form className="modal_nickname_edit">
-            <div className="nickname_box">
-              <p className="info_p">닉네임</p>
-              <input
-                type="text"
-                placeholder="닉네임"
-                value={nickname}
-                onChange={handleNicknameChange}
-              />
-              <button
-                type="button"
-                className="nickname_check_btn"
-                onClick={check_nickname}
-              >
-                중복 확인
-              </button>
-              <div className="permission_msg">{nickname_check}</div>
+          {/* 이메일, 이름, 닉네임 부분 */}
+          <div className="fix_info">
+            <div className="fix_info_box">
+              <p className="info_p">이메일: </p>
+              <span className="info_span">&nbsp;{email}</span>
             </div>
-            <button
-              type="button"
-              className="profile_edit_btn"
-              onClick={handleNicknameSubmit}
-            >
-              닉네임 수정
-            </button>
-          </form>
+            <div className="fix_info_box">
+              <p className="info_p">이름: </p>
+              <span className="info_span">&nbsp;{name}</span>
+            </div>
+            <div className="fix_info_box">
+              <p className="info_p">닉네임: </p>
+              <span className="info_span">&nbsp;{nickname}</span>
+            </div>
+          </div>
           <hr />
           {/* 비밀번호 부분 */}
           <form className="modal_password_edit" onSubmit={handlePasswordSubmit}>
             <div className="pw_box">
-              <div>
+              <div className="fix_info_box">
                 <p className="info_p">비밀번호</p>
                 <p>(8~20자 영문, 숫자, 특수기호 조합)</p>
               </div>
@@ -344,8 +288,20 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
               비밀번호 수정
             </button>
           </form>
-          {/*  */}
+          <hr />
+          {/* 로그아웃 부분 */}
+          <button type="button" className="logout_btn" onClick={handleLogout}>
+            로그아웃
+          </button>
         </div>
+        {/* 회원탈퇴 부분 */}
+        <button
+          type="button"
+          className="user_out_btn"
+          onClick={handleUserDelete}
+        >
+          회원탈퇴
+        </button>
       </div>
     </div>
   );

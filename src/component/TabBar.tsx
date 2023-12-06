@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import GridOnOutlinedIcon from "@mui/icons-material/GridOnOutlined";
 import GridOnTwoToneIcon from "@mui/icons-material/GridOnTwoTone";
@@ -6,8 +5,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LikePost from "./LikePost";
 import MyPost from "./MyPost";
-import { useRecoilState } from "recoil";
-import { FeedContent } from "@/recoilAtom/FeedContents";
 
 interface IMAGE {
   boardId: number;
@@ -30,22 +27,6 @@ interface FEEDATA {
   weather: string;
   weatherIcon?: string;
 }
-/*
-interface IMAGE {
-  boardId: number;
-  imageId: number;
-  image_url: string;
-}
-
-interface FEEDATA {
-  boardId: number;
-  images: IMAGE;
-  likeCount: number;
-  nickName: string;
-  temperature: number;
-  weather: string;
-}
-*/
 
 interface TabbarProps {
   myPostData: FEEDATA[];
