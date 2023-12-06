@@ -20,16 +20,31 @@
     //   position: fixed;
     //   bottom: 30px;
     // }
-    .comment_form {
+    .form {
       display: flex;
+      justify-content: space-evenly;
+      margin-bottom: 5px;
+      input {
+        width: 80%;
+        border: 1px solid #d0dbff;
+        border-radius: 7px;
+      }
     }
     .commentList {
       height: 80%;
       overflow-y: auto;
       .comment_box {
-        border-bottom: 1px solid;
+        border-bottom: 2px dotted gray;
         margin-bottom: 15px;
-        display: flex;
+        .comment_box_div {
+          display: flex;
+        }
+        .reply_box_div {
+          margin-left: 20px;
+          .reply_box {
+            display: flex;
+          }
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import CommentModal from "@/component/CommentModal";
 import CommentTest from "./CommentTest";
@@ -9,6 +9,7 @@ interface CommentIconProps {
   boardComment: boardCommentType[];
   decoded_nickName: string;
   localBoardId: number | null | undefined;
+  handleRefreshComments: () => void;
 }
 
 interface boardCommentType {
@@ -23,7 +24,13 @@ interface boardCommentType {
 }
 
 export default function CommentIcon(props: CommentIconProps) {
-  const { accessToken, boardComment, decoded_nickName, localBoardId } = props;
+  const {
+    accessToken,
+    boardComment,
+    decoded_nickName,
+    localBoardId,
+    handleRefreshComments,
+  } = props;
 
   console.log("아이콘 눌렀을 때 댓글: ", boardComment);
 
@@ -33,6 +40,7 @@ export default function CommentIcon(props: CommentIconProps) {
   // 회원 정보 수정 모달 이벤트
   const handleCommentClick = () => {
     setShowCommentsModal(!showCommentsModal);
+    handleRefreshComments();
   };
 
   return (
