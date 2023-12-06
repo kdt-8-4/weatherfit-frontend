@@ -6,6 +6,7 @@ import "@/style/main.scss";
 // import { GetServerSideProps } from "next";
 import Image from "next/image";
 import BestItem from "@/component/BestItem";
+import BestCoordi from "@/component/BestCoordi";
 
 interface MainPageProps {
   accessToken?: string;
@@ -46,8 +47,10 @@ export default function Mainpage() {
       </header>
       <section className="main">
         <MainWeather />
+        <br />
         <BestItem />
-        <div>좋아요 많은 순 게시물의 이미지 가지고 오기</div>
+        <br />
+        <BestCoordi />
       </section>
       <Menubar />
     </div>
