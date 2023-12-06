@@ -38,12 +38,18 @@
         margin-bottom: 15px;
         .comment_box_div {
           display: flex;
+          position: relative;
         }
         .reply_box_div {
           margin-left: 20px;
           .reply_box {
             display: flex;
+            position: relative;
           }
+        }
+        .btn_box {
+          position: absolute;
+          right: 30px;
         }
       }
     }

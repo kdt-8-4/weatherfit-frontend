@@ -2,9 +2,13 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
-
+import jwt from "jsonwebtoken";
 import InputBar from "@/component/InputBar";
+import Link from "next/link";
 import "../../style/register.scss";
+import "@/style/GotoLogin.scss";
+
+
 interface GOOGLEDATA{
   email: string;
   id: string;
@@ -19,6 +23,9 @@ export default function CompleteProfile() {
   const [nickname_check, setNickCHeck] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const [resEmail, setResEmail] = useState<string>("");
+
+  const [google_signup_check, setSignUpCheck] = useState<boolean>();
 
 
   useEffect(()=>{
@@ -51,49 +58,26 @@ export default function CompleteProfile() {
   useEffect(()=>{
     if(sendGoogle_data){
       const googlesenddata = async() => {
-        const sendGoogle = await axios({
+        const resGoogle = await axios({
           method: "POST",
           url: "https://www.jerneithe.site/user/login/google",
           data: sendGoogle_data,
         });
-        console.log("로그인 결과", sendGoogle);
+        console.log("로그인 결과", resGoogle);
+        if(resGoogle.data.nickname == null){
+          setResEmail(resGoogle.data.email);
+          setSignUpCheck(false);
+        } else {
+          setSignUpCheck(true);
+        }
+        
       }
       googlesenddata();
     }
   },[sendGoogle_data])
   
-  // useEffect(() => {
-    
-  //   if (googleToken) {
-  //     SendToken(googleToken);
-  //     console.log("useEffect : ", googleToken);
-  //   }
-  // }, [setGoogle, googleToken]);
-
-  // const SendToken = async(code : string | null) => {
-  //   try {
-  //     if (code === null) {
-  //       console.error("Authorization code is null");
-  //       return;
-  //     }
-  //     try {
-  //       const response = await axios({
-  //         method: "POST",
-  //         url: "https://www.jerneithe.site/user/api/token",
-  //         data: {
-  //           token: googleToken,
-  //         },
-  //       });
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // }
-
   // console.log("받아온 토큰:", googleToken);
-  console.log("보내려고 하는 데이터", sendGoogle_data);
+  // console.log("보내려고 하는 데이터", sendGoogle_data);
 
 
     //닉네임 중복 검사
@@ -123,46 +107,85 @@ export default function CompleteProfile() {
   
     }
 
+    //데이터 보내기
+    const google_signup = async() => {
+      console.log("이메일", resEmail);
+      console.log("닉네임", nickname);
+      console.log("이름", name);
+
+      try {
+        const googleLogin_final = await axios({
+          method: "POST",
+          url: "https://www.jerneithe.site/user/login/google/additional",
+          data:{
+            email: resEmail, 
+            name: name,
+            nickname: nickname,
+          }
+        });
+
+        console.log("로그인할 유저 데이터", googleLogin_final.data);
+      
+      } catch (error) {
+        console.log("서버에 구글 토큰을 넘겨서 받아온 데이터의 널값 채워서 다시 보내기 실패", error);
+      }
+      
+
+    }
+
+    console.log("회원가입 여부", google_signup_check);
+    // console.log("받은 이메일", resEmail);
+
   return (
     <>
-    <div className="container">  
-      <div className="title">
-          <p>Google 회원가입</p>
+    {google_signup_check ? 
+      <>
+        <div className="title">
+          <p>로그인 성공!</p>
+        </div>
+        <br />
+        <Link className="goto" href={"/"}>홈 페이지로 이동</Link>
+      </>
+      :
+      <div className="container">  
+        <div className="title">
+            <p>Google 회원가입</p>
+        </div>
+        <section id="main">
+            <form>
+              {/* 닉네임 👉🏻 중복검사*/}
+              <InputBar
+                label="닉네임"
+                id="nickname"
+                type="text"
+                placeholder="닉네임을 입력하세요"
+                value={nickname}
+                onChange={(value: string) => setNickname(value)}
+                onBlur={check_nickname}
+                autoFocus
+              />
+              <div className="permission_msg">
+                {nickname_check}
+              </div>
+
+              {/* 이름*/}
+              <InputBar
+                label="이름"
+                id="name"
+                type="text"
+                placeholder="이름을 입력하세요"
+                value={name}
+                onChange={(value: string) => setName(value)}
+                autoFocus
+              />
+
+              <button id="btn_register" type="button" onClick={google_signup}>
+                옷늘 캐스터 등록
+              </button>
+            </form>
+          </section>
       </div>
-      <section id="main">
-          <form>
-            {/* 닉네임 👉🏻 중복검사*/}
-            <InputBar
-              label="닉네임"
-              id="nickname"
-              type="text"
-              placeholder="닉네임을 입력하세요"
-              value={nickname}
-              onChange={(value: string) => setNickname(value)}
-              onBlur={check_nickname}
-              autoFocus
-            />
-            <div className="permission_msg">
-              {nickname_check}
-            </div>
-
-            {/* 이름*/}
-            <InputBar
-              label="이름"
-              id="name"
-              type="text"
-              placeholder="이름을 입력하세요"
-              value={name}
-              onChange={(value: string) => setName(value)}
-              autoFocus
-            />
-
-            <button id="btn_register" type="button">
-              옷늘 캐스터 등록
-            </button>
-          </form>
-        </section>
-    </div>
+    }
     </>
   );
 }
