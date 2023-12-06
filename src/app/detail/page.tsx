@@ -64,7 +64,7 @@ export default function Detail(): JSX.Element {
       if (!localBoardId) return;
       try {
         const response = await axios.get(
-          `https://www.jerneithe.site/board/detail/${localBoardId}`
+          `https://www.jerneithe.site/board/detail/${localBoardId}`,
         );
         setLikelist(response.data.likelist);
         setLikeCount(response.data.likeCount);
@@ -137,15 +137,14 @@ export default function Detail(): JSX.Element {
             />
           </div>
         </div>
-        <hr className="w-full border-t-1" />
+        {/* <hr className="w-full border-t-1" /> */}
         <WeatherBar />
         <hr className="w-full border-t-1" />
       </header>
 
       <section
         className="main flex flex-col items-center"
-        style={{ width: "70%" }}
-      >
+        style={{ width: "70%" }}>
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
@@ -153,8 +152,7 @@ export default function Detail(): JSX.Element {
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center p-3"
-                >
+                  className="ml-auto flex flex-col items-center p-3">
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -166,14 +164,12 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
-                      >
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
                         삭제
                       </button>
                     </div>
