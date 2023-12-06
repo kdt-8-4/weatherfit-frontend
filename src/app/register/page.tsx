@@ -23,7 +23,7 @@ export default function Register(): JSX.Element {
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repassword, setRepassword] = useState<string>("");
-
+  
   //중복검사
   const [emailcheck, setEmailCheck] = useState<string>("");
   const [nickname_check, setNickCHeck] = useState<string>("");
@@ -51,34 +51,36 @@ export default function Register(): JSX.Element {
   };
 
   //이메일 중복 검사
-  const check_email = async () => {
+  const check_email = async() => {
     try {
       const duplication_email = await axios({
         method: "POST",
         url: "https://www.jerneithe.site/user/signup/email",
         data: {
-          email: email,
+          email : email
         },
       });
 
       console.log(duplication_email.data.result);
-
-      if (duplication_email.data.result) {
+      
+      if(duplication_email.data.result) {
         setEmailCheck("");
       } else {
         setEmailCheck("사용할 수 없는 이메일입니다. 다시 입력해주세요.");
       }
+      
     } catch (error) {
       console.log("이메일 데이터를 보내지 못했습니다", error);
     }
 
     console.log("onBlur 동작", email);
-  };
+  }
 
   //닉네임 중복 검사
-  const check_nickname = async () => {
+  const check_nickname = async() => {
     console.log("잘 동작하는지 확인", nickname);
     try {
+
       const duplication_nickname = await axios({
         method: "POST",
         url: "https://www.jerneithe.site/user/signup/nickname",
@@ -87,15 +89,19 @@ export default function Register(): JSX.Element {
         },
       });
 
-      if (duplication_nickname.data.result) {
+      
+      if(duplication_nickname.data.result) {
         setNickCHeck("");
       } else {
         setNickCHeck("사용할 수 없는 닉네임입니다. 다시 입력해주세요.");
       }
+      
     } catch (error) {
-      console.log("닉네임 데이터를 보내지 못했습니다", nickname, error);
+      console.log("닉네임 데이터를 보내지 못했습니다", nickname,error);
     }
-  };
+
+
+  }
 
   //이메일 전송
   const verify_btn = async () => {
@@ -105,23 +111,24 @@ export default function Register(): JSX.Element {
       const verify_email = await axios({
         method: "POST",
         url: "https://www.jerneithe.site/user/signup/email/send",
-        data: { email },
+        data: {email},
       });
 
       console.log(verify_email.data);
 
-      if (verify_email.data.result) {
+      if(verify_email.data.result){
         setCertified(true);
-      } else {
+      }else{
         setCertified(false);
       }
+
     } catch (error) {
       console.log("이메일 인증 코드 전송 실패", error);
     }
   };
 
   //이메일 인증 코드 수신 후 전송
-  const code_btn = async () => {
+  const code_btn = async() => {
     try {
       const send_code = await axios({
         method: "POST",
@@ -129,13 +136,13 @@ export default function Register(): JSX.Element {
         data: {
           email: email,
           code: email_code,
-        },
+        }
       });
       console.log(send_code.data);
-      if (send_code.data.result) {
+      if(send_code.data.result){
         setPstatus("인증 성공!");
         setPermission(true);
-      } else {
+      }else{
         setPstatus("인증코드가 일치하지 않습니다.");
         setPermission(false);
       }
@@ -144,29 +151,38 @@ export default function Register(): JSX.Element {
     } catch (error) {
       console.log("이메일 인증 실패", error);
     }
-  };
+  }
+
 
   const caster_register = async () => {
-    console.log(email, name, nickname, password);
 
-    if (permission) {
+    console.log(
+      email, 
+      name, 
+      nickname, 
+      password
+      )
+
+    if(permission){
       try {
         const register_data = await axios({
           method: "POST",
           url: "https://www.jerneithe.site/user/api/signup",
-          data: {
-            email: email,
-            name: name,
-            nickname: nickname,
-            password: password,
-          },
+          data : {
+            email : email,
+            name : name,
+            nickname : nickname,
+            password : password
+          }
         });
-
+  
         console.log("회원가입 됐는지 확인", register_data);
+        
       } catch (error) {
-        console.log("이메일 인증에 실패했기 떄문에 회원가입 불가", error);
+        console.log("이메일 인증에 실패했기 떄문에 회원가입 불가",error); 
       }
     }
+    
   };
 
   return (
@@ -196,27 +212,30 @@ export default function Register(): JSX.Element {
               onButtonClick={verify_btn}
               autoFocus
             />
-            <div className="permission_msg">{emailcheck}</div>
+            <div className="permission_msg">
+              {emailcheck}
+            </div>
 
             {/* 이메일 인증 코드 입력 인풋바 */}
-            {emailCertified ? (
+            {emailCertified ? 
               <InputBar
-                label="이메일 인증 코드"
-                id="email_code"
-                type="text"
-                placeholder="인증코드을 입력하세요"
-                value={email_code}
-                onChange={(value: string) => setEmail_code(value)}
-                button // 버튼을 사용한다고 명시
-                buttonId="btn_code"
-                buttonText="전송"
-                onButtonClick={code_btn}
-                autoFocus
-              />
-            ) : (
-              <div></div>
-            )}
-            <div className="permission_msg">{permission_status}</div>
+              label="이메일 인증 코드"
+              id="email_code"
+              type="text"
+              placeholder="인증코드을 입력하세요"
+              value={email_code}
+              onChange={(value: string) => setEmail_code(value)}
+              button // 버튼을 사용한다고 명시
+              buttonId="btn_code"
+              buttonText="전송"
+              onButtonClick={code_btn}
+              autoFocus
+            /> :
+            <div></div>
+            }
+            <div className="permission_msg">
+              {permission_status}
+            </div>
 
             {/* 닉네임 👉🏻 중복검사*/}
             <InputBar
@@ -229,7 +248,9 @@ export default function Register(): JSX.Element {
               onBlur={check_nickname}
               autoFocus
             />
-            <div className="permission_msg">{nickname_check}</div>
+            <div className="permission_msg">
+              {nickname_check}
+            </div>
 
             {/* 이름*/}
             <InputBar
