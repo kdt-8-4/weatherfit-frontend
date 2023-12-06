@@ -26,8 +26,8 @@ export default function Mainpage() {
 
         const response2 = await axios({
           method: "GET",
-          // url: `https://www.jerneithe.site/board/tops?temp_min=${weather.min}&temp_max=${weather.max}`,
-          url: `https://www.jerneithe.site/board/tops?temp_min=0&temp_max=10`,
+          url: `https://www.jerneithe.site/board/tops?temp_min=${weather.min}&temp_max=${weather.max}`,
+          // url: `https://www.jerneithe.site/board/tops?temp_min=0&temp_max=10`,
         });
 
         setCategories(response.data.result);
