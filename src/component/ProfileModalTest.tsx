@@ -40,10 +40,35 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
   //----------------------------------------------------------------------
 
   // 정보 수정
+
+  // 닉네임 수정
   const handleNicknameChange = (e: any) => {
     setNickname(e.target.value);
   };
 
+  const handleNicknameSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (nickname.trim() === "") {
+      // 닉네임이 빈 값인 경우
+      alert("닉네임을 입력해주세요");
+      return;
+    }
+
+    try {
+      if (confirm("닉네임을 수정하시겠습니까?")) {
+        const response = await axios.patch(
+          `https://www.jerneithe.site/user/api/profile/modify`,
+          { email: email, nickname: nickname }
+        );
+
+        console.log("닉네임 수정 Data:", response.data);
+      }
+    } catch (error) {
+      console.error("닉네임 에러: ", error);
+    }
+  };
+
+  // 비밀번호 수정
   const handleCurrentPasswordChange = (e: any) => {
     setCurrentPassword(e.target.value);
   };
@@ -56,15 +81,8 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
     setConfirmPassword(e.target.value);
   };
 
-  // 파일 비동기 전송
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handlePasswordSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (nickname.trim() === "") {
-      // 닉네임이 빈 값인 경우
-      alert("닉네임을 입력해주세요");
-      return;
-    }
 
     if (!currentPassword) {
       // 현재 비밀번호가 빈 값인 경우
@@ -92,25 +110,33 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
     }
 
     try {
-      if (confirm("수정하시겠습니까?")) {
+      if (confirm("비밀번호를 수정하시겠습니까?")) {
+        const response = await axios.patch(
+          `https://www.jerneithe.site/user/api/profile/modify`,
+          { email: email, password: newPassword }
+        );
+
+        console.log("비밀번호 수정 Data:", response.data);
+      }
+    } catch (error) {
+      console.error("비밀번호 수정 에러: ", error);
+    }
+  };
+
+  // 파일 비동기 전송
+  const handleImageSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      if (confirm("이미지를 수정하시겠습니까?")) {
         const formData = new FormData();
         if (selectedImage) {
           formData.append("profile", selectedImage); // 이미지 파일을 FormData에 추가
         }
 
-        // let editInfo = {
-        //     nickname: nickname,
-        //     password: newPassword,
-        //   }
-
-        //   formData.append(
-        //     "editInfo",
-        //     new Blob([JSON.stringify(editInfo)], { type: "application/json" })
-        //   );
-
         const response = await axios.patch(
           `https://www.jerneithe.site/user/api/profile/modify`,
-          { image: formData, nickname: nickname, password: newPassword },
+          { email: email, image: formData },
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -118,7 +144,7 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
           }
         );
 
-        console.log("수정 Data:", response.data);
+        console.log("이미지 수정 Data:", response.data);
       }
     } catch (error) {
       console.error("이미지 업로드 에러: ", error);
@@ -145,7 +171,7 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
           <CloseIcon className="icon" onClick={handleSettingsClick} />
         </div>
         <div className="modal_content">
-          <form className="modal_form" onSubmit={handleSubmit}>
+          <form className="modal_image_edit" onSubmit={handleImageSubmit}>
             {/* 프로필 이미지 부분입니다. */}
             {selectedImage ? (
               <Image
@@ -169,15 +195,19 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
             <button onClick={handleDefaultImage} type="button">
               기본 이미지
             </button>
-
-            <div className="email_box">
-              <p>이메일</p>
-              <span>{email}</span>
-            </div>
-            <div className="name_box">
-              <p>이름</p>
-              <span>{name}</span>
-            </div>
+            <button type="submit" className="profile_edit_btn">
+              이미지 수정
+            </button>
+          </form>
+          <div className="email_box">
+            <p>이메일</p>
+            <span>{email}</span>
+          </div>
+          <div className="name_box">
+            <p>이름</p>
+            <span>{name}</span>
+          </div>
+          <form className="modal_nickname_edit" onSubmit={handleNicknameSubmit}>
             <div className="nickname_box">
               <div className="nickname_check">
                 <p>닉네임</p>
@@ -192,6 +222,11 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
                 onChange={handleNicknameChange}
               />
             </div>
+            <button type="submit" className="profile_edit_btn">
+              닉네임 수정
+            </button>
+          </form>
+          <form className="modal_password_edit" onSubmit={handlePasswordSubmit}>
             <div className="pw_box">
               <p>비밀번호</p>
               <input
@@ -214,7 +249,7 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
               />
             </div>
             <button type="submit" className="profile_edit_btn">
-              수정
+              비밀번호 수정
             </button>
           </form>
         </div>
