@@ -1,25 +1,6 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { FeedContent } from "@/recoilAtom/FeedContents";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-/*
-interface IMAGE {
-  boardId: number;
-  imageId: number;
-  image_url: string;
-}
-
-interface FEEDATA {
-  boardId: number;
-  images: IMAGE;
-  likeCount: number;
-  nickName: string;
-  temperature: number;
-  weather: string;
-}
-*/
 interface IMAGE {
   boardId: number;
   imageId: number;
@@ -51,11 +32,23 @@ export default function MyPost(props: MyPostProps) {
 
   console.log("mypost 데이터: ", myPostData);
 
+  const router = useRouter();
+
+  const goDetail = async (board_id: number) => {
+    console.log("게시글 아이디", board_id);
+    localStorage.setItem("getBoardId_local", JSON.stringify(board_id));
+    router.push("/detail");
+  };
+
   return (
     <div className="post_box">
       {myPostData.length > 0 ? (
         myPostData.map((item) => (
-          <div key={item.boardId} className="post">
+          <div
+            key={item.boardId}
+            className="post"
+            onClick={() => goDetail(item.boardId)}
+          >
             {item.images && (
               <Image
                 src={item.images.imageUrl}

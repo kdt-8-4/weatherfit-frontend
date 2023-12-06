@@ -2,7 +2,7 @@
 
 import React, { SetStateAction, useEffect, useState } from "react";
 import "../../style/mypage.scss";
-import "@/style/GotoLogin.scss"
+import "@/style/GotoLogin.scss";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
@@ -156,83 +156,7 @@ export default function Mypage() {
     fetchData();
   }, []);
 
-  /*
-  useEffect(() => {
-    const profileData = async () => {
-      // 회원 정보 데이터
-      try {
-        // const response = await axios({
-        //   method: "POST",
-        //   url: `https://www.jerneithe.site/user/api/profile`,
-        //   data: { email: "user91@test.com" },
-        //   // headers: {
-        //   //   Authorization: "weatherfit",
-        //   // },
-        // });
-
-        const accessToken = Cookies.get("accessToken");
-        console.log("accessToken 값: ", accessToken);
-
-        const decodedToken = accessToken
-          ? (jwt.decode(accessToken) as { [key: string]: any })
-          : null;
-        const decoded_nickName = decodedToken?.sub;
-        console.log("디코딩", decodedToken);
-
-        // const response = await axios({
-        //   method: "POST",
-        //   url: "https://www.jerneithe.site/user/api/profile",
-        //   data: {
-        //     email: email,
-        //   },
-        // });
-
-        // const response = await axios.post(
-        //   `https://www.jerneithe.site/user/api/profile`,
-        //   { email: "user100@test.com" }
-        // );
-
-        const response = await axios({
-          method: "POST",
-          url: `https://www.jerneithe.site/user/api/profile`,
-          headers: {
-            Authorization: "Bearer " + accessToken,
-          },
-          data: {
-            email: localStorage.getItem("user_email"),
-          },
-        });
-
-        setUserProfile(response.data);
-        setNickname(response.data.nickname);
-        setUserImage(response.data.image);
-
-
-      } catch (error) {
-        console.error("회원정보 에러: ", error);
-      }
-    };
-    profileData();
-  }, []);
-
-  console.log("회원정보 Data: ", userPofile);
-  */
-
-  // ------------------------------------------------------------------------
-
-  /*
-  // board 이미지 데이터 불러오기 (my post)
-  useEffect(() => {
-    const postData = async () => {
-      const req = await axios.get("https://www.jerneithe.site/board/list");
-      const data: FEEDATA[] = req.data;
-      const filteredData = data.filter((item) => item.nickName === nickname);
-      console.log("filterData: ", filteredData);
-      setMyPostData(filteredData);
-    };
-    postData();
-  }, []);
-  */
+  // -------------------------------------------------------------
 
   // 회원 정보 수정 모달 이벤트
   const handleSettingsClick = () => {
@@ -260,17 +184,8 @@ export default function Mypage() {
                   postData={postData}
                   userProfileImage={userImage}
                 />
-                {/* <MypageProfile
-                  nickname={userPofile.nickname}
-                  postnum={myPostData.length}
-                  myPostData={myPostData}
-                  userProfileImage={userImage}
-                /> */}
               </>
             )}
-            {/* --------------------------------------- */}
-            {/* ------------- tap 부분 ------------- */}
-            {/* <TabBar myPostData={myPostData} /> */}
           </div>
           <Menubar />
         </div>
@@ -282,9 +197,13 @@ export default function Mypage() {
           <div id="login_msg"> 로그인을 해주세요. </div>
           <br />
           <br />
-          <Link className="goto" href={"/login"}>로그인 페이지로 이동</Link>
+          <Link className="goto" href={"/login"}>
+            로그인 페이지로 이동
+          </Link>
           <br />
-          <Link className="goto" href={"/"}>홈 페이지로 이동</Link>
+          <Link className="goto" href={"/"}>
+            홈 페이지로 이동
+          </Link>
         </>
       )}
 
@@ -296,19 +215,9 @@ export default function Mypage() {
           password={userPofile.password}
           userProfileImage={userImage}
           accessToken={logintoken}
+          nickname={nickname}
         />
       )}
     </>
   );
 }
-
-// {showProfileModify && (
-//   <ProfileModal
-//     handleSettingsClick={handleSettingsClick}
-//     email={userPofile.email}
-//     name={userPofile.name}
-//     password={userPofile.password}
-//     userProfileImage={userImage}
-//     accessToken={logintoken}
-//   />
-// )}
