@@ -8,7 +8,7 @@ export default function FeedSort(){
     
     const [feedata, setFeedd] = useRecoilState(FeedContent);
     const fullfeeddata = useRecoilValue(FeedFullcontents);
-    console.log("정렬 컴포넌트로 넘어간 피드 데이터", feedata);
+    // console.log("정렬 컴포넌트로 넘어간 피드 데이터", feedata);
     const [sortType, setSortType] = useState<string>('');
 
     const allcontents = () => {

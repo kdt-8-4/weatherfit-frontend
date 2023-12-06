@@ -31,6 +31,71 @@
       }
     }
     .modal_content {
+      display: flex;
+      flex-direction: column;
+      .info_p {
+        font-weight: bold;
+      }
+      .info_span {
+        color: gray;
+        margin: 0px 15px;
+      }
+      input {
+        border: 1px solid #d0dbff;
+        padding: 5px;
+        border-radius: 7px;
+      }
+      .profile_image_box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 10px 0px;
+        .profile_image {
+          width: 100px;
+          height: 100px;
+          .profile_image_icon_1 {
+            border-radius: 50%;
+          }
+          .profile_image_icon_2 {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .profile_select_box {
+          .profile_select_btn {
+            margin: 0px 10px;
+          }
+        }
+      }
+      .fix_info_box {
+        display: flex;
+        // justify-content: center;
+        margin: 10px 0px;
+        padding: 0px 30px;
+      }
+      .modal_nickname_edit {
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        margin: 10px 0px;
+        .nickname_box {
+          padding: 0px 30px;
+        }
+      }
+      .modal_password_edit {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 30px;
+        margin: 10px 0px;
+        .pw_box {
+          .pw_input_box {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+      }
+
       .modal_form {
         display: flex;
         flex-direction: column;

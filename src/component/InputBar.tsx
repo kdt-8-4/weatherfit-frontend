@@ -30,8 +30,6 @@ const InputBar: React.FC<InputBarProps> = ({
   onButtonClick,
   autoFocus,
 }: InputBarProps) => {
-  // const inputClass = `${type === "email" ? "email" : ""}`;
-
   return (
     <div className="input-wrapper">
       <label htmlFor={id}>{label}</label>
