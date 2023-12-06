@@ -17,7 +17,7 @@ interface SEARCH {
 export default function FeedSearch(){
 
     const [catesearch, setCateSearch] = useRecoilState(FeedSearchdata);
-    console.log("검색할 카테고리 데이터", catesearch);
+    // console.log("검색할 카테고리 데이터", catesearch);
     const [feedata, setFeedd] = useRecoilState(FeedContent);
 
     const [hash_value, setHval] = useState<string>("");
