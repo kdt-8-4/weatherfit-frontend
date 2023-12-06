@@ -8,9 +8,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 interface Board {
-  id: number;
-  imageUrl: string;
-  likeCount: number;
+  boardId: number;
+  images: {
+    imageId: number;
+    boardId: number;
+    imageUrl: string;
+  };
 }
 
 export default function BestCoordi() {
@@ -33,18 +36,18 @@ export default function BestCoordi() {
           url: `https://www.jerneithe.site/board/tops?temp_min=${weather.min}&temp_max=${weather.max}`,
         });
 
-        setBoards(response.data.result);
-        console.log("top5", boards);
+        setBoards(response.data.content);
+        console.log("게시물 top5", response.data.content);
       } catch (err) {
         console.error(err);
       }
     }
 
     getTop5();
-  }, []);
+  }, [weather.max, weather.min]);
 
   return (
-    <div>
+    <div className="boardTop5-container">
       <h2>
         오늘 날씨, <span className="highlight">좋아요가 가장 많은</span> 코디는?
       </h2>
@@ -52,7 +55,7 @@ export default function BestCoordi() {
         {boards.map((board, index) => (
           <div
             key={index}
-            onClick={() => sendDetail(board.id)}
+            onClick={() => sendDetail(board.boardId)}
             style={{ cursor: "pointer", width: "100%", height: "100%" }}>
             <div
               className="image-wrapper"
@@ -63,8 +66,8 @@ export default function BestCoordi() {
                 height: "100%",
               }}>
               <Image
-                src={board.imageUrl}
-                alt={`Board ${board.id}`}
+                src={board.images.imageUrl}
+                alt={`Board ${board.boardId}`}
                 layout="fill"
                 objectFit="contain"
               />
