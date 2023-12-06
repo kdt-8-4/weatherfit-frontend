@@ -75,6 +75,7 @@ h2 {
   width: 100%; /* 이미지의 크기를 div에 맞게 조절합니다. */
   height: 100%;
   object-fit: cover; /* 이미지가 div를 꽉 채우면서 비율을 유지하게 합니다. */
+  cursor: pointer;
 }
 
 .carousel-prev,
@@ -137,7 +138,7 @@ h2 {
 
 @media only screen and (min-width: 1024px) {
   .carousel {
-    width: 35%;
+    width: 30%;
     height: 425px;
   }
 

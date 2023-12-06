@@ -77,7 +77,7 @@ export default function BestCoordi() {
                   src={board.images.imageUrl}
                   alt={`Board ${board.boardId}`}
                   layout="fill"
-                  onClick={() => sendDetail}
+                  onClick={() => sendDetail(board.boardId)}
                 />
               </div>
             </div>
