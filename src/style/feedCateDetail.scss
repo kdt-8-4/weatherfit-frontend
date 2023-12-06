@@ -1,0 +1,83 @@
+//카테고리 전체
+.tab_detail{
+    position: absolute;
+    bottom: 0;
+    z-index: 1000;
+
+    background-color: white;
+    border-top-right-radius: 18px;
+    border-top-left-radius: 18px;
+
+    width: 40%;
+    
+}
+
+//하이바
+.high_var{
+    display: flex;
+    margin: 5px 0;
+}
+
+#cate_name{
+    margin: auto;
+    font-weight: bold;
+}
+
+#cateclose_btn{
+    position: absolute;
+    left: 94%;
+}
+
+//tab_flex_table 카테고리 감싸는 바
+.tab_flex_table{
+    display: flex;
+    margin: 10px 0;
+}
+
+//선택할 카테고리 메뉴
+
+//div태그
+.tab_menu_box{
+    width: 50%;
+    
+}
+
+//  선택 버튼
+.cate_btn_dj{
+    background-color: #A8BBFF;
+    border-radius: 10px;
+
+    margin: 5px;
+    padding: 5px;
+}
+
+
+//선택한 카테고리 메뉴
+
+//div 태그
+.choose_box{
+    width: 50%;
+}
+
+// 선택한 카테고리 보여주는 div
+.choose_small_box{
+    background-color: #bccafe;
+    border-radius: 10px;
+
+    margin: 5px;
+    padding: 5px;
+    width: 70%;
+
+    justify-content: space-between;
+}
+
+// 선택된 카테고리 
+.chooseCa{
+    text-align: center  ;
+}
+
+// 완료 버튼
+#chooseDone{
+    font-weight: bold;
+    margin-left: 75%;
+}

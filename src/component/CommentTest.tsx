@@ -475,39 +475,45 @@ export default function CommentTest(props: CommentModalProps) {
             {/* 댓글 목록 */}
             {boardCommentList.map((comment, commentIndex) => (
               <div key={`comment-box-${commentIndex}`} className="comment_box">
-                <p key={`comment-${commentIndex}`}>
-                  {comment.nickname}:{" "}
-                  {comment.isEditing ? (
-                    <input
-                      type="text"
-                      value={comment.editedContent}
-                      onChange={(e) => handleEditChange(e, commentIndex)}
-                    />
-                  ) : (
-                    comment.content
-                  )}{" "}
-                  ({comment.createdDate})
-                </p>
-                {comment.nickname === decoded_nickName && (
-                  <>
+                <div className="comment_box_div">
+                  <p key={`comment-${commentIndex}`}>
+                    {comment.nickname}:{" "}
                     {comment.isEditing ? (
-                      <button
-                        onClick={(e) => handleEditSubmit(e, commentIndex)}
-                      >
-                        완료
-                      </button>
+                      <input
+                        type="text"
+                        value={comment.editedContent}
+                        onChange={(e) => handleEditChange(e, commentIndex)}
+                      />
                     ) : (
+                      comment.content
+                    )}{" "}
+                    ({comment.createdDate})
+                  </p>
+                  <div className="btn_box">
+                    {comment.nickname === decoded_nickName && (
                       <>
-                        <button onClick={() => handleEditClick(commentIndex)}>
-                          수정
+                        {comment.isEditing ? (
+                          <button
+                            onClick={(e) => handleEditSubmit(e, commentIndex)}
+                          >
+                            완료
+                          </button>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => handleEditClick(commentIndex)}
+                            >
+                              수정
+                            </button>
+                          </>
+                        )}
+                        <button onClick={() => handleDeleteClick(commentIndex)}>
+                          삭제
                         </button>
                       </>
                     )}
-                    <button onClick={() => handleDeleteClick(commentIndex)}>
-                      삭제
-                    </button>
-                  </>
-                )}
+                  </div>
+                </div>
 
                 {/* 답글 작성 폼 및 답글 목록 */}
                 <div className="reply_mode_box">
@@ -516,7 +522,7 @@ export default function CommentTest(props: CommentModalProps) {
                   </button>
                 </div>
                 {comment.isReplying && (
-                  <div>
+                  <div className="reply_box_div">
                     {comment.replyList.map((reply, replyIndex) => (
                       <div
                         key={`reply-box-${replyIndex}`}
@@ -541,45 +547,54 @@ export default function CommentTest(props: CommentModalProps) {
                           )}{" "}
                           ({reply.createdDate})
                         </p>
-                        {reply.nickname === decoded_nickName && (
-                          <>
-                            {reply.isEditing ? (
+                        <div className="btn_box">
+                          {reply.nickname === decoded_nickName && (
+                            <>
+                              {reply.isEditing ? (
+                                <button
+                                  onClick={(e) =>
+                                    handleReplyEditSubmit(
+                                      e,
+                                      commentIndex,
+                                      replyIndex
+                                    )
+                                  }
+                                >
+                                  완료
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() =>
+                                    handleReplyEditClick(
+                                      commentIndex,
+                                      replyIndex
+                                    )
+                                  }
+                                >
+                                  수정
+                                </button>
+                              )}
                               <button
-                                onClick={(e) =>
-                                  handleReplyEditSubmit(
-                                    e,
+                                onClick={() =>
+                                  handleReplyDeleteClick(
                                     commentIndex,
                                     replyIndex
                                   )
                                 }
                               >
-                                완료
+                                삭제
                               </button>
-                            ) : (
-                              <button
-                                onClick={() =>
-                                  handleReplyEditClick(commentIndex, replyIndex)
-                                }
-                              >
-                                수정
-                              </button>
-                            )}
-                            <button
-                              onClick={() =>
-                                handleReplyDeleteClick(commentIndex, replyIndex)
-                              }
-                            >
-                              삭제
-                            </button>
-                          </>
-                        )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     ))}
                     <br />
                     <form
-                      className="reply_form"
+                      className="reply_form form"
                       onSubmit={(e) => handleReplySubmit(e, commentIndex)}
                     >
+                      <p>{decoded_nickName}:</p>
                       <input
                         type="text"
                         placeholder="답글을 입력하세요."
@@ -593,8 +608,8 @@ export default function CommentTest(props: CommentModalProps) {
               </div>
             ))}
           </div>
-          <form className="comment_form" onSubmit={handleFormSubmit}>
-            <p>{decoded_nickName}</p>
+          <form className="comment_form form" onSubmit={handleFormSubmit}>
+            <p>{decoded_nickName}:</p>
             <input
               type="text"
               placeholder="댓글을 입력하세요."

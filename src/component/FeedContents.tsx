@@ -53,7 +53,7 @@ export default function FeedContents() {
         url: "https://www.jerneithe.site/board/list",
       });
 
-      console.log("받아온 데이터", req.data);
+      // console.log("받아온 데이터", req.data);
       setFulldata(req.data);
 
       //현재 로그인한 닉네임과 각 게시물의 likelist에 같은 닉네임이 있다면 
@@ -61,7 +61,7 @@ export default function FeedContents() {
 
       const copy: FEEDATA[] = sortedData;
 
-      console.log("카피", copy);
+      // console.log("카피", copy);
 
       const filter_of_tem = copy.filter(
         (item) =>
@@ -69,7 +69,7 @@ export default function FeedContents() {
           item.temperature <= parseFloat(max),
       );
 
-      console.log("필터 적용", filter_of_tem);
+      // console.log("필터 적용", filter_of_tem);
 
       // setFeedd(req.data);
       setFeedd(filter_of_tem);
@@ -102,7 +102,7 @@ export default function FeedContents() {
 
   const heart_plus = async (board_id: number, isLiked:boolean) => {
     console.log("하트 누른 피드의 boardId", board_id);
-    console.log("피드 상위에서 받아온 토큰", loginToken_feed);
+    // console.log("피드 상위에서 받아온 토큰", loginToken_feed);
 
     await updateLikeStatus(board_id);
 
@@ -157,7 +157,7 @@ export default function FeedContents() {
     return likelist.some((like) => like.nickName === userNickname);
   };
 
-  console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
+  // console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
 
   return (
     <>
