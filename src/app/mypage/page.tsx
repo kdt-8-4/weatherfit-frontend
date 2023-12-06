@@ -69,6 +69,7 @@ interface FEEDATA {
 // }
 
 export default function Mypage() {
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
   // 회원 정보 수정 모달
   const [showProfileModify, setShowProfileModify] = useState<boolean>(false);
 
@@ -100,6 +101,7 @@ export default function Mypage() {
       setCheck(false);
     } else {
       setCheck(true);
+      setIsLoading(false);
     }
 
     setEmail(localStorage.getItem("user_email"));
@@ -167,56 +169,67 @@ export default function Mypage() {
 
   return (
     <>
-      {logincheck ? (
-        <div className="container">
-          {/* header 넣을지 말지 */}
-          {/* <header>로고 이미지</header> */}
-          <div className="top">
-            <h2 className="title">마이페이지</h2>
-            <SettingsIcon className="icon" onClick={handleSettingsClick} />
-          </div>
-          <div className="mypage_body">
-            {/* ------------- 프로필 부분 ------------- */}
-            {userPofile && (
-              <>
-                <MypageProfile
-                  nickname={nickname}
-                  postData={postData}
-                  userProfileImage={userImage}
-                />
-              </>
-            )}
-          </div>
-          <Menubar />
-        </div>
+      {isLoading ? ( // 로딩 중인 경우
+        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
-          <br />
-          <br />
-          <br />
-          <div id="login_msg"> 로그인을 해주세요. </div>
-          <br />
-          <br />
-          <Link className="goto" href={"/login"}>
-            로그인 페이지로 이동
-          </Link>
-          <br />
-          <Link className="goto" href={"/"}>
-            홈 페이지로 이동
-          </Link>
-        </>
-      )}
+          {logincheck ? (
+            <div className="container">
+              {/* header 넣을지 말지 */}
+              {/* <header>로고 이미지</header> */}
+              <header className="header_mypage">
+                <div className="top_mypage">
+                  <h2 className="title">마이페이지</h2>
+                  <SettingsIcon
+                    className="icon"
+                    onClick={handleSettingsClick}
+                  />
+                </div>
+              </header>
+              <div className="mypage_body">
+                {/* ------------- 프로필 부분 ------------- */}
+                {userPofile && (
+                  <>
+                    <MypageProfile
+                      nickname={nickname}
+                      postData={postData}
+                      userProfileImage={userImage}
+                    />
+                  </>
+                )}
+              </div>
+              <Menubar />
+            </div>
+          ) : (
+            <>
+              <br />
+              <br />
+              <br />
+              <div id="login_msg"> 로그인을 해주세요. </div>
+              <br />
+              <br />
+              <Link className="goto" href={"/login"}>
+                로그인 페이지로 이동
+              </Link>
+              <br />
+              <Link className="goto" href={"/"}>
+                홈 페이지로 이동
+              </Link>
+            </>
+          )}
 
-      {showProfileModify && (
-        <ProfileModalTest
-          handleSettingsClick={handleSettingsClick}
-          email={userPofile.email}
-          name={userPofile.name}
-          password={userPofile.password}
-          userProfileImage={userImage}
-          accessToken={logintoken}
-          nickname={nickname}
-        />
+          {showProfileModify && (
+            <ProfileModalTest
+              handleSettingsClick={handleSettingsClick}
+              email={userPofile.email}
+              name={userPofile.name}
+              password={userPofile.password}
+              userProfileImage={userImage}
+              accessToken={logintoken}
+              nickname={nickname}
+            />
+          )}
+        </>
       )}
     </>
   );

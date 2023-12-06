@@ -55,7 +55,7 @@ export default function Register(): JSX.Element {
     try {
       const duplication_email = await axios({
         method: "POST",
-        url: "https://www.jerneithe.site/user/signup/email",
+        url: "https://www.jerneithe.site/signup/email",
         data: {
           email: email,
         },
