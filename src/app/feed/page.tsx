@@ -13,7 +13,7 @@ import { RecoilRoot, useRecoilState } from "recoil";
 import { useEffect } from "react";
 import axios from "axios";
 
-import '../../style/feed.scss';
+import "../../style/feed.scss";
 
 import { FeedDecodeNickname } from "@/recoilAtom/FeedNickname";
 import { FeedLoginToken } from "@/recoilAtom/FeedLoginToken";
@@ -53,4 +53,5 @@ export default function Feed(){
         <Menubar />
     {/* </RecoilRoot> */}
     </>)
+
 }
