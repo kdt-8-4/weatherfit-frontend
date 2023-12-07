@@ -39,35 +39,6 @@ interface FEEDATA {
   weatherIcon?: string;
 }
 
-/*
-interface IMAGE {
-  boardId: number;
-  imageId: number;
-  image_url: string;
-}
-
-interface FEEDATA {
-  boardId: number;
-  images: IMAGE;
-  likeCount: number;
-  nickName: string;
-  temperature: number;
-  weather: string;
-}
-*/
-
-// interface userProfileType {
-//   id: number;
-//   email: string;
-//   fromSocial: boolean;
-//   image: string | null;
-//   name: string;
-//   nickname: string;
-//   password: string;
-//   phone: number | null;
-//   status: boolean;
-// }
-
 export default function Mypage() {
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
   // 회원 정보 수정 모달
@@ -78,6 +49,7 @@ export default function Mypage() {
   const [userImage, setUserImage] = useState<string | null>("");
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string | undefined>("");
+  const [fromSocial, setFromSocial] = useState<boolean>(false);
 
   // 로그인 확인 후 페이지 로드
   const [logincheck, setCheck] = useState<boolean>(false);
@@ -140,7 +112,9 @@ export default function Mypage() {
         setUserProfile(response.data);
         setNickname(response.data.nickname);
         setUserImage(response.data.image);
+        setFromSocial(response.data.fromSocial);
 
+        console.log("유저 data: ", response.data);
         // 게시물 데이터 가져오기
         const req = await axios.get("https://www.jerneithe.site/board/list");
         const data: FEEDATA[] = req.data;
@@ -220,13 +194,14 @@ export default function Mypage() {
 
           {showProfileModify && (
             <ProfileModalTest
-              handleSettingsClick={handleSettingsClick}
-              email={userPofile.email}
-              name={userPofile.name}
-              password={userPofile.password}
-              userProfileImage={userImage}
-              accessToken={logintoken}
-              nickname={nickname}
+          handleSettingsClick={handleSettingsClick}
+          email={userPofile.email}
+          name={userPofile.name}
+          password={userPofile.password}
+          userProfileImage={userImage}
+          accessToken={logintoken}
+          nickname={nickname}
+          fromSocial={fromSocial}
             />
           )}
         </>
