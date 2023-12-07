@@ -10,9 +10,6 @@ export default function Login() {
     // <RecoilRoot>
     <div className="container">
       <div>
-        <CloseIcon />
-        <hr className="layout_hr" />
-        <br />
         <LoginForm />
         <br />
       </div>
