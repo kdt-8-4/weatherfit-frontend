@@ -17,6 +17,7 @@ import CommentIcon from "@/component/CommentIcon";
 import CategoryDetail from "@/component/CategoryDetail";
 import { useRouter } from "next/navigation";
 import { editBoardIdState } from "@/recoilAtom/EditDetail";
+import { ProfileTemperature } from "@/recoilAtom/ProfileTemperature";
 import Link from "next/link";
 
 interface boardCommentType {
@@ -42,14 +43,15 @@ export default function Detail(): JSX.Element {
   const [editBoardId, setEditBoardId] = useRecoilState(editBoardIdState);
   const [comment, setComment] = useState<boardCommentType[]>([]);
   const [refreshComments, setRefreshComments] = useState(false);
-  const [likelist, setLikelist] = useState<LIKE[]>([]); //리코일로 만드는게 나을듯 일단은 이대로 ㄱㄱ
+  const [likelist, setLikelist] = useState<LIKE[]>([]);
+  const [profile_temperature, setProfileTemperature] = useRecoilState(ProfileTemperature);
   // const [likeCount, setLikeCount] = useState<number>();
   const [likeCount, setLikeCount] = useState(0);
-
   // 좋아요 개수 업데이트 함수
   const updateLikeCount = (boardId: number, newCount: number) => {
     setLikeCount((prevCount) => prevCount + newCount);
   };
+
 
   const router = useRouter();
   const accessToken = Cookies.get("accessToken");
@@ -72,10 +74,12 @@ export default function Detail(): JSX.Element {
         const response = await axios.get(
           `https://www.jerneithe.site/board/detail/${localBoardId}`,
         );
+        // console.log("디테일 응답", response);
         setLikelist(response.data.likelist);
         setLikeCount(response.data.likeCount);
         setBoardDetail(response.data);
         setComment(response.data.comments);
+        setProfileTemperature(response.data.temperature);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
