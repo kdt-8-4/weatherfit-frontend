@@ -47,7 +47,7 @@ export default function Upload(): JSX.Element {
     setLoginToken(accessToken);
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     cookie();
   }, []);
 
@@ -246,16 +246,31 @@ export default function Upload(): JSX.Element {
               <br />
               <br />
               <br />
-              <div id="login_msg"> 로그인 후에 업로드할 수 있습니다. </div>
               <br />
               <br />
-              <Link className="goto" href={"/login"}>
-                로그인 페이지로 이동
-              </Link>
               <br />
-              <Link className="goto" href={"/"}>
-                홈 페이지로 이동
-              </Link>
+              <div
+                className="login_goto_box"
+                style={{
+                  height: "40%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <div id="login_msg" style={{ fontSize: "20px" }}>
+                  {" "}
+                  로그인 후에 업로드할 수 있습니다.{" "}
+                </div>
+                <Link className="goto" href={"/login"}>
+                  로그인 페이지로 이동
+                </Link>
+                <Link className="goto" href={"/"}>
+                  홈 페이지로 이동
+                </Link>
+              </div>
+              <br />
             </>
           )}
         </>

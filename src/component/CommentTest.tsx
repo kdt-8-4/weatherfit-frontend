@@ -1,7 +1,7 @@
 import "../style/modal_comment.scss";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import CommentsTest from "./CommentsTest";
+import "animate.css";
 
 interface CommentModalProps {
   handleModalToggle: () => void;
@@ -42,6 +42,19 @@ export default function CommentTest(props: CommentModalProps) {
     localBoardId,
   } = props;
 
+  // 로그인 확인
+  const [logincheck, setCheck] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (accessToken === undefined) {
+      setCheck(false);
+    } else {
+      setCheck(true);
+    }
+  }, []);
+
+  // -------------------------------------------------------------
+
   const [boardCommentList, setBoardCommentList] = useState(
     boardComment
       .filter(
@@ -66,6 +79,8 @@ export default function CommentTest(props: CommentModalProps) {
   }, [boardCommentList]);
 
   console.log("새로운 댓글 목록: ", boardCommentList);
+
+  // -------------------------------------------------------------
 
   const [comment, setComment] = useState<string>(""); // 댓글 input
   const [reply, setReply] = useState<replyListType[]>([]); // 답글 input
@@ -129,7 +144,13 @@ export default function CommentTest(props: CommentModalProps) {
     setBoardCommentList((prevList) =>
       prevList.map((item, idx) =>
         idx === index
-          ? { ...item, isEditing: true, editedContent: item.content }
+          ? {
+              ...item,
+              isEditing: true,
+              editedContent: item.content,
+              isReplying: false,
+              isReplyMode: false,
+            }
           : item
       )
     );
@@ -182,6 +203,7 @@ export default function CommentTest(props: CommentModalProps) {
                 ...item,
                 content: editedComment.editedContent,
                 isEditing: false,
+                editedContent: "",
               }
             : item
         )
@@ -468,7 +490,7 @@ export default function CommentTest(props: CommentModalProps) {
   return (
     <>
       <div className="modal_back">
-        <div className="modal_body">
+        <div className="modal_body animate__animated animate__slideInUp animate__delay-0.5s">
           <button onClick={handleModalToggle}>닫기</button>
           <hr />
           <div className="commentList">
@@ -486,8 +508,16 @@ export default function CommentTest(props: CommentModalProps) {
                       />
                     ) : (
                       comment.content
-                    )}{" "}
-                    ({comment.createdDate})
+                    )}
+                  </p>
+                  <p
+                    style={{
+                      color: "lightgray",
+                      fontSize: "10px",
+                      paddingLeft: "5px",
+                    }}
+                  >
+                    {comment.createdDate} {comment.createdTime}
                   </p>
                   <div className="btn_box">
                     {comment.nickname === decoded_nickName && (
@@ -529,7 +559,7 @@ export default function CommentTest(props: CommentModalProps) {
                         className="reply_box"
                       >
                         <p key={`reply-${replyIndex}`}>
-                          ㄴ{reply.nickname}:
+                          ㄴ{reply.nickname}:{" "}
                           {reply.isEditing ? (
                             <input
                               type="text"
@@ -544,8 +574,16 @@ export default function CommentTest(props: CommentModalProps) {
                             />
                           ) : (
                             reply.content
-                          )}{" "}
-                          ({reply.createdDate})
+                          )}
+                        </p>
+                        <p
+                          style={{
+                            color: "lightgray",
+                            fontSize: "10px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          {reply.createdDate} {reply.createdTime}
                         </p>
                         <div className="btn_box">
                           {reply.nickname === decoded_nickName && (
@@ -590,34 +628,44 @@ export default function CommentTest(props: CommentModalProps) {
                       </div>
                     ))}
                     <br />
-                    <form
-                      className="reply_form form"
-                      onSubmit={(e) => handleReplySubmit(e, commentIndex)}
-                    >
-                      <p>{decoded_nickName}:</p>
-                      <input
-                        type="text"
-                        placeholder="답글을 입력하세요."
-                        value={comment.editedContent}
-                        onChange={(e) => handleEditChange(e, commentIndex)}
-                      />
-                      <button type="submit">게시</button>
-                    </form>
+                    {logincheck ? (
+                      <form
+                        className="reply_form form"
+                        onSubmit={(e) => handleReplySubmit(e, commentIndex)}
+                      >
+                        <p>{decoded_nickName}:</p>
+                        <input
+                          type="text"
+                          placeholder="답글을 입력하세요."
+                          value={comment.editedContent}
+                          onChange={(e) => handleEditChange(e, commentIndex)}
+                        />
+                        <button type="submit">게시</button>
+                      </form>
+                    ) : (
+                      <p>로그인 후 답글 작성이 가능합니다!</p>
+                    )}
                   </div>
                 )}
               </div>
             ))}
           </div>
-          <form className="comment_form form" onSubmit={handleFormSubmit}>
-            <p>{decoded_nickName}:</p>
-            <input
-              type="text"
-              placeholder="댓글을 입력하세요."
-              value={comment}
-              onChange={handleInputChange}
-            />
-            <button type="submit">게시</button>
-          </form>
+          {logincheck ? (
+            <form className="comment_form form" onSubmit={handleFormSubmit}>
+              <p>{decoded_nickName}:</p>
+              <input
+                type="text"
+                placeholder="댓글을 입력하세요."
+                value={comment}
+                onChange={handleInputChange}
+              />
+              <button type="submit">게시</button>
+            </form>
+          ) : (
+            <p style={{ textAlign: "center", fontSize: "20px" }}>
+              로그인 후 댓글 작성이 가능합니다!
+            </p>
+          )}
         </div>
       </div>
     </>

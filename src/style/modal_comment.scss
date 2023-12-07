@@ -16,18 +16,17 @@
     position: fixed;
     bottom: 0px;
     height: 75%;
-    // .comment_form {
-    //   position: fixed;
-    //   bottom: 30px;
-    // }
+    // animation: slideInUp;
+    // animation-duration: 0.5s;
     .form {
       display: flex;
       justify-content: space-evenly;
       margin-bottom: 5px;
       input {
-        width: 80%;
+        width: 77%;
         border: 1px solid #d0dbff;
         border-radius: 7px;
+        padding: 1px 5px;
       }
     }
     .commentList {
@@ -39,17 +38,23 @@
         .comment_box_div {
           display: flex;
           position: relative;
+          align-items: center;
         }
         .reply_box_div {
           margin-left: 20px;
           .reply_box {
             display: flex;
             position: relative;
+            align-items: center;
           }
         }
         .btn_box {
           position: absolute;
           right: 30px;
+          font-size: 13px;
+          width: 55px;
+          display: flex;
+          justify-content: space-evenly;
         }
       }
     }
