@@ -58,7 +58,12 @@ export default function FeedContents() {
       setFulldata(req.data);
 
       //현재 로그인한 닉네임과 각 게시물의 likelist에 같은 닉네임이 있다면 
-      const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => b.boardId - a.boardId);
+      // const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => b.boardId - a.boardId);
+      const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => {
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        return dateB.getTime() - dateA.getTime(); // 최신 날짜 순으로 정렬
+      });
 
       const copy: FEEDATA[] = sortedData;
 

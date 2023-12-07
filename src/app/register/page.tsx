@@ -168,7 +168,7 @@ export default function Register(): JSX.Element {
         console.log("회원가입 됐는지 확인", register_data);
 
         alert("회원가입 성공!");
-        router.push('/login');
+        router.push('/mypage');
 
       } catch (error) {
         console.log("이메일 인증에 실패했기 떄문에 회원가입 불가", error);
