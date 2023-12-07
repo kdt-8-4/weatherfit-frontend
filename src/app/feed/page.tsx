@@ -40,6 +40,7 @@ export default function Feed(){
 
     return(<>
     {/* <RecoilRoot> */}
+    
         <div className="container_dj">
             <br />
             <FeedSearch />
@@ -48,9 +49,8 @@ export default function Feed(){
             <FeedCategory />
             <FeedSort />
             <FeedContenets />
-            <Menubar />
-
         </div>
+        <Menubar />
     {/* </RecoilRoot> */}
     </>)
 }
