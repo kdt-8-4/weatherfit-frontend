@@ -22,10 +22,10 @@ export default function LoginForm() {
     // } catch (error) {
     //   console.error(error);
     // }
-    
+
     window.location.href =
       // "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&scope=email&state=FnOs2B9peyHie3pfwVOFMaqIFqlifucO4v6jmFPEc_M%3D&redirect_uri=http://localhost:3000/socialregister";
-      "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=http://localhost:3000/socialregister&response_type=token&scope=email";
+      "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=https://weatherfit-frontend.vercel.app/socialregister&response_type=token&scope=email";
   };
 
   const handleLogin = async (e: FormEvent) => {
@@ -84,7 +84,6 @@ export default function LoginForm() {
   //   }
   // },[token]);
 
-
   // console.log("resData token 적용됐는지: ", token);
 
   return (
@@ -117,7 +116,6 @@ export default function LoginForm() {
       </form>
       <br />
       <div className="login_linkbox">
-        <a className="link_pw">비밀번호 찾기</a> |
         <a className="link_signup">회원가입</a>
       </div>
       <br />

@@ -4,12 +4,10 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import "../../style/mypage.scss";
 import "@/style/GotoLogin.scss";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
-import TabBar from "@/component/TabBar";
-import ProfileModal from "@/component/ProfileModal";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import Image from "next/image";
 
 // import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined'; // > 아이콘
 import axios from "axios";
@@ -50,6 +48,7 @@ export default function Mypage() {
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string | undefined>("");
   const [fromSocial, setFromSocial] = useState<boolean>(false);
+  const [refreshProfile, setRefreshProfile] = useState<boolean>(false);
 
   // 로그인 확인 후 페이지 로드
   const [logincheck, setCheck] = useState<boolean>(false);
@@ -130,13 +129,18 @@ export default function Mypage() {
       }
     };
     fetchData();
-  }, []);
+  }, [refreshProfile]);
 
   // -------------------------------------------------------------
+
+  const handleRefreshProfile = () => {
+    setRefreshProfile(!refreshProfile);
+  };
 
   // 회원 정보 수정 모달 이벤트
   const handleSettingsClick = () => {
     setShowProfileModify(!showProfileModify);
+    handleRefreshProfile();
   };
 
   console.log("mypage의 게시물 data: ", postData);
@@ -144,7 +148,25 @@ export default function Mypage() {
   return (
     <>
       {isLoading ? ( // 로딩 중인 경우
-        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
+        <div
+          style={{
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={200}
+            height={150}
+          />
+          Loading...
+        </div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
           {logincheck ? (
@@ -194,14 +216,14 @@ export default function Mypage() {
 
           {showProfileModify && (
             <ProfileModalTest
-          handleSettingsClick={handleSettingsClick}
-          email={userPofile.email}
-          name={userPofile.name}
-          password={userPofile.password}
-          userProfileImage={userImage}
-          accessToken={logintoken}
-          nickname={nickname}
-          fromSocial={fromSocial}
+              handleSettingsClick={handleSettingsClick}
+              email={userPofile.email}
+              name={userPofile.name}
+              password={userPofile.password}
+              userProfileImage={userImage}
+              accessToken={logintoken}
+              nickname={nickname}
+              fromSocial={fromSocial}
             />
           )}
         </>
