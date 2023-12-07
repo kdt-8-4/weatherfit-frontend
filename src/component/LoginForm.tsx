@@ -90,7 +90,7 @@ export default function LoginForm() {
       <br />
       <div className="login_linkbox" style={{display: "flex", justifyContent: "space-evenly", height: "70px", flexDirection: "column",
     alignItems: "center"}}>
-        <p style={{color: "gray", fontWeight: "500"}}></p>
+        <p style={{color: "gray", fontWeight: "500"}}>아직 회원이 아니신가요?</p>
         <a className="link_signup" href="/register" style={{fontSize: "18px"}}>회원가입</a>
       </div>
       <br />
