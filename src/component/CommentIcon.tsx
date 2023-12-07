@@ -65,12 +65,3 @@ export default function CommentIcon(props: CommentIconProps) {
     </>
   );
 }
-
-{
-  /* <CommentModal
-handleModalToggle={handleCommentClick}
-accessToken={accessToken}
-boardComment={boardComment}
-decoded_nickName={decoded_nickName}
-/> */
-}
