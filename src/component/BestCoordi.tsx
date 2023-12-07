@@ -42,31 +42,37 @@ export default function BestCoordi({ boards }: { boards: Board[] }) {
       <h2>
         오늘 날씨, <span className="highlight">좋아요가 가장 많은</span> 코디는?
       </h2>
-      <div className="carousel">
-        <div
-          className="carousel-inner"
-          style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
-          {boards.map((board, index) => (
-            <div key={index} className="carousel-slide">
-              <div className="image-wrapper">
-                <Image
-                  className="carousel_img"
-                  src={board.images.imageUrl}
-                  alt={`Board ${board.boardId}`}
-                  layout="fill"
-                  onClick={() => sendDetail(board.boardId)}
-                />
+      {boards.length > 0 ? ( // categories 배열의 길이가 0보다 큰 경우
+        <div className="carousel">
+          <div
+            className="carousel-inner"
+            style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
+            {boards.map((board, index) => (
+              <div key={index} className="carousel-slide">
+                <div className="image-wrapper">
+                  <Image
+                    className="carousel_img"
+                    src={board.images.imageUrl}
+                    alt={`Board ${board.boardId}`}
+                    layout="fill"
+                    onClick={() => sendDetail(board.boardId)}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <button className="carousel-prev" onClick={prevSlide}>
+            <FiChevronLeft />
+          </button>
+          <button className="carousel-next" onClick={nextSlide}>
+            <FiChevronRight />
+          </button>
         </div>
-        <button className="carousel-prev" onClick={prevSlide}>
-          <FiChevronLeft />
-        </button>
-        <button className="carousel-next" onClick={nextSlide}>
-          <FiChevronRight />
-        </button>
-      </div>
+      ) : (
+        <div style={{ textAlign: "center" }}>
+          좋아요 받은 코디가 아직 없어요..🥲
+        </div>
+      )}
     </div>
   );
 }

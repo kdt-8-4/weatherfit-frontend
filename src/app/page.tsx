@@ -69,7 +69,7 @@ export default function Mainpage() {
       ) : (
         <>
           <header>
-            <div className="top">
+            <div className="top_main">
               <div className="img_wrap">
                 <Image
                   className="logo"

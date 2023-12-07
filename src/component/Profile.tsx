@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { ProfileTemperature } from "@/recoilAtom/ProfileTemperature";
+import { useRecoilState } from "recoil";
 
 interface ProfileProps {
   nickName: string;
@@ -8,6 +10,9 @@ interface ProfileProps {
 }
 
 const Profile = ({ nickName, userImage }: ProfileProps): JSX.Element => {
+
+  const [profile_temperature, setProfileTemperature] = useRecoilState(ProfileTemperature);
+
   return (
     <div className="profile w-full h-20 flex items-center p-3">
       <div className="img relative rounded-full overflow-hidden w-12 h-12 md:w-18 md:h-18 lg:w-18 lg:h-18">
@@ -29,7 +34,7 @@ const Profile = ({ nickName, userImage }: ProfileProps): JSX.Element => {
       </div>
       <div className="text flex flex-col ml-2">
         <span>{nickName}</span>
-        <span>-5 ℃</span>
+        <span> {profile_temperature} ℃</span>
       </div>
     </div>
   );

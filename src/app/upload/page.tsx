@@ -36,7 +36,7 @@ export default function Upload(): JSX.Element {
   const [usetemp, setTemp] = useRecoilState(TemNowControl);
 
   // 로그인 확인 후 페이지 로드
-  const [logincheck, setCheck] = useState<boolean>(false);
+  const [logincheck, setCheck] = useState<boolean>(true);
   // 토큰 값
   const [logintoken, setLoginToken] = useState<string | undefined>("");
 
@@ -47,8 +47,12 @@ export default function Upload(): JSX.Element {
     setLoginToken(accessToken);
   };
 
-  useEffect(() => {
+  useEffect(()=> {
     cookie();
+  }, []);
+
+  useEffect(() => {
+    // cookie();
     if (logintoken === undefined) {
       setCheck(false);
     } else {

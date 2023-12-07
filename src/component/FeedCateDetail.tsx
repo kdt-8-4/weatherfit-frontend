@@ -188,18 +188,17 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
 
     return(<>
         <div className="tab_detail">
-            <div className="high_var">
+            {/* <div className="high_var">
                 <p id="cate_name">{categorytitle}</p>
                 <button id="cateclose_btn" onClick={close_cate}>X</button>
             </div>
-            <hr />
+            <hr /> */}
             {/* 카테고리 목록 */}
             <div className="tab_flex_table">
                 <div className="tab_menu_box">
                     {view_arr && view_arr.map((myarr, index)=>{
                             return(<>
                                 <button key={index} className="cate_btn_dj" onClick={()=>cate_btn(myarr)}>{myarr}</button>
-                                <br />
                             </>)
                         }
                     )}
@@ -213,15 +212,16 @@ export default function FeedcateDetail( { categorytitle, setControl } : PROPS) {
                     오류 예방  
                     */}
                     <p style={{"fontWeight" : "bold"}}>선택한 카테고리</p>
-                    {chooseCa && chooseCa.map((myarr, index)=>{
-                        return(<>
-                            <div key={index} style={{"display":"flex"}} className="choose_small_box">
-                                <p className="chooseCa">{myarr} </p>
-                                <button className="catecancle_btn" onClick={() => del_choose(myarr)}> x</button> 
-                            </div>
-                            <hr />
-                        </>)
-                    })}
+                    <div id="choose_flex_box">
+                        {chooseCa && chooseCa.map((myarr, index)=>{
+                            return(<>
+                                <div key={index} style={{"display":"flex"}} className="choose_small_box">
+                                    <p className="chooseCa">{myarr} </p>
+                                    <button className="catecancle_btn" onClick={() => del_choose(myarr)}> x</button> 
+                                </div>
+                            </>)
+                        })}
+                    </div>
                     <button onClick={startSearch} id="chooseDone">완료</button>
                 </div>
             </div>
