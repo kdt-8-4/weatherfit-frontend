@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "../style/_util.scss";
-import { useRouter } from "next/navigation";
 
 interface ContentDetailProps {
   content: string;
@@ -13,7 +12,6 @@ const ContentDetail = ({
 }: ContentDetailProps): JSX.Element => {
   const [expanded, setExpanded] = useState(false); // 더 보기 상태를 저장하는 상태 변수
   const [showButton, setShowButton] = useState(false); // "더 보기" 버튼을 표시할지 여부를 저장하는 상태 변수
-  const router = useRouter();
 
   useEffect(() => {
     // 컴포넌트가 마운트되었을 때 실행되는 효과
@@ -33,7 +31,6 @@ const ContentDetail = ({
 
   const handleHashTagClick = (hashTag: string) => {
     console.log("Clicked hashtag:", hashTag);
-    // router.push(`/feed?hashtag=${hashTag}`);
   };
 
   const extractAndStyleHashtags = (content: string) => {
@@ -76,9 +73,7 @@ const ContentDetail = ({
   };
 
   return (
-    <div
-      className="content-detail w-full p-3"
-      style={{ paddingBottom: "30px", height: "100%" }}>
+    <div className="content-detail w-full p-3" style={{ height: "100%" }}>
       <div
         id="content"
         className={`${

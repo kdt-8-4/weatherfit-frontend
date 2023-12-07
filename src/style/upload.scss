@@ -23,7 +23,8 @@
     flex-direction: column;
     align-items: center;
 
-    h2 {
+    .upload_text,
+    .edit_text {
       margin: 30px 0px 10px 0px;
     }
 
@@ -50,46 +51,50 @@
   }
 }
 
-header {
+.header_upload,
+.header_edit {
   width: 100%;
-}
 
-.top {
-  height: 80px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+  .top_upload,
+  .top_edit {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-bottom: solid 1px $color-main;
 
-  .img_wrap {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    .img_wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-    .logo {
-      margin: 0 auto;
-      margin-bottom: 0.625rem;
+      .logo {
+        margin: 0 auto;
+        margin-bottom: 0.625rem;
+      }
     }
-  }
 
-  #btn_complete {
-    font-weight: 500;
-    background-color: $color-main;
-    color: white;
-    margin: 10px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    &:hover {
-      background-color: #a8bbff;
+    #btn_complete {
+      font-weight: 500;
+      background-color: $color-main;
+      color: white;
+      margin: 10px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      &:hover {
+        background-color: #a8bbff;
+      }
     }
-  }
-  hr {
-    background-color: #252525;
-    width: 100%;
-    height: 1px;
+
+    hr {
+      background-color: #252525;
+      width: 100%;
+      height: 1px;
+    }
   }
 }
 
@@ -97,15 +102,17 @@ header {
   #x {
     @include x-icon(20px, 20px);
   }
-  .top {
+  .top_upload,
+  .top_edit {
     // height: 40px;
     font-size: 15px;
 
-    button {
+    .btn_complete {
       font-size: 13px;
     }
   }
-  h2 {
+  .upload_text,
+  .edit_text {
     height: 60px;
     font-size: 20px;
     display: flex;
@@ -117,15 +124,17 @@ header {
   #x {
     @include x-icon(23px, 23px);
   }
-  .top {
+  .top_upload,
+  .top_edit {
     // height: 50px;
     font-size: 20px;
 
-    button {
+    .btn_complete {
       font-size: 15px;
     }
   }
-  h2 {
+  .upload_text,
+  .edit_text {
     height: 90px;
     font-size: 25px;
     display: flex;
@@ -141,11 +150,12 @@ header {
     // height: 50px;
     font-size: 23px;
 
-    button {
+    .btn_complete {
       font-size: 17px;
     }
   }
-  h2 {
+  .upload_text,
+  .edit_text {
     height: 90px;
     font-size: 25px;
     display: flex;
