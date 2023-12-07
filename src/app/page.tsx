@@ -35,7 +35,6 @@ export default function Mainpage() {
 
         setBoards(response2.data.content);
         console.log("게시물 top5", response2.data.content);
-        setIsLoading(false); // 로딩 완료 후 상태 업데이트
       } catch (err) {
         console.error(err);
       }
