@@ -1,4 +1,4 @@
-("use client");
+"use client";
 import MainWeather from "@/component/MainWeather";
 import Menubar from "@/component/MenuBar";
 import axios from "axios";
