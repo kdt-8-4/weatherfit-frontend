@@ -5,11 +5,17 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import CheckroomOutlinedIcon from "@mui/icons-material/CheckroomOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Menubar() {
+  const [home, setHome] = useState<boolean>(true);
+  const [feed, setFeed] = useState<boolean>(false);
+  const [upload, setUpload] = useState<boolean>(false);
+  const [mypage, setMypage] = useState<boolean>(false);
+
   return (
     <div className="menubar">
-      <Link href={'/'} className="menu_box">
+      <Link href={"/"} className="menu_box">
         <HomeOutlinedIcon className="menu_icon" />
         <span>홈</span>
       </Link>
@@ -21,7 +27,7 @@ export default function Menubar() {
         <AddBoxOutlinedIcon className="menu_icon" />
         <span>업로드</span>
       </Link>
-      <Link href={"mypage"} className="menu_box">
+      <Link href={"/mypage"} className="menu_box">
         <PersonOutlineOutlinedIcon className="menu_icon" />
         <span>마이페이지</span>
       </Link>

@@ -153,7 +153,7 @@ export default function Register(): JSX.Element {
       try {
         const register_data = await axios({
           method: "POST",
-          url: "https://www.jerneithe.site/user/api/signup",
+          url: "https://www.jerneithe.site/user/signup",
           data: {
             email: email,
             name: name,

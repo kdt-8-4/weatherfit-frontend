@@ -7,7 +7,7 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({ category }) => {
     <div className="pl-3 w-full mb-20">
       {category.map((subCategory, index) => (
         <button
-          className="rounded-md border border-main text-main px-1 py-1 text-sm font-medium mt-5 mr-2"
+          className="rounded-md border border-main text-main px-1 py-1 text-sm font-bold mt-5 mr-2"
           key={index}>
           {subCategory}
         </button>

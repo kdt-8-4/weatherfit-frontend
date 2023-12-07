@@ -39,36 +39,8 @@ interface FEEDATA {
   weatherIcon?: string;
 }
 
-/*
-interface IMAGE {
-  boardId: number;
-  imageId: number;
-  image_url: string;
-}
-
-interface FEEDATA {
-  boardId: number;
-  images: IMAGE;
-  likeCount: number;
-  nickName: string;
-  temperature: number;
-  weather: string;
-}
-*/
-
-// interface userProfileType {
-//   id: number;
-//   email: string;
-//   fromSocial: boolean;
-//   image: string | null;
-//   name: string;
-//   nickname: string;
-//   password: string;
-//   phone: number | null;
-//   status: boolean;
-// }
-
 export default function Mypage() {
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
   // 회원 정보 수정 모달
   const [showProfileModify, setShowProfileModify] = useState<boolean>(false);
 
@@ -77,6 +49,7 @@ export default function Mypage() {
   const [userImage, setUserImage] = useState<string | null>("");
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string | undefined>("");
+  const [fromSocial, setFromSocial] = useState<boolean>(false);
 
   // 로그인 확인 후 페이지 로드
   const [logincheck, setCheck] = useState<boolean>(false);
@@ -100,6 +73,7 @@ export default function Mypage() {
       setCheck(false);
     } else {
       setCheck(true);
+      setIsLoading(false);
     }
 
     setEmail(localStorage.getItem("user_email"));
@@ -138,7 +112,9 @@ export default function Mypage() {
         setUserProfile(response.data);
         setNickname(response.data.nickname);
         setUserImage(response.data.image);
+        setFromSocial(response.data.fromSocial);
 
+        console.log("유저 data: ", response.data);
         // 게시물 데이터 가져오기
         const req = await axios.get("https://www.jerneithe.site/board/list");
         const data: FEEDATA[] = req.data;
@@ -167,48 +143,57 @@ export default function Mypage() {
 
   return (
     <>
-      {logincheck ? (
-        <div className="container">
-          {/* header 넣을지 말지 */}
-          {/* <header>로고 이미지</header> */}
-          <div className="top">
-            <h2 className="title">마이페이지</h2>
-            <SettingsIcon className="icon" onClick={handleSettingsClick} />
-          </div>
-          <div className="mypage_body">
-            {/* ------------- 프로필 부분 ------------- */}
-            {userPofile && (
-              <>
-                <MypageProfile
-                  nickname={nickname}
-                  postData={postData}
-                  userProfileImage={userImage}
-                />
-              </>
-            )}
-          </div>
-          <Menubar />
-        </div>
+      {isLoading ? ( // 로딩 중인 경우
+        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
-          <br />
-          <br />
-          <br />
-          <div id="login_msg"> 로그인을 해주세요. </div>
-          <br />
-          <br />
-          <Link className="goto" href={"/login"}>
-            로그인 페이지로 이동
-          </Link>
-          <br />
-          <Link className="goto" href={"/"}>
-            홈 페이지로 이동
-          </Link>
-        </>
-      )}
+          {logincheck ? (
+            <div className="container">
+              {/* header 넣을지 말지 */}
+              {/* <header>로고 이미지</header> */}
+              <header className="header_mypage">
+                <div className="top_mypage">
+                  <h2 className="title">마이페이지</h2>
+                  <SettingsIcon
+                    className="icon"
+                    onClick={handleSettingsClick}
+                  />
+                </div>
+              </header>
+              <div className="mypage_body">
+                {/* ------------- 프로필 부분 ------------- */}
+                {userPofile && (
+                  <>
+                    <MypageProfile
+                      nickname={nickname}
+                      postData={postData}
+                      userProfileImage={userImage}
+                    />
+                  </>
+                )}
+              </div>
+              <Menubar />
+            </div>
+          ) : (
+            <>
+              <br />
+              <br />
+              <br />
+              <div id="login_msg"> 로그인을 해주세요. </div>
+              <br />
+              <br />
+              <Link className="goto" href={"/login"}>
+                로그인 페이지로 이동
+              </Link>
+              <br />
+              <Link className="goto" href={"/"}>
+                홈 페이지로 이동
+              </Link>
+            </>
+          )}
 
-      {showProfileModify && (
-        <ProfileModalTest
+          {showProfileModify && (
+            <ProfileModalTest
           handleSettingsClick={handleSettingsClick}
           email={userPofile.email}
           name={userPofile.name}
@@ -216,7 +201,10 @@ export default function Mypage() {
           userProfileImage={userImage}
           accessToken={logintoken}
           nickname={nickname}
-        />
+          fromSocial={fromSocial}
+            />
+          )}
+        </>
       )}
     </>
   );

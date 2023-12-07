@@ -30,6 +30,7 @@ export default function Upload(): JSX.Element {
     Record<string, string[]>
   >({});
   const [token, setToken] = useRecoilState(Login_token);
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
   //openweathermap에서 제공하는 icon과 현재 온도
   const [icon, setIcon] = useRecoilState(WeatherIcons);
   const [usetemp, setTemp] = useRecoilState(TemNowControl);
@@ -53,6 +54,7 @@ export default function Upload(): JSX.Element {
     } else {
       setCheck(true);
     }
+    setIsLoading(false);
   }, [logintoken]);
 
   const handleImagesSelected = useCallback((files: File[] | null) => {
@@ -77,10 +79,13 @@ export default function Upload(): JSX.Element {
   const handleComplete = async () => {
     if (selectedImages.length === 0) {
       alert("이미지를 추가해주세요!");
+      return;
     } else if (content.trim() === "") {
       alert("글을 작성해주세요!");
+      return;
     } else if (Object.keys(selectedCategories).length === 0) {
       alert("카테고리를 추가해주세요!");
+      return;
     }
 
     if (isUploading) {
@@ -135,92 +140,101 @@ export default function Upload(): JSX.Element {
 
   return (
     <>
-      <link
-        rel="preload"
-        href="https://weatherfit-frontend.vercel.app/_next/static/css/ae6068da4d977bed.css"
-        as="style"></link>
-      {logincheck ? (
-        <div className="container">
-          <header>
-            <div className="top">
-              <CloseIcon
-                id="x"
-                onClick={() => {
-                  window.history.back();
-                }}
-              />
-              <div className="img_wrap">
-                <Image
-                  className="logo"
-                  src="/images/logo2.svg"
-                  alt="옷늘날씨"
-                  width={150}
-                  height={90}
-                />
-              </div>
-              <button
-                type="button"
-                id="btn_complete"
-                onClick={handleComplete}
-                disabled={isUploading}>
-                완료
-              </button>
-            </div>
-            <hr />
-            <WeatherBar />
-            <hr />
-          </header>
-          <section className="main">
-            <h2>오늘 날씨의 옷차림을 올려주세요!</h2>
-            <div className="content">
-              <ImageUpload
-                onImagesSelected={handleImagesSelected}
-                initialImages={[]}
-              />
-              <br />
-              <TextArea
-                content={content}
-                placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
-                handleHashtags={handleHashtags}
-                handleContent={handleContent}
-              />
-            </div>
-            <div className="category">
-              <div>
-                {Object.entries(categories).map(
-                  ([category, subCategories], index) => (
-                    <SelectCategory
-                      key={category}
-                      category={category}
-                      subCategories={subCategories}
-                      initialSelectedSubCategories={initialSubCategories[index]}
-                      onSelect={(selectedSubCategories) =>
-                        handleCategorySelect(category, selectedSubCategories)
-                      }
-                    />
-                  ),
-                )}
-              </div>
-            </div>
-          </section>
-
-          <Menubar />
-        </div>
+      {isLoading ? ( // 로딩 중인 경우
+        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
-          <br />
-          <br />
-          <br />
-          <div id="login_msg"> 로그인 후에 업로드할 수 있습니다. </div>
-          <br />
-          <br />
-          <Link className="goto" href={"/login"}>
-            로그인 페이지로 이동
-          </Link>
-          <br />
-          <Link className="goto" href={"/"}>
-            홈 페이지로 이동
-          </Link>
+          {logincheck ? (
+            <div className="container">
+              <header className="header_upload">
+                <div className="top_upload">
+                  <CloseIcon
+                    id="x"
+                    onClick={() => {
+                      window.history.back();
+                    }}
+                  />
+                  <div className="img_wrap">
+                    <Image
+                      className="logo"
+                      src="/images/logo2.svg"
+                      alt="옷늘날씨"
+                      width={150}
+                      height={90}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    id="btn_complete"
+                    onClick={handleComplete}
+                    disabled={isUploading}>
+                    완료
+                  </button>
+                </div>
+                {/* <hr /> */}
+                <WeatherBar />
+                <hr />
+              </header>
+              <section className="main">
+                <h2 className="upload_text">
+                  오늘 날씨의 옷차림을 올려주세요!
+                </h2>
+                <div className="content">
+                  <ImageUpload
+                    onImagesSelected={handleImagesSelected}
+                    initialImages={[]}
+                  />
+                  <br />
+                  <TextArea
+                    content={content}
+                    placeholder="코디에 같이 올리고 싶은 글과 #해시태그를 작성해주세요"
+                    handleHashtags={handleHashtags}
+                    handleContent={handleContent}
+                  />
+                </div>
+                <div className="category">
+                  <div>
+                    {Object.entries(categories).map(
+                      ([category, subCategories], index) => (
+                        <SelectCategory
+                          key={category}
+                          category={category}
+                          subCategories={subCategories}
+                          initialSelectedSubCategories={
+                            initialSubCategories[index]
+                          }
+                          onSelect={(selectedSubCategories) =>
+                            handleCategorySelect(
+                              category,
+                              selectedSubCategories,
+                            )
+                          }
+                        />
+                      ),
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              <Menubar />
+            </div>
+          ) : (
+            <>
+              <br />
+              <br />
+              <br />
+              <div id="login_msg"> 로그인 후에 업로드할 수 있습니다. </div>
+              <br />
+              <br />
+              <Link className="goto" href={"/login"}>
+                로그인 페이지로 이동
+              </Link>
+              <br />
+              <Link className="goto" href={"/"}>
+                홈 페이지로 이동
+              </Link>
+            </>
+          )}
         </>
       )}
     </>
