@@ -4,6 +4,8 @@ import { FeedFullcontents } from "@/recoilAtom/FeedFulldata";
 import { useEffect, useState } from "react";
 import "@/style/FeedSort.scss";
 
+
+
 export default function FeedSort(){
     
     const [feedata, setFeedd] = useRecoilState(FeedContent);
@@ -24,13 +26,29 @@ export default function FeedSort(){
         setFeedd(sorted);
     };
 
+    // const sortByNewest = () => {
+    //     const sorted = [...feedata].sort((a, b) => b.boardId - a.boardId);
+    //     setFeedd(sorted);
+    // };
     const sortByNewest = () => {
-        const sorted = [...feedata].sort((a, b) => b.boardId - a.boardId);
+        const sorted = [...feedata].sort((a, b) => {
+            const dateA = a.createDate ? new Date(a.createDate) : new Date();
+            const dateB = b.createDate ? new Date(b.createDate) : new Date();
+            return dateB.getTime() - dateA.getTime(); // 최신 날짜 순으로 정렬
+        });
         setFeedd(sorted);
     };
 
+    // const sortByOldest = () => {
+    //     const sorted = [...feedata].sort((a, b) => a.boardId - b.boardId);
+    //     setFeedd(sorted);
+    // };
     const sortByOldest = () => {
-        const sorted = [...feedata].sort((a, b) => a.boardId - b.boardId);
+        const sorted = [...feedata].sort((a, b) => {
+            const dateA = a.createDate ? new Date(a.createDate) : new Date();
+            const dateB = b.createDate ? new Date(b.createDate) : new Date();
+            return dateA.getTime() - dateB.getTime(); // 오래된 날짜 순으로 정렬
+        });
         setFeedd(sorted);
     };
 
