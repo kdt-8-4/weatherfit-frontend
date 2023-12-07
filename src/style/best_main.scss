@@ -14,13 +14,15 @@ h2 {
 
 .category_btn {
   border-radius: 20px;
-  padding: 2px 7px;
-  font-size: 13px;
-  font-weight: 500;
+  padding: 5px 10px;
+  font-size: 17px;
+  font-weight: 700;
   margin-top: 5px;
   margin-right: 5px;
-  border: 1px solid $color-main;
-  color: $color-main;
+  border: 2px solid $color-main;
+  // color: $color-main;
+  background-color: $color-main;
+  color: white;
 }
 
 .highlight {
@@ -51,7 +53,6 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
 .carousel-inner {
@@ -109,6 +110,7 @@ h2 {
   .carousel {
     width: 40%;
     height: 300px;
+    margin-bottom: 30px;
   }
 
   .carousel-inner {
@@ -118,12 +120,26 @@ h2 {
   .carousel_img {
     height: 100%;
   }
+
+  .category_btn {
+    border-radius: 20px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-right: 5px;
+    border: 2px solid $color-main;
+    // color: $color-main;
+    background-color: $color-main;
+    color: white;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
   .carousel {
     width: 45%;
     height: 375px;
+    margin-bottom: 50px;
   }
 
   .carousel-inner {
@@ -139,6 +155,7 @@ h2 {
   .carousel {
     width: 30%;
     height: 425px;
+    margin-bottom: 70px;
   }
 
   .carousel-inner {
