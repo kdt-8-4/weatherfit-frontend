@@ -1,5 +1,17 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import styled from "styled-components";
+
+const Button = styled.button`
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: rgba(240, 248, 255, 0.4901960784);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 interface ImageDetailProps {
   images: { imageId: number; boardId: number; imageUrl: string }[];
@@ -36,10 +48,12 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
             <div className="image-slide">
               <div
                 className="image-container relative"
-                style={{ aspectRatio: "1.2/1.5" }}>
+                style={{ aspectRatio: "1.2/1.5" }}
+              >
                 <div
                   className="image-wrapper"
-                  style={{ paddingBottom: "100%" }}>
+                  style={{ paddingBottom: "100%" }}
+                >
                   <Image
                     key={images[currentIndex].imageId}
                     src={images[currentIndex].imageUrl}
@@ -58,9 +72,14 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
                   top: "50%",
                   justifyContent: "space-between",
                   transform: "translateY(-50%)",
-                }}>
-                <button onClick={handlePrevious}>◀️</button>
-                <button onClick={handleNext}>▶️</button>
+                }}
+              >
+                <Button onClick={handlePrevious} className="move_btn">
+                  <FiChevronLeft />
+                </Button>
+                <Button onClick={handleNext} className="move_btn">
+                  <FiChevronRight />
+                </Button>
               </div>
             )}
           </div>
@@ -69,3 +88,11 @@ export default function ImageDetail({ images }: ImageDetailProps): JSX.Element {
     </div>
   );
 }
+
+// width: "25px",
+// height: "25px",
+// borderRadius: "50%",
+// backgroundColor: "rgba(240, 248, 255, 0.4901960784)",
+// display: flex;
+// align-items: center;
+// justify-content: center;

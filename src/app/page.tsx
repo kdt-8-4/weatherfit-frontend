@@ -47,7 +47,25 @@ export default function Mainpage() {
   return (
     <div className="container">
       {isLoading ? (
-        <div style={{ textAlign: "center" }}>Loading...</div>
+        <div
+          style={{
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={200}
+            height={150}
+          />
+          Loading...
+        </div>
       ) : (
         <>
           <header>
