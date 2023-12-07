@@ -88,13 +88,13 @@ export default function LoginForm() {
         <button type="submit">로 그 인</button>
       </form>
       <br />
-      <div className="login_linkbox">
-        <a className="link_signup" href="/register">회원가입</a>
+      <div className="login_linkbox" style={{display: "flex", justifyContent: "space-evenly", height: "70px", flexDirection: "column",
+    alignItems: "center"}}>
+        <p style={{color: "gray", fontWeight: "500"}}></p>
+        <a className="link_signup" href="/register" style={{fontSize: "18px"}}>회원가입</a>
       </div>
       <br />
-      <br />
-      <br />
-      <div className="login_easy" style={{height: "60px", justifyContent: "space-between"}}>
+      <div className="login_easy" style={{height: "70px", justifyContent: "space-between"}}>
         간편 로그인 <hr />
         <button onClick={onGoogleSocialLogin} style={{backgroundColor: "white", border: "2px solid", borderRadius: "7px", padding: "3px 5px", width: "145px"}}>구글 로그인</button>
       </div>
