@@ -14,6 +14,7 @@ interface LIKE {
 interface FEEDATA {
   boardId: number;
   images: IMAGE;
+  createDate?: string;
   likeCount: number;
   likelist: LIKE[];
   nickName: string;

@@ -24,6 +24,7 @@ export default function CompleteProfile() {
   const [nickname, setNickname] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [resEmail, setResEmail] = useState<string>("");
+  const [token, setToken] = useState<string>("");
 
   const [google_signup_check, setSignUpCheck] = useState<boolean>();
 
@@ -70,11 +71,18 @@ export default function CompleteProfile() {
         } else {
           setSignUpCheck(true);
         }
+        setToken(resGoogle.data.token);
         
       }
       googlesenddata();
     }
-  },[sendGoogle_data])
+  },[sendGoogle_data]);
+
+  useEffect(()=>{
+    if(token){
+      document.cookie = `accessToken=${token}; path=/`;
+    }
+  },[token]);
   
   // console.log("받아온 토큰:", googleToken);
   // console.log("보내려고 하는 데이터", sendGoogle_data);
@@ -135,6 +143,7 @@ export default function CompleteProfile() {
 
     console.log("회원가입 여부", google_signup_check);
     // console.log("받은 이메일", resEmail);
+    
 
   return (
     <>

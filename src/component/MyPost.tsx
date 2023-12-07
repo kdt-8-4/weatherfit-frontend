@@ -61,7 +61,7 @@ export default function MyPost(props: MyPostProps) {
         ))
       ) : (
         <>
-          <p>게시물을 등록해주세요.</p>
+          <p className="post_box_p">게시물을 등록해주세요.</p>
         </>
       )}
     </div>
