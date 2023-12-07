@@ -59,8 +59,9 @@ export default function MypageProfile(props: MyPageProfileProps) {
               <Image
                 src={userProfileImage}
                 alt="프로필 이미지"
-                layout="fill"
-                objectFit="cover"
+                width={100}
+                height={100}
+                className="user_image_icon"
               />
             )}
           </div>

@@ -18,6 +18,7 @@ interface handleSettingsClickProps {
   userProfileImage: string | null;
   accessToken: string | undefined;
   nickname: string;
+  fromSocial: boolean;
 }
 
 export default function ProfileModalTest(props: handleSettingsClickProps) {
@@ -29,6 +30,7 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
     userProfileImage,
     accessToken,
     nickname,
+    fromSocial
   } = props;
 
   // 프로필 이미지
@@ -108,7 +110,9 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
           formData.append("image", selectedImage); // 이미지 파일을 FormData에 추가
         }
 
-        formData.append("email", JSON.stringify(email));
+        formData.append("email", email);
+
+        // formData.append("email", JSON.stringify(email));
 
         // formData.append(
         //   "email",
