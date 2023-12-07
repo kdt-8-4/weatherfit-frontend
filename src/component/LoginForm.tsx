@@ -13,16 +13,6 @@ export default function LoginForm() {
   const router = useRouter();
 
   const onGoogleSocialLogin = async () => {
-    // try {
-    //   const response = await axios({
-    //     method: "POST",
-    //     url: "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=https://localhost:3000&response_type=token&scope=email",
-    //   });
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
     window.location.href =
       // "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&scope=email&state=FnOs2B9peyHie3pfwVOFMaqIFqlifucO4v6jmFPEc_M%3D&redirect_uri=http://localhost:3000/socialregister";
       "https://accounts.google.com/o/oauth2/v2/auth?client_id=453423602833-7db2b1dbicre47rkcrpfgn20nd16l9rs.apps.googleusercontent.com&redirect_uri=https://weatherfit-frontend.vercel.app/socialregister&response_type=token&scope=email";
@@ -69,23 +59,6 @@ export default function LoginForm() {
     (e: ChangeEvent<HTMLInputElement>) =>
       setState(e.target.value);
 
-  // Recoil로 로그인 체크할려했으나 새로고침하면 사라지는 문제가 여전히 존재해 패스
-  // useEffect(()=>{
-  //   const cookie = () => {
-  //     const accessToken = Cookies.get("accessToken");
-  //     console.log("accessToken 값: ", accessToken);
-  //   }
-  //   cookie();
-  //   cookie();
-  //   if (token === undefined) {
-  //     setLogincheck(false);
-  //   } else {
-  //     setLogincheck(true);
-  //   }
-  // },[token]);
-
-  // console.log("resData token 적용됐는지: ", token);
-
   return (
     <>
       <div className="login_logobox">
@@ -115,16 +88,15 @@ export default function LoginForm() {
         <button type="submit">로 그 인</button>
       </form>
       <br />
-      <div className="login_linkbox">
-        <a className="link_signup" href="/register">회원가입</a>
+      <div className="login_linkbox" style={{display: "flex", justifyContent: "space-evenly", height: "70px", flexDirection: "column",
+    alignItems: "center"}}>
+        <p style={{color: "gray", fontWeight: "500"}}>아직 회원이 아니신가요?</p>
+        <a className="link_signup" href="/register" style={{fontSize: "18px"}}>회원가입</a>
       </div>
       <br />
-      <br />
-      <br />
-      <div className="login_easy">
+      <div className="login_easy" style={{height: "70px", justifyContent: "space-between"}}>
         간편 로그인 <hr />
-        <button onClick={onGoogleSocialLogin}>구글 로그인</button>
-        <hr />
+        <button onClick={onGoogleSocialLogin} style={{backgroundColor: "white", border: "2px solid", borderRadius: "7px", padding: "3px 5px", width: "145px"}}>구글 로그인</button>
       </div>
     </>
   );

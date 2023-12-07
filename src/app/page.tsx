@@ -31,7 +31,6 @@ export default function Mainpage() {
         });
 
         setCategories(response.data.result);
-        setIsLoading(false); // 로딩 완료 후 상태 업데이트
         console.log("카테고리 top5", response.data.result);
 
         setBoards(response2.data.content);

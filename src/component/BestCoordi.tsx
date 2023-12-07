@@ -70,7 +70,7 @@ export default function BestCoordi({ boards }: { boards: Board[] }) {
         </div>
       ) : (
         <div style={{ textAlign: "center" }}>
-          좋아요 받은 코디가 아직 없어요..🥲
+          좋아요 받은 코디가 아직 없어요..
         </div>
       )}
     </div>
