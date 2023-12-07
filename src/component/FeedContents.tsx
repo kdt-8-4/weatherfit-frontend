@@ -27,6 +27,7 @@ interface LIKE {
 interface FEEDATA {
   boardId: number;
   images: IMAGE;
+  createDate: string;
   likeCount: number;
   likelist: LIKE[];
   nickName: string;
@@ -157,7 +158,7 @@ export default function FeedContents() {
     return likelist.some((like) => like.nickName === userNickname);
   };
 
-  // console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
+  console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
 
   return (
     <>
@@ -204,7 +205,7 @@ export default function FeedContents() {
                           width={100}
                           height={100}
                       /> */}
-                      <img src={arr.weatherIcon} alt="날씨 아이콘">
+                      <img src={arr.weatherIcon} alt="날씨 아이콘" id="weather_icon_dj">
                       </img>
                     </div>
                     <div>

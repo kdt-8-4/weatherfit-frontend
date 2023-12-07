@@ -61,7 +61,7 @@ export default function LikePost(props: LikePostProps) {
         ))
       ) : (
         <>
-          <p>게시물의 좋아요를 눌러주세요.</p>
+          <p className="post_box_p">게시물의 좋아요를 눌러주세요.</p>
         </>
       )}
     </div>

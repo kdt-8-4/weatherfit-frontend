@@ -30,11 +30,11 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
     userProfileImage,
     accessToken,
     nickname,
-    fromSocial
+    fromSocial,
   } = props;
 
   // 프로필 이미지
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(userProfileImage);
 
   // 비밀번호
   const [currentPassword, setCurrentPassword] = useState<string>("");
@@ -94,6 +94,8 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
         );
 
         console.log("비밀번호 수정 Data:", response.data);
+
+        handleSettingsClick();
       }
     } catch (error) {
       console.error("비밀번호 수정 에러: ", error);
@@ -103,6 +105,12 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
   // 파일 비동기 전송
   const handleImageSubmit = async () => {
     // e.preventDefault();
+
+    if (fromSocial) {
+      alert("소셜 로그인 회원은 이미지 수정이 불가합니다.");
+      return;
+    }
+
     try {
       if (confirm("이미지를 수정하시겠습니까?")) {
         const formData = new FormData();
@@ -134,6 +142,8 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
         );
 
         console.log("이미지 수정 Data:", response.data);
+
+        handleSettingsClick();
       }
     } catch (error) {
       console.error("이미지 업로드 에러: ", error);
@@ -202,13 +212,23 @@ export default function ProfileModalTest(props: handleSettingsClickProps) {
             {/* <form className="modal_image_edit" onSubmit={handleImageSubmit}> */}
             <div className="profile_image">
               {selectedImage ? (
-                <Image
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Uploaded"
-                  width={100}
-                  height={100}
-                  className="profile_image_icon_1"
-                />
+                typeof selectedImage === "string" ? (
+                  <Image
+                    src={selectedImage}
+                    alt="Current"
+                    width={100}
+                    height={100}
+                    className="profile_image_icon_1"
+                  />
+                ) : (
+                  <Image
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Uploaded"
+                    width={100}
+                    height={100}
+                    className="profile_image_icon_1"
+                  />
+                )
               ) : (
                 <AccountCircleOutlinedIcon className="profile_image_icon_2" />
               )}
