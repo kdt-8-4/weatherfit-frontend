@@ -101,7 +101,7 @@ export default function MainWeather() {
             <p className="weather_value">
               {weather.weat && weatherValue[weather.weat]}
             </p>
-            <p className="weather_temp">{weather.usetemp}</p>
+            <p className="weather_temp">{weather.usetemp} ℃</p>
           </div>
           <p className="weather_max_min_temp">
             최고: {weather.max} / 최저: {weather.min}

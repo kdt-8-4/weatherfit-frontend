@@ -47,6 +47,7 @@ export default function Detail(): JSX.Element {
   const [profile_temperature, setProfileTemperature] = useRecoilState(ProfileTemperature);
   // const [likeCount, setLikeCount] = useState<number>();
   const [likeCount, setLikeCount] = useState(0);
+  const [userImage, setUserImage] = useState<string | null>("");
   // 좋아요 개수 업데이트 함수
   const updateLikeCount = (boardId: number, newCount: number) => {
     setLikeCount((prevCount) => prevCount + newCount);
@@ -72,13 +73,25 @@ export default function Detail(): JSX.Element {
       if (!localBoardId) return;
       try {
         const response = await axios.get(
-          `https://www.jerneithe.site/board/detail/${localBoardId}`,
+          `https://www.jerneithe.site/board/detail/${localBoardId}`
         );
         // console.log("디테일 응답", response);
         setLikelist(response.data.likelist);
         setLikeCount(response.data.likeCount);
         setBoardDetail(response.data);
         setComment(response.data.comments);
+
+        // 작성한 유저 정보 가져오기
+        const userres = await axios({
+          method: "POST",
+          url: `https://www.jerneithe.site/user/api/userinfo`,
+          data: {
+            nickname: response.data.nickName,
+          },
+        });
+
+        console.log("디테일 작성자 정보: ", userres.data);
+        setUserImage(userres.data.image);
         setProfileTemperature(response.data.temperature);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -154,15 +167,17 @@ export default function Detail(): JSX.Element {
 
       <section
         className="main flex flex-col items-center"
-        style={{ width: "70%" }}>
+        style={{ width: "70%" }}
+      >
         {boardDetail && (
           <>
             <div className="w-full flex items-center">
-              <Profile nickName={boardDetail.nickName} />
+              <Profile nickName={boardDetail.nickName} userImage={userImage} />
               {decoded_nickName === boardDetail.nickName && (
                 <div
                   onClick={toggleDropdown}
-                  className="ml-auto flex flex-col items-center p-3">
+                  className="ml-auto flex flex-col items-center p-3"
+                >
                   <Image
                     src="/images/more.svg"
                     alt="etc"
@@ -174,12 +189,14 @@ export default function Detail(): JSX.Element {
                     <div className="dropdown absolute mt-7 z-10">
                       <button
                         onClick={handleEdit}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         수정
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none">
+                        className="block w-full text-left py-2 px-4 hover:bg-gray-200 focus:outline-none"
+                      >
                         삭제
                       </button>
                     </div>

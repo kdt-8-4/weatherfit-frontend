@@ -24,7 +24,7 @@ export default function Upload(): JSX.Element {
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [initialSubCategories, setInitialSubCategories] = useState<string[][]>(
-    Array(Object.entries(categories).length).fill([]),
+    Array(Object.entries(categories).length).fill([])
   );
   const [selectedCategories, setSelectedCategories] = useState<
     Record<string, string[]>
@@ -77,7 +77,7 @@ export default function Upload(): JSX.Element {
     (category: string, subCategories: string[]) => {
       setSelectedCategories((prev) => ({ ...prev, [category]: subCategories }));
     },
-    [],
+    []
   );
 
   const handleComplete = async () => {
@@ -100,7 +100,7 @@ export default function Upload(): JSX.Element {
     try {
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
         (acc, subCategories) => acc.concat(subCategories),
-        [],
+        []
       );
 
       let formData = new FormData();
@@ -145,7 +145,25 @@ export default function Upload(): JSX.Element {
   return (
     <>
       {isLoading ? ( // 로딩 중인 경우
-        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
+        <div
+          style={{
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={200}
+            height={150}
+          />
+          Loading...
+        </div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
           {logincheck ? (
@@ -171,7 +189,8 @@ export default function Upload(): JSX.Element {
                     type="button"
                     id="btn_complete"
                     onClick={handleComplete}
-                    disabled={isUploading}>
+                    disabled={isUploading}
+                  >
                     완료
                   </button>
                 </div>
@@ -210,11 +229,11 @@ export default function Upload(): JSX.Element {
                           onSelect={(selectedSubCategories) =>
                             handleCategorySelect(
                               category,
-                              selectedSubCategories,
+                              selectedSubCategories
                             )
                           }
                         />
-                      ),
+                      )
                     )}
                   </div>
                 </div>
