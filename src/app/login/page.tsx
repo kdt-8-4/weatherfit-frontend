@@ -8,8 +8,8 @@ import LoginForm from "@/component/LoginForm";
 export default function Login() {
   return (
     // <RecoilRoot>
-    <div className="container" style={{justifyContent: "center"}}>
-      <div>
+    <div className="container" style={{justifyContent: "center", alignItems: "center" }}>
+      <div style={{width: "100%"}}>
         <LoginForm />
         <br />
       </div>
