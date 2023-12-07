@@ -96,7 +96,7 @@ export default function LoginForm() {
       <br />
       <div className="login_easy" style={{height: "60px", justifyContent: "space-between"}}>
         간편 로그인 <hr />
-        <button onClick={onGoogleSocialLogin} style={{backgroundColor: "white", border: "2px solid" borderRadius: "7px", padding: "3px 5px", width: "145px"}}>구글 로그인</button>
+        <button onClick={onGoogleSocialLogin} style={{backgroundColor: "white", border: "2px solid", borderRadius: "7px", padding: "3px 5px", width: "145px"}}>구글 로그인</button>
       </div>
     </>
   );
