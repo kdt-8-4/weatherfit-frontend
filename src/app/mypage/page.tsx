@@ -52,7 +52,7 @@ export default function Mypage() {
   const [fromSocial, setFromSocial] = useState<boolean>(false);
 
   // 로그인 확인 후 페이지 로드
-  const [logincheck, setCheck] = useState<boolean>(false);
+  const [logincheck, setCheck] = useState<boolean>(true);
   // 토큰 값
   const [logintoken, setToken] = useState<string | undefined>("");
 

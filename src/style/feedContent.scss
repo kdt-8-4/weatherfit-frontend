@@ -20,7 +20,7 @@
 .feed_info{
     height: 30%;
     display: flex;
-
+    margin: 4%;
     justify-content: space-between; 
 }
 
@@ -34,4 +34,9 @@
 
 #like_feed_dj{
     display: flex;
+    padding-top: 10px;
+}
+
+#weather_icon_dj{
+  width: 30px;
 }

@@ -118,7 +118,7 @@ export default function LoginForm() {
       <br />
       <div className="login_linkbox">
         <a className="link_pw">비밀번호 찾기</a> |
-        <a className="link_signup">회원가입</a>
+        <a className="link_signup" href="/register">회원가입</a>
       </div>
       <br />
       <br />
