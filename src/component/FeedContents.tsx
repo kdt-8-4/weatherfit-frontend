@@ -27,6 +27,7 @@ interface LIKE {
 interface FEEDATA {
   boardId: number;
   images: IMAGE;
+  createDate: string;
   likeCount: number;
   likelist: LIKE[];
   nickName: string;
@@ -57,7 +58,12 @@ export default function FeedContents() {
       setFulldata(req.data);
 
       //현재 로그인한 닉네임과 각 게시물의 likelist에 같은 닉네임이 있다면 
-      const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => b.boardId - a.boardId);
+      // const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => b.boardId - a.boardId);
+      const sortedData: FEEDATA[] = [...req.data].sort((a :FEEDATA, b: FEEDATA) => {
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        return dateB.getTime() - dateA.getTime(); // 최신 날짜 순으로 정렬
+      });
 
       const copy: FEEDATA[] = sortedData;
 
@@ -157,7 +163,7 @@ export default function FeedContents() {
     return likelist.some((like) => like.nickName === userNickname);
   };
 
-  // console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
+  console.log("리코일스테이트로 잘 들어왔는지 확인", feedata);
 
   return (
     <>
@@ -204,7 +210,7 @@ export default function FeedContents() {
                           width={100}
                           height={100}
                       /> */}
-                      <img src={arr.weatherIcon} alt="날씨 아이콘">
+                      <img src={arr.weatherIcon} alt="날씨 아이콘" id="weather_icon_dj">
                       </img>
                     </div>
                     <div>

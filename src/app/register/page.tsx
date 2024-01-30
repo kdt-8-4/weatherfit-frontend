@@ -6,6 +6,7 @@ import InputBar from "@/component/InputBar";
 import Menubar from "@/component/MenuBar";
 import axios from "axios";
 import { METHODS } from "http";
+import { useRouter } from "next/navigation";
 
 ///////////////////////////해야하는 작업/////////////////////////////
 
@@ -34,6 +35,8 @@ export default function Register(): JSX.Element {
   //이메일 인증이 되어야만 회원가입 데이터 전송 가능
   const [permission, setPermission] = useState<boolean>(false);
   const [permission_status, setPstatus] = useState<string>("");
+
+  const router = useRouter();
 
   const validateEmail = (inputValue: string) => {
     const emailFormat =
@@ -163,6 +166,10 @@ export default function Register(): JSX.Element {
         });
 
         console.log("회원가입 됐는지 확인", register_data);
+
+        alert("회원가입 성공!");
+        router.push('/mypage');
+
       } catch (error) {
         console.log("이메일 인증에 실패했기 떄문에 회원가입 불가", error);
       }

@@ -24,7 +24,7 @@ export default function Upload(): JSX.Element {
   const [content, setContent] = useState<string>("");
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [initialSubCategories, setInitialSubCategories] = useState<string[][]>(
-    Array(Object.entries(categories).length).fill([]),
+    Array(Object.entries(categories).length).fill([])
   );
   const [selectedCategories, setSelectedCategories] = useState<
     Record<string, string[]>
@@ -36,7 +36,7 @@ export default function Upload(): JSX.Element {
   const [usetemp, setTemp] = useRecoilState(TemNowControl);
 
   // 로그인 확인 후 페이지 로드
-  const [logincheck, setCheck] = useState<boolean>(false);
+  const [logincheck, setCheck] = useState<boolean>(true);
   // 토큰 값
   const [logintoken, setLoginToken] = useState<string | undefined>("");
 
@@ -49,6 +49,10 @@ export default function Upload(): JSX.Element {
 
   useEffect(() => {
     cookie();
+  }, []);
+
+  useEffect(() => {
+    // cookie();
     if (logintoken === undefined) {
       setCheck(false);
     } else {
@@ -73,7 +77,7 @@ export default function Upload(): JSX.Element {
     (category: string, subCategories: string[]) => {
       setSelectedCategories((prev) => ({ ...prev, [category]: subCategories }));
     },
-    [],
+    []
   );
 
   const handleComplete = async () => {
@@ -96,7 +100,7 @@ export default function Upload(): JSX.Element {
     try {
       const allSelectedSubCategories = Object.values(selectedCategories).reduce(
         (acc, subCategories) => acc.concat(subCategories),
-        [],
+        []
       );
 
       let formData = new FormData();
@@ -141,7 +145,25 @@ export default function Upload(): JSX.Element {
   return (
     <>
       {isLoading ? ( // 로딩 중인 경우
-        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
+        <div
+          style={{
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={200}
+            height={150}
+          />
+          Loading...
+        </div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
           {logincheck ? (
@@ -167,7 +189,8 @@ export default function Upload(): JSX.Element {
                     type="button"
                     id="btn_complete"
                     onClick={handleComplete}
-                    disabled={isUploading}>
+                    disabled={isUploading}
+                  >
                     완료
                   </button>
                 </div>
@@ -206,11 +229,11 @@ export default function Upload(): JSX.Element {
                           onSelect={(selectedSubCategories) =>
                             handleCategorySelect(
                               category,
-                              selectedSubCategories,
+                              selectedSubCategories
                             )
                           }
                         />
-                      ),
+                      )
                     )}
                   </div>
                 </div>
@@ -223,16 +246,31 @@ export default function Upload(): JSX.Element {
               <br />
               <br />
               <br />
-              <div id="login_msg"> 로그인 후에 업로드할 수 있습니다. </div>
               <br />
               <br />
-              <Link className="goto" href={"/login"}>
-                로그인 페이지로 이동
-              </Link>
               <br />
-              <Link className="goto" href={"/"}>
-                홈 페이지로 이동
-              </Link>
+              <div
+                className="login_goto_box"
+                style={{
+                  height: "40%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <div id="login_msg" style={{ fontSize: "20px" }}>
+                  {" "}
+                  로그인 후에 업로드할 수 있습니다.{" "}
+                </div>
+                <Link className="goto" href={"/login"}>
+                  로그인 페이지로 이동
+                </Link>
+                <Link className="goto" href={"/"}>
+                  홈 페이지로 이동
+                </Link>
+              </div>
+              <br />
             </>
           )}
         </>

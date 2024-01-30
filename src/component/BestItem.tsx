@@ -26,7 +26,7 @@ export default function BestItem({ categories }: { categories: Category[] }) {
           ))}
         </div>
       ) : (
-        <div style={{ textAlign: "center" }}>카테고리가 아직 없어요..🥲</div>
+        <div style={{ textAlign: "center" }}>카테고리가 아직 없어요..</div>
       )}
     </div>
   );

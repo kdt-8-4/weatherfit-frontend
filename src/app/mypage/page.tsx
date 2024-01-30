@@ -4,12 +4,10 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import "../../style/mypage.scss";
 import "@/style/GotoLogin.scss";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menubar from "@/component/MenuBar";
-import TabBar from "@/component/TabBar";
-import ProfileModal from "@/component/ProfileModal";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import Image from "next/image";
 
 // import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined'; // > 아이콘
 import axios from "axios";
@@ -50,9 +48,10 @@ export default function Mypage() {
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState<string | undefined>("");
   const [fromSocial, setFromSocial] = useState<boolean>(false);
+  const [refreshProfile, setRefreshProfile] = useState<boolean>(false);
 
   // 로그인 확인 후 페이지 로드
-  const [logincheck, setCheck] = useState<boolean>(false);
+  const [logincheck, setCheck] = useState<boolean>(true);
   // 토큰 값
   const [logintoken, setToken] = useState<string | undefined>("");
 
@@ -130,21 +129,42 @@ export default function Mypage() {
       }
     };
     fetchData();
-  }, []);
+  }, [refreshProfile]);
 
   // -------------------------------------------------------------
+
+  const handleRefreshProfile = () => {
+    setRefreshProfile(!refreshProfile);
+  };
 
   // 회원 정보 수정 모달 이벤트
   const handleSettingsClick = () => {
     setShowProfileModify(!showProfileModify);
+    handleRefreshProfile();
   };
-
-  console.log("mypage의 게시물 data: ", postData);
 
   return (
     <>
       {isLoading ? ( // 로딩 중인 경우
-        <div>Loading...</div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
+        <div
+          style={{
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={200}
+            height={150}
+          />
+          Loading...
+        </div> // 로딩 화면을 표시하거나 원하는 처리를 수행할 수 있음
       ) : (
         <>
           {logincheck ? (
@@ -179,29 +199,44 @@ export default function Mypage() {
               <br />
               <br />
               <br />
-              <div id="login_msg"> 로그인을 해주세요. </div>
               <br />
               <br />
-              <Link className="goto" href={"/login"}>
-                로그인 페이지로 이동
-              </Link>
               <br />
-              <Link className="goto" href={"/"}>
-                홈 페이지로 이동
-              </Link>
+              <div
+                className="login_goto_box"
+                style={{
+                  height: "40%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <div id="login_msg" style={{ fontSize: "20px" }}>
+                  {" "}
+                  로그인 후에 업로드할 수 있습니다.{" "}
+                </div>
+                <Link className="goto" href={"/login"}>
+                  로그인 페이지로 이동
+                </Link>
+                <Link className="goto" href={"/"}>
+                  홈 페이지로 이동
+                </Link>
+              </div>
+              <br />
             </>
           )}
 
           {showProfileModify && (
             <ProfileModalTest
-          handleSettingsClick={handleSettingsClick}
-          email={userPofile.email}
-          name={userPofile.name}
-          password={userPofile.password}
-          userProfileImage={userImage}
-          accessToken={logintoken}
-          nickname={nickname}
-          fromSocial={fromSocial}
+              handleSettingsClick={handleSettingsClick}
+              email={userPofile.email}
+              name={userPofile.name}
+              password={userPofile.password}
+              userProfileImage={userImage}
+              accessToken={logintoken}
+              nickname={nickname}
+              fromSocial={fromSocial}
             />
           )}
         </>

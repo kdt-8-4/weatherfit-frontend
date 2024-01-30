@@ -31,7 +31,6 @@ export default function Mainpage() {
         });
 
         setCategories(response.data.result);
-        setIsLoading(false); // 로딩 완료 후 상태 업데이트
         console.log("카테고리 top5", response.data.result);
 
         setBoards(response2.data.content);
@@ -47,7 +46,25 @@ export default function Mainpage() {
   return (
     <div className="container">
       {isLoading ? (
-        <div style={{ textAlign: "center" }}>Loading...</div>
+        <div
+          style={{
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            className="logo"
+            src="/images/logo2.svg"
+            alt="옷늘날씨"
+            width={200}
+            height={150}
+          />
+          Loading...
+        </div>
       ) : (
         <>
           <header>

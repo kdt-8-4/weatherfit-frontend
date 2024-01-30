@@ -65,15 +65,21 @@ export default function MypageProfile(props: MyPageProfileProps) {
               />
             )}
           </div>
-          <p className="user_name">{nickname}</p>
+          <p className="user_name" style={{ fontWeight: "bold" }}>
+            {nickname}
+          </p>
         </div>
         <div className="user_info">
           <div className="num_box">
-            <p className="user_post">내 게시물</p>
+            <p className="user_post" style={{ fontWeight: "bold" }}>
+              내 게시물
+            </p>
             <p className="user_post_num">{myPostData.length}</p>
           </div>
           <div className="num_box">
-            <p className="user_like">좋아요 한 게시물</p>
+            <p className="user_like" style={{ fontWeight: "bold" }}>
+              좋아요 한 게시물
+            </p>
             <p className="user_like_num">{myLikePostData.length}</p>
           </div>
         </div>
