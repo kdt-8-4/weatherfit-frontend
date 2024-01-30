@@ -7,6 +7,7 @@ export default function MainWeather() {
   const API_KEY = "fa3eba61f243af3e8e69086462763172";
   const kakao_API_KEY = "3a6c3035c801405eaa71ebb9dc7f474b";
   const [weather, setWeather] = useRecoilState(WeatherState);
+  const [isWeather, setIsWeather] = useState(false);
   const [address, setAddress] = useState<string | undefined>();
   const [icon, setIcon] = useState<string | undefined>();
 
@@ -43,7 +44,8 @@ export default function MainWeather() {
             navigator.geolocation.getCurrentPosition(resolve, reject);
           }
         );
-
+        
+        console.log("위치", position);
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
@@ -83,31 +85,60 @@ export default function MainWeather() {
     getLocation(); // getLocation 함수 실행
   }, []);
 
+  useEffect(()=>{
+    const weatherCheck = () => {
+      if(weather.weat == null){
+        setIsWeather(false);
+      }else{
+        setIsWeather(true);
+      }
+    }
+
+    weatherCheck();
+    console.log(isWeather);
+  },[weather])
+
+
   console.log("날씨 아이콘: ", weather.weat);
 
   return (
     <section className="mainweather">
-      <div className="weather_box">
-        {weather.weat && (
-          <Image
-            src={`/images/${weatherIcon[weather.weat]}`}
-            alt={weather.weat}
-            width={500}
-            height={300}
-          />
-        )}
-        <div className="weather_info">
-          <div className="weather_now">
-            <p className="weather_value">
-              {weather.weat && weatherValue[weather.weat]}
-            </p>
-            <p className="weather_temp">{weather.usetemp}</p>
-          </div>
-          <p className="weather_max_min_temp">
-            최고: {weather.max} / 최저: {weather.min}
-          </p>
-        </div>
-      </div>
+      {isWeather ? (
+            <div className="weather_box">
+              {weather.weat && (
+                <Image
+                  src={`/images/${weatherIcon[weather.weat]}`}
+                  alt={weather.weat}
+                  width={500}
+                  height={300}
+                />
+              )}
+              <div className="weather_info">
+                <div className="weather_now">
+                  <p className="weather_value">
+                    {weather.weat && weatherValue[weather.weat]}
+                  </p>
+                  <p className="weather_temp">{weather.usetemp} ℃</p>
+                </div>
+                <p className="weather_max_min_temp">
+                  최고: {weather.max} / 최저: {weather.min}
+                </p>
+              </div>
+            </div>
+            ) : (
+              <div
+                style={{
+                height: "100%",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                }}
+              >
+                <p>위치 정보에 대한 동의를 해야 날씨가 표시됩니다.</p>
+              </div>
+      )}
     </section>
   );
 }
