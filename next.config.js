@@ -5,6 +5,7 @@ module.exports = {
     domains: [
       "weatherfit-board-image.s3.amazonaws.com",
       "heesung-s3.s3.ap-northeast-2.amazonaws.com",
+      "weatherfit-board-image-copy.s3.amazonaws.com",
     ],
   },
 };
