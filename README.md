@@ -215,10 +215,10 @@
       <td align="center"><a href="https://github.com/hyeiis"><img src="https://github.com/hyeiis.png" width="100px;" alt=""/><br /><b>박혜원</b></a><br /></td>
     </tr>
     <tr>
-      <td align="center">팀장<br/>Backend<br/>Infra<br/></td>
+      <td align="center">Backend 팀장<br/>Backend<br/>Infra<br/></td>
       <td align="center">Backend</td>
       <td align="center">Backend</td>
-      <td align="center">Frontend</td>
+      <td align="center">Frontend 팀장<br/>Frontend</td>
       <td align="center">Frontend</td>
       <td align="center">Frontend</td>
     </tr>
